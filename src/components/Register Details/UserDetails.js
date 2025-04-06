@@ -1,11 +1,40 @@
-import React from 'react'
+import React from 'react';
 import "../../component styles/Register Details/UserDetails.css";
-
 
 function UserDetails() {
   return (
-    <div>UserDetails</div>
-  )
+    <form className="user-details-form">
+        <div className="form-group">
+            <label htmlFor="owner">MushKit Owner</label>
+            <input type="text" id="owner" name="owner" placeholder="Enter owner's name" />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="contact">Contact Number</label>
+            <input type="tel" id="contact" name="contact" placeholder="Enter contact number" />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="affiliation">Affiliation</label>
+            <input type="text" id="affiliation" name="affiliation" placeholder="Enter affiliation" />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter email" />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" />
+        </div>
+
+        <div className="form-group">
+            <label htmlFor="pin">MushKit PIN</label>
+            <input type="text" id="pin" name="pin" placeholder="Enter MushKit PIN" />
+        </div>
+    </form>
+  );
 }
 
-export default UserDetails
+export default UserDetails;
