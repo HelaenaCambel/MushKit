@@ -17,7 +17,7 @@ const GaugeHumid = ({ value = 70 }) => {
     series: [
       {
         type: 'gauge',
-        center: ['50%', '60%'],
+        center: ['50%', '40%'],
         startAngle: 200,
         endAngle: -20,
         min: 0,

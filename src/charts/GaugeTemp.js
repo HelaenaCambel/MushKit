@@ -16,12 +16,12 @@ const GaugeTemp = ({ value = 0 }) => {
     series: [
       {
         type: 'gauge',
-        center: ['50%', '60%'],
+        center: ['50%', '40%'],
         startAngle: 200,
         endAngle: -20,
         min: 0,
         max: max,
-        itemStyle: { color: getColorByValue(value) }, // <- Dynamic color here
+        itemStyle: { color: getColorByValue(value) }, 
         progress: { show: true, width: 30 },
         pointer: { show: false },
         axisLine: {
