@@ -16,19 +16,15 @@ const GaugeTemp = ({ value = 0 }) => {
     series: [
       {
         type: 'gauge',
-        center: ['50%', '40%'],
+        center: ['50%', '60%'],
         startAngle: 200,
         endAngle: -20,
         min: 0,
         max: max,
         itemStyle: { color: getColorByValue(value) }, 
-        progress: { show: true, width: 30 },
+        progress: { show: true, width: 20 },
         pointer: { show: false },
-        axisLine: {
-          lineStyle: {
-            width: 30
-          }
-        },
+        axisLine: { lineStyle: { width: 20 } },
         axisTick: { show: false },
         splitLine: { show: false },
         axisLabel: { show: false },
@@ -37,8 +33,8 @@ const GaugeTemp = ({ value = 0 }) => {
           width: '60%',
           lineHeight: 40,
           borderRadius: 8,
-          offsetCenter: [0, '-15%'],
-          fontSize: 35,
+          offsetCenter: [0, '0%'],
+          fontSize: 30,
           fontWeight: 'bolder',
           formatter: `{value}°C`,
           color: 'inherit'
@@ -48,7 +44,7 @@ const GaugeTemp = ({ value = 0 }) => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '300px', width: '100%' }} />;
+  return <ReactECharts option={option} style={{ height: '200px', width: '100%' }} />;
 };
 
 export default GaugeTemp;

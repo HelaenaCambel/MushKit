@@ -7,6 +7,7 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: auto auto auto;
+	gap: 0px; 
 	max-width: 1300px;
 	margin: auto;
 	padding: 20px;
@@ -17,14 +18,10 @@
 	text-align: center;
   }
   
-  .gauge-section1 > *,
-  .gauge-section2 > * {
-	border: 1px solid #ddd; /* 👈 adds visible border to each cell */
-	padding: 10px;          /* optional: adds spacing inside */
-	border-radius: 5px;     /* optional: for slightly rounded corners */
-	background-color: #fff; /* optional: contrast with background */
+  .gauge-section2 {
+	margin-top: 30px; 
   }
-  
+
   .kit-title {
 	grid-column: span 3;
 	font-size: 1.5rem;
@@ -38,16 +35,18 @@
   .gauge-temp,
   .gauge-humid {
 	display: flex;
-	max-height: 300px;
+	max-height: 200px;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column; 
+	padding: 0;
+	margin-bottom: 0;
   }
   
   .gauge-label {
 	font-size: 1.2rem;
 	font-weight: bold;
-	margin-top: -10px;
+	margin-top: -80px;
   }
 
   .spanned-cell {
@@ -57,11 +56,10 @@
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	gap: 10px;
 	padding: 10px;
-	background-color: #fff;
+	/*background-color: #fff;
 	border: 1px solid #ddd;
-	border-radius: 5px;
+	border-radius: 5px;*/
   }
   
   .status-item {
@@ -75,7 +73,6 @@
 	margin-bottom: 5px;
 	font-weight: bold;
   }
-  .peltier h3,
   .light h3 {
 	font-size: 1.2rem;
 	margin-bottom: 5px;
@@ -89,7 +86,6 @@
 	font-weight: bold;
 	gap: 10px;
   }
-  .peltier,
   .light {
 	display: flex;
 	flex-direction: column;
@@ -98,7 +94,6 @@
   }
   
   .water-level span,
-  .peltier-status span,
   .light-status span {
 	display: block;
 	text-align: center;
@@ -108,7 +103,6 @@
 	cursor: pointer;
   }
 
-  .peltier-status,
   .light-status {
 	display: flex;
 	justify-content: space-evenly;
@@ -118,7 +112,6 @@
   }
   
   .water-level span:hover,
-  .peltier-status span:hover,
   .light-status span:hover {
 	background-color: #d0d0d0;
   }
