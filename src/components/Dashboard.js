@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState }from "react";
 import SideNavBar from "../static/SideNavBar";
 import "../styles/Dashboard.css";
 import GaugeTemp from "../charts/GaugeTemp";
 import GaugeHumid from "../charts/GaugeHumid";
 
 const Dashboard = () => {
+  //For MushKit #1
+  const [waterLevel1, setWaterLevel1] = useState("Medium");
+  const [lightStatus1, setLightStatus1] = useState("On");
+  
+  // For MushKit #2
+  const [waterLevel2, setWaterLevel2] = useState("Low"); 
+  const [lightStatus2, setLightStatus2] = useState("Off");
+  
   return (
     <div className="dashboard-container">
       <SideNavBar />
@@ -25,17 +33,42 @@ const Dashboard = () => {
             <div className="status-item">
               <h3>Water Level Status</h3>
               <div className="water-level">
-                <span>High</span>
-                <span>Medium</span>
-                <span>Low</span>
+                <span 
+                  className={waterLevel1 === "High" ? "active-high" : ""}
+                  onClick={() => setWaterLevel1("High")}
+                >
+                  High
+                </span>
+                <span 
+                  className={waterLevel1 === "Medium" ? "active-medium" : ""}
+                  onClick={() => setWaterLevel1("Medium")}
+                >
+                  Medium
+                </span>
+                <span 
+                  className={waterLevel1 === "Low" ? "active-low" : ""}
+                  onClick={() => setWaterLevel1("Low")}
+                >
+                  Low
+                </span>
               </div>
             </div>
 
             <div className="light">
               <h3>Growing Light Status</h3>
               <div className="light-status">
-                <span>On</span>
-                <span>Off</span>
+                <span 
+                  className={lightStatus1 === "On" ? "active-on" : ""}
+                  onClick={() => setLightStatus1("On")}
+                >
+                  On
+                </span>
+                <span 
+                  className={lightStatus1 === "Off" ? "active-off" : ""}
+                  onClick={() => setLightStatus1("Off")}
+                >
+                  Off
+                </span>
               </div>
             </div>
           </div>
@@ -59,17 +92,42 @@ const Dashboard = () => {
             <div className="status-item">
               <h3>Water Level Status</h3>
               <div className="water-level">
-                <span>High</span>
-                <span>Medium</span>
-                <span>Low</span>
+                <span 
+                  className={waterLevel2 === "High" ? "active-high" : ""}
+                  onClick={() => setWaterLevel2("High")}
+                >
+                  High
+                </span>
+                <span 
+                  className={waterLevel2 === "Medium" ? "active-medium" : ""}
+                  onClick={() => setWaterLevel2("Medium")}
+                >
+                  Medium
+                </span>
+                <span 
+                  className={waterLevel2 === "Low" ? "active-low" : ""}
+                  onClick={() => setWaterLevel2("Low")}
+                >
+                  Low
+                </span>
               </div>
             </div>
 
             <div className="light">
               <h3>Growing Light Status</h3>
               <div className="light-status">
-                <span>On</span>
-                <span>Off</span>
+                <span 
+                  className={lightStatus2 === "On" ? "active-on" : ""}
+                  onClick={() => setLightStatus2("On")}
+                >
+                  On
+                </span>
+                <span 
+                  className={lightStatus2 === "Off" ? "active-off" : ""}
+                  onClick={() => setLightStatus2("Off")}
+                >
+                  Off
+                </span>
               </div>
             </div>
           </div>

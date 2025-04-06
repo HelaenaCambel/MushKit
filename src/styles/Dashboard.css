@@ -115,3 +115,28 @@
   .light-status span:hover {
 	background-color: #d0d0d0;
   }
+
+  .water-level span.active-high {
+	background-color: #4CAF50;
+	color: white;
+  }
+  
+  .water-level span.active-medium {
+	background-color: #FF9800; 
+	color: white;
+  }
+  
+  .water-level span.active-low {
+	background-color: #F44336;
+	color: white;
+  }
+  
+  .light-status span.active-on {
+	background-color: #4CAF50;
+	color: white;
+  }
+
+  .light-status span.active-off {
+	background-color: #F44336;
+	color: white;
+  }
