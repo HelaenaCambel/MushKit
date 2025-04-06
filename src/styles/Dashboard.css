@@ -1,4 +1,4 @@
-.dashboard-container {
+  .dashboard-container {
 	margin-left: 100px;
   }
   
@@ -75,6 +75,12 @@
 	margin-bottom: 5px;
 	font-weight: bold;
   }
+  .peltier h3,
+  .light h3 {
+	font-size: 1.2rem;
+	margin-bottom: 5px;
+	font-weight: bold;
+  }
   
   .water-level {
 	display: flex;
@@ -83,20 +89,6 @@
 	font-weight: bold;
 	gap: 10px;
   }
-  
-  .water-level span {
-	display: block;
-	text-align: center;
-	padding: 5px 10px;
-	background-color: #f0f0f0;
-	border-radius: 5px;
-	cursor: pointer;
-  }
-  
-  .water-level span:hover {
-	background-color: #d0d0d0;
-  }
-
   .peltier,
   .light {
 	display: flex;
@@ -105,22 +97,7 @@
 	margin-top: 20px;
   }
   
-  .peltier h3,
-  .light h3 {
-	font-size: 1.2rem;
-	margin-bottom: 5px;
-	font-weight: bold;
-  }
-  
-  .peltier-status,
-  .light-status {
-	display: flex;
-	justify-content: space-evenly;
-	width: 100%;
-	font-weight: bold;
-	gap: 10px;
-  }
-  
+  .water-level span,
   .peltier-status span,
   .light-status span {
 	display: block;
@@ -130,7 +107,17 @@
 	border-radius: 5px;
 	cursor: pointer;
   }
+
+  .peltier-status,
+  .light-status {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+	font-weight: bold;
+	gap: 10px;
+  }
   
+  .water-level span:hover,
   .peltier-status span:hover,
   .light-status span:hover {
 	background-color: #d0d0d0;
