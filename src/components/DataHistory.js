@@ -1,11 +1,12 @@
 import React from "react";
 import SideNavBar from "../static/SideNavBar";
+import "../styles/DataHistory.css";
 
 const DataHistory = () => {
   return (
-    <div className="dashboard-container" style={{ display: "flex" }}>
+    <div className="history-container">
       <SideNavBar />
-      <div className="dashboard-content" style={{ flex: 1, padding: "20px" }}>
+      <div>
         <h1>History</h1>
       </div>
     </div>
