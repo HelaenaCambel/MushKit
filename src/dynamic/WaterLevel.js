@@ -3,9 +3,9 @@ import "../dynamic/status.css";
 
 const WaterLevel = ({ value, onChange }) => {
   return (
-    <div className="status-item">
+    <div className="water-level">
       <h3>Water Level Status</h3>
-      <div className="water-level">
+      <div className="water-status">
         <span
           className={value === "High" ? "active-high" : ""}
           onClick={() => onChange("High")}
