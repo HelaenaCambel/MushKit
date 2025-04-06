@@ -1,6 +1,6 @@
 import React from "react";
 import SideNavBar from "../static/SideNavBar";
-import "../styles/UserProfile.css";
+import "../component styles/UserProfile.css";
 
 const UserProfile = () => {
   return (

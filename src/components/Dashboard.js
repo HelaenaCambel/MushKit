@@ -1,6 +1,6 @@
 import React, { useState }from "react";
 import SideNavBar from "../static/SideNavBar";
-import "../styles/Dashboard.css";
+import "../component styles/Dashboard.css";
 import GaugeTemp from "../charts/GaugeTemp";
 import GaugeHumid from "../charts/GaugeHumid";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import NumPad from "../static/NumPad";
-import "../styles/Login.css"; // Include styles for the login page
+import "../component styles/Login.css"; 
 
 const Login = () => {
   const handlePinSubmit = (pin) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import SideNavBar from "../static/SideNavBar";
-import "../styles/DataHistory.css";
+import "../component styles/DataHistory.css";
 
 const DataHistory = () => {
   return (

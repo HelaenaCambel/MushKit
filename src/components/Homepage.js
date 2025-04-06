@@ -1,6 +1,6 @@
 import React from "react";
 import SideNavBar from "../static/SideNavBar";
-import "../styles/Homepage.css";
+import "../component styles/Homepage.css";
 
 const Home = () => {
   return (
