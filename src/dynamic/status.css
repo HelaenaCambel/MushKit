@@ -1,0 +1,94 @@
+  .status-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .status-item h3 {
+	font-size: 1.2rem;
+	margin-bottom: 5px;
+	font-weight: bold;
+  }
+  
+  .water-level {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+	font-weight: bold;
+	gap: 10px;
+  }
+
+  .water-level span,
+  .light-status span {
+	display: block;
+	text-align: center;
+	padding: 5px 10px;
+	background-color: #f0f0f0;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+
+  .water-level span:hover,
+  .light-status span:hover {
+	background-color: #d0d0d0;
+  }
+
+  .water-level span.active-high {
+	background-color: #4CAF50;
+	color: white;
+  }
+  
+  .water-level span.active-medium {
+	background-color: #FF9800; 
+	color: white;
+  }
+  
+  .water-level span.active-low {
+	background-color: #F44336;
+	color: white;
+  }
+
+  
+  .light h3 {
+	font-size: 1.2rem;
+	margin-bottom: 5px;
+	font-weight: bold;
+  }
+  
+  .light {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 20px;
+  }
+  
+  .light-status span {
+	display: block;
+	text-align: center;
+	padding: 5px 10px;
+	background-color: #f0f0f0;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+
+  .light-status {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+	font-weight: bold;
+	gap: 10px;
+  }
+  
+  .light-status span:hover {
+	background-color: #d0d0d0;
+  }
+  
+  .light-status span.active-on {
+	background-color: #4CAF50;
+	color: white;
+  }
+
+  .light-status span.active-off {
+	background-color: #F44336;
+	color: white;
+  }
