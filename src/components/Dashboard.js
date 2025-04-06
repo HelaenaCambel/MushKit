@@ -22,7 +22,7 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
 
         <div className="gauge-section1">
-          <div className="kit-title">MushKit #1</div>
+          <div className="section-title">MushKit #1</div>
 
           <div className="gauge-temp">
             <GaugeTemp value={13} label="C°" max={60} />
@@ -40,7 +40,7 @@ const Dashboard = () => {
         </div>
 
         <div className="gauge-section2">
-          <div className="kit-title">MushKit #2</div>
+          <div className="section-title">MushKit #2</div>
 
           <div className="gauge-temp">
             <GaugeTemp value={23} label="C°" max={60} />
