@@ -1,4 +1,3 @@
-// SideNavBar.js
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "./SideNavBar.css";
