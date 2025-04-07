@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import "./ValidationSchema.css";
 
 const ValidationSchema = Yup.object().shape({
   email: Yup.string()
