@@ -1,0 +1,71 @@
+  .mushkit-details-form {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    padding: 16px;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group.span-2-3 {
+    grid-column: 2 / span 2;
+  }
+  
+  .form-group.span-4-5 {
+    grid-column: 4 / span 2;
+  }  
+  
+  .form-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .form-group input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .password-wrapper input {
+    flex: 1;
+    padding-right: 32px;
+  }
+  
+  .eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .eye-icon:hover {
+    color: #333;
+  }  
+
+  @media (max-width: 768px) {
+    .user-details-form {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .user-details-form {
+      grid-template-columns: 1fr;
+    }
+  }
+  
