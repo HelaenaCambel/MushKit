@@ -1,30 +1,10 @@
-import React, { useState } from 'react';
-import { useFormik } from 'formik';
+import React from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import ValidationSchema from '../../schema/ValidationSchema'; 
 import "../../component styles/Register Details/UserDetails.css";
 
-function UserDetails() {
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePassword = () => setShowPassword((prev) => !prev);
-
-  const formik = useFormik({
-    initialValues: {
-      owner: '',
-      contact: '',
-      affiliation: '',
-      email: '',
-      password: '',
-      pin: '',
-    },
-    validationSchema: ValidationSchema, 
-    onSubmit: (values) => {
-      console.log(values); 
-    },
-  });
-
+function UserDetails( {formik, showPassword, togglePassword} ) {
   return (
-    <form className="user-details-form" onSubmit={formik.handleSubmit}>
+    <div className="user-details-form">
       <div className="form-group">
         <label htmlFor="owner">MushKit Owner</label>
         <input
@@ -122,7 +102,7 @@ function UserDetails() {
           <div className="error">{formik.errors.pin}</div>
         ) : null}
       </div>
-    </form>
+    </div>
   );
 }
 

@@ -3,9 +3,16 @@
   	justify-content: space-between;
   	align-items: center;
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 30px;
     background-color: var(--dark);
     color: var(--light);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .login-text {
@@ -33,6 +40,7 @@
   border-radius: 6px;
   cursor: pointer;
   margin-left: 12px;
+  margin-right: 40px;
   margin-bottom: 3px;
   transition: background-color 0.2s ease;
 }
@@ -44,10 +52,22 @@
   margin-bottom: 0.5px;
 }
 
-.details-section {
+.details-section-user {
 	max-width: 1300px;
 	margin: auto;
-  margin-top: 30px;
+  margin-top: 130px;
+	padding: 20px;
+	border: 2px solid #ccc;
+	border-radius: 10px;
+	background-color: #f9f9f9;
+	align-items: center;
+	text-align: center;
+}
+
+.details-section-mushkit {
+	max-width: 1300px;
+	margin: auto;
+  margin-top: 25px;
 	padding: 20px;
 	border: 2px solid #ccc;
 	border-radius: 10px;

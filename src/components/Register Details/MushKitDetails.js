@@ -1,27 +1,10 @@
-import React, { useState } from 'react';
-import { useFormik } from 'formik';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import ValidationSchema from '../../schema/ValidationSchema'; 
+import React from 'react';
 import "../../component styles/Register Details/MushKitDetails.css";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-function MushKitDetails() {
-  const [showWifiPassword, setShowWifiPassword] = useState(false);
-  const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
-
-  const formik = useFormik({
-    initialValues: {
-      kit_name: '',
-      wifi_ssid: '',
-      wifi_pass: '',
-    },
-    validationSchema: ValidationSchema, 
-    onSubmit: (values) => {
-      console.log(values); 
-    },
-  });
-
+function MushKitDetails( {formik, showWifiPassword, toggleWifiPassword} ) {
   return (
-    <form className="mushkit-details-form" onSubmit={formik.handleSubmit}>
+    <div className="mushkit-details-form">
       <div className="form-group">
         <label htmlFor="kit_name"> MushKit Name </label>
         <input
@@ -74,7 +57,7 @@ function MushKitDetails() {
           <div className="error">{formik.errors.wifi_pass}</div>
         ) : null}
       </div>      
-    </form>
+    </div>
   )
 }
 
