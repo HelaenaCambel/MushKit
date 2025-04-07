@@ -2,11 +2,13 @@
   	display: flex;
   	justify-content: space-between;
   	align-items: center;
-	padding: 1rem 2rem;	
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--dark);
+    color: var(--light);
 }
 
 .login-text {
-    margin-top: 20px;
     font-size: 16px;
     text-align: center;
 	  font-weight: bold
@@ -45,7 +47,7 @@
 .details-section {
 	max-width: 1300px;
 	margin: auto;
-	margin-bottom: 30px; 
+  margin-top: 30px;
 	padding: 20px;
 	border: 2px solid #ccc;
 	border-radius: 10px;

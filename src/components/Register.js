@@ -7,7 +7,7 @@ const Register = () => {
   return (
     <div>
       <div className="register-header">
-        <h1>Register</h1>
+        <h1>MushKit Register</h1>
         <div className="login-text">
           <p>
             Already have an account?{" "}
