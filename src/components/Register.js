@@ -4,11 +4,12 @@ import ValidationSchema from '../schema/ValidationSchema';
 import "../component styles/Register.css";
 import UserDetails from './Register Details/UserDetails';
 import MushKitDetails from './Register Details/MushKitDetails';
-import Submit from './Register Details/Submit';
+import Buttons from './Register Details/Buttons';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showWifiPassword, setShowWifiPassword] = useState(false);
+  const [mushKits, setMushKits] = useState([0]);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
@@ -28,9 +29,13 @@ const Register = () => {
     validationSchema: ValidationSchema,
     onSubmit: (values) => {
       console.log('Submitted values:', values);
-      // insert code to send data to backend 
     },
   });
+
+  const handleAddMushKit = () => {
+    console.log("Add MushKit clicked");
+    setMushKits(prev => [...prev, prev.length]);
+  };
 
   return (
     <div>
@@ -58,14 +63,19 @@ const Register = () => {
 
         <div className="details-section-mushkit">
           <div className="section-title">MushKit Details</div>
-          <MushKitDetails
-            formik={formik}
-            showWifiPassword={showWifiPassword}
-            toggleWifiPassword={toggleWifiPassword}
-          />
+          {mushKits.map((_, index) => (
+            <MushKitDetails
+              formik={formik}
+              showWifiPassword={showWifiPassword}
+              toggleWifiPassword={toggleWifiPassword}
+            />
+          ))}
         </div>
 
-        <Submit />
+        <Buttons 
+          onAddMushKit={handleAddMushKit}
+          onSubmit={formik.handleSubmit}  
+        />
       </form>
     </div>
   );
