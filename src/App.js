@@ -4,7 +4,6 @@ import Register from "./components/Register";
 import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard";
 import DataHistory from "./components/DataHistory";
-import UserProfile from "./components/UserProfile";
 
 const App = () => {
   return (
@@ -16,7 +15,6 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Homepage />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile" element={<UserProfile />} />
             <Route path="/history" element={<DataHistory />} />
           </Routes>
         </div>
