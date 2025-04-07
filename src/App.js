@@ -4,6 +4,7 @@ import Register from "./components/Register";
 import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard";
 import DataHistory from "./components/DataHistory";
+import UserProfile from "./components/UserProfile";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/home" element={<Homepage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/history" element={<DataHistory />} />
+            <Route path="/profile" element={<UserProfile />} />
           </Routes>
         </div>
       </div>
