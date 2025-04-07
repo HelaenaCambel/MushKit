@@ -4,6 +4,12 @@
   margin-top: 20px;
 }
 
+.left-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 95px;
+}
+
 .submit-button {
   background-color: #4CAF50;
   color: white;
@@ -21,8 +27,16 @@
   background-color: #388E3C;
 }
 
-.add-mushkit-button {
+.remove-mushkit-button {
   background-color: #2196F3;
+}
+
+.add-mushkit-button {
+  background-color: #f44336;
+}
+
+.add-mushkit-button,
+.remove-mushkit-button {
   color: white;
   border: none;
   padding: 10px 15px;
@@ -36,4 +50,8 @@
 
 .add-mushkit-button:hover {
   background-color: #1976D2;
+}
+
+.remove-mushkit-button:hover {
+  background-color: #d32f2f;
 }
