@@ -1,33 +1,33 @@
 import React from 'react';
 import '../../component styles/Register Details/Buttons.css'; 
 
-const Buttons = ({ onSubmit, onAddMushKit, onRemoveMushKit }) => {
+const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, onSubmit}) => {
   return (
     <div className="form-buttons">
       <div className='lef-buttons'>
         <button
           type="button"
-          onClick={onAddMushKit}
           className="add-mushkit-button"
-        >
-          Add MushKit
+          disabled={!canAdd}
+          onClick={onAddMushKit}
+        > Add MushKit
         </button>
 
         <button
           type="button"
-          onClick={onRemoveMushKit}
           className="remove-mushkit-button"
-        >
-          Remove MushKit
+          disabled={!canRemove}
+          onClick={onRemoveMushKit}
+        > Remove MushKit
         </button>
       </div>
       
       <button
         type="submit"
-        onClick={onSubmit}
         className="submit-button"
-      >
-        Submit Details
+        disabled={!canSubmit}
+        onClick={onSubmit}
+      > Submit Details
       </button>
     </div>
   );

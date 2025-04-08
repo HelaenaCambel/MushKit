@@ -23,7 +23,7 @@
 
   .add-mushkit-button {
     background-color: #2196F3; 
-    margin-left: 90px;
+    margin-left: 95px;
   }
 
   .remove-mushkit-button {
@@ -41,11 +41,11 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    margin-right: 90px;
+    margin-right: 95px;
     margin-bottom: 20px;
   }
 
-/*Styles when hovered*/
+/*When hovered*/
   .add-mushkit-button:hover {
     background-color: #1976D2;
   }
@@ -56,4 +56,20 @@
 
   .submit-button:hover {
     background-color: #388E3C;
+  }
+
+/*Disable buttons*/
+  .add-mushkit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .remove-mushkit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }

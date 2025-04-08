@@ -31,10 +31,24 @@ const Register = () => {
       console.log('Submitted values:', values);
     },
   });
+  
+  const isFirstMushKitComplete =
+  formik.values.kit_name.trim() !== '' &&
+  formik.values.wifi_ssid.trim() !== '' &&
+  formik.values.wifi_pass.trim() !== '' &&
+  !formik.errors.kit_name &&
+  !formik.errors.wifi_ssid &&
+  !formik.errors.wifi_pass;
 
   const handleAddMushKit = () => {
     console.log("Add MushKit clicked");
     setMushKits(prev => [...prev, prev.length]);
+  };
+
+  const handleRemoveMushKit = () => {
+    if (mushKits.length > 1) {
+      setMushKits(prev => prev.slice(0, -1));
+    }
   };
 
   return (
@@ -73,8 +87,12 @@ const Register = () => {
         </div>
 
         <Buttons 
+          canAdd={isFirstMushKitComplete}
           onAddMushKit={handleAddMushKit}
-          onSubmit={formik.handleSubmit}  
+          canRemove={mushKits.length > 1}
+          onRemoveMushKit={handleRemoveMushKit}
+          canSubmit={formik.isValid && formik.dirty}
+          onSubmit={formik.handleSubmit}
         />
       </form>
     </div>
