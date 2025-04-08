@@ -1,57 +1,59 @@
-.form-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
 
-.left-buttons {
-  display: flex;
-  gap: 10px;
-  margin-left: 95px;
-}
+  .left-buttons {
+    display: flex;
+    margin-bottom: 20px;
+  }
 
-.submit-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-right: 95px;
-}
+  .add-mushkit-button,
+  .remove-mushkit-button {
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-.submit-button:hover {
-  background-color: #388E3C;
-}
+  .add-mushkit-button {
+    background-color: #2196F3; 
+    margin-left: 90px;
+  }
 
-.remove-mushkit-button {
-  background-color: #2196F3;
-}
+  .remove-mushkit-button {
+    background-color: #f44336;
+    margin-left: 10px;
+  }
 
-.add-mushkit-button {
-  background-color: #f44336;
-}
+  .submit-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-right: 90px;
+    margin-bottom: 20px;
+  }
 
-.add-mushkit-button,
-.remove-mushkit-button {
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-left: 95px;
-}
+/*Styles when hovered*/
+  .add-mushkit-button:hover {
+    background-color: #1976D2;
+  }
 
-.add-mushkit-button:hover {
-  background-color: #1976D2;
-}
+  .remove-mushkit-button:hover {
+    background-color: #d32f2f;
+  }
 
-.remove-mushkit-button:hover {
-  background-color: #d32f2f;
-}
+  .submit-button:hover {
+    background-color: #388E3C;
+  }
