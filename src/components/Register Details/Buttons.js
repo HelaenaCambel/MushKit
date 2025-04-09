@@ -1,16 +1,17 @@
 import React from 'react';
 import '../../component styles/Register Details/Buttons.css'; 
 
-const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, onSubmit}) => {
+const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, onSubmit }) => {
   return (
     <div className="form-buttons">
-      <div className='lef-buttons'>
+      <div className="lef-buttons">
         <button
           type="button"
           className="add-mushkit-button"
           disabled={!canAdd}
           onClick={onAddMushKit}
-        > Add MushKit
+        >
+          Add MushKit
         </button>
 
         <button
@@ -18,7 +19,8 @@ const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, 
           className="remove-mushkit-button"
           disabled={!canRemove}
           onClick={onRemoveMushKit}
-        > Remove MushKit
+        >
+          Remove MushKit
         </button>
       </div>
       
@@ -27,7 +29,8 @@ const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, 
         className="submit-button"
         disabled={!canSubmit}
         onClick={onSubmit}
-      > Submit Details
+      >
+        Submit Details
       </button>
     </div>
   );

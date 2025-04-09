@@ -2,50 +2,52 @@ import React from 'react';
 import "../../component styles/Register Details/MushKitDetails.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-function MushKitDetails( {formik, showWifiPassword, toggleWifiPassword} ) {
+function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword }) {
+  const getField = (field) => `mushkits[${index}].${field}`;
+
   return (
     <div className="mushkit-details-form">
       <div className="form-group">
-        <label htmlFor="kit_name"> MushKit Name </label>
+        <label htmlFor={getField("kit_name")}>MushKit Name</label>
         <input
           type="text"
-          id="kit_name"
-          name="kit_name"
+          id={`kit_name_${index}`}
+          name={getField("kit_name")}
           placeholder="Enter MushKit name"
-          value={formik.values.kit_name}
+          value={formik.values.mushkits[index].kit_name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.touched.kit_name && formik.errors.kit_name ? (
-          <div className="error">{formik.errors.kit_name}</div>
-        ) : null}
+        {formik.touched.mushkits?.[index]?.kit_name && formik.errors.mushkits?.[index]?.kit_name && (
+          <div className="error">{formik.errors.mushkits[index].kit_name}</div>
+        )}
       </div>
 
       <div className="form-group span-2-3">
-        <label htmlFor="wifi_ssid"> SSID (Wi-Fi Name) </label>
+        <label htmlFor={getField("wifi_ssid")}>SSID (Wi-Fi Name)</label>
         <input
           type="text"
-          id="wifi_ssid"
-          name="wifi_ssid"
+          id={`wifi_ssid_${index}`}
+          name={getField("wifi_ssid")}
           placeholder="Enter Wi-Fi's name/SSID"
-          value={formik.values.wifi_ssid}
+          value={formik.values.mushkits[index].wifi_ssid}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.touched.wifi_ssid && formik.errors.wifi_ssid ? (
-          <div className="error">{formik.errors.wifi_ssid}</div>
-        ) : null}
+        {formik.touched.mushkits?.[index]?.wifi_ssid && formik.errors.mushkits?.[index]?.wifi_ssid && (
+          <div className="error">{formik.errors.mushkits[index].wifi_ssid}</div>
+        )}
       </div>
 
       <div className="form-group password-group span-4-5">
-        <label htmlFor="wifi_pass"> Wi-Fi Password</label>
+        <label htmlFor={getField("wifi_pass")}>Wi-Fi Password</label>
         <div className="password-wrapper">
           <input
             type={showWifiPassword ? 'text' : 'password'}
-            id="wifi_pass"
-            name="wifi_pass"
+            id={`wifi_pass_${index}`}
+            name={getField("wifi_pass")}
             placeholder="Enter Wi-Fi password"
-            value={formik.values.wifi_pass}
+            value={formik.values.mushkits[index].wifi_pass}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
@@ -53,12 +55,12 @@ function MushKitDetails( {formik, showWifiPassword, toggleWifiPassword} ) {
             {showWifiPassword ? <FaEye /> : <FaEyeSlash />}
           </span>
         </div>
-        {formik.touched.wifi_pass && formik.errors.wifi_pass ? (
-          <div className="error">{formik.errors.wifi_pass}</div>
-        ) : null}
-      </div>      
+        {formik.touched.mushkits?.[index]?.wifi_pass && formik.errors.mushkits?.[index]?.wifi_pass && (
+          <div className="error">{formik.errors.mushkits[index].wifi_pass}</div>
+        )}
+      </div>
     </div>
-  )
+  );
 }
 
-export default MushKitDetails
+export default MushKitDetails;

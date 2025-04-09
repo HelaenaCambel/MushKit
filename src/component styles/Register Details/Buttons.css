@@ -59,16 +59,8 @@
   }
 
 /*Disable buttons*/
-  .add-mushkit-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-
-  .remove-mushkit-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-
+  .add-mushkit-button:disabled,
+  .remove-mushkit-button:disabled,
   .submit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
