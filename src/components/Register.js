@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, FieldArray, Form } from 'formik';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import ValidationSchema from '../schema/ValidationSchema';
 import "../component styles/Register.css";
 import UserDetails from './Register Details/UserDetails';
@@ -12,6 +13,23 @@ const Register = () => {
 
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
+
+  const handleSubmit = async (values) => {
+    try {
+      const db = getFirestore();
+      const docRef = await addDoc(collection(db, "users"), {
+        owner: values.owner,
+        contact: values.contact,
+        email: values.email,
+        password: values.password,
+        pin: values.pin,
+        mushkits: values.mushkits,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   return (
     <div>
@@ -44,9 +62,7 @@ const Register = () => {
           ]
         }}
         validationSchema={ValidationSchema}
-        onSubmit={(values) => {
-          console.log('Submitted values:', values);
-        }}
+        onSubmit={handleSubmit}
       >
         {formik => {
           const firstKit = formik.values.mushkits[0];
