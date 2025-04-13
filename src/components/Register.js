@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, FieldArray, Form } from 'formik';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../database/firebase.js';
 import ValidationSchema from '../schema/ValidationSchema';
 import "../component styles/Register.css";
@@ -21,9 +21,17 @@ const Register = () => {
 
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
-
+  
   const handleSubmit = async (values, actions) => {
     try {
+      const q = query(collection(db, "users"), where("email", "==", values.email));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        actions.setFieldError("email", "Already used. Kindly proceed to login and update your existing account if this is you.");
+        return;
+      }
+  
       const docRef = await addDoc(collection(db, "users"), {
         owner: values.owner,
         contact: values.contact,
@@ -32,13 +40,14 @@ const Register = () => {
         pin: values.pin,
         mushkits: values.mushkits,
       });
+  
       console.log("Document written with ID: ", docRef.id);
       actions.resetForm(); 
       setShowSuccessMessage(true);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-  };  
+  };
 
   return (
     <div>
