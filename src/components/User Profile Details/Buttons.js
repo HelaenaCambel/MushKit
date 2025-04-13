@@ -1,26 +1,71 @@
 import React from 'react';
 import '../../component styles/User Profile Details/Buttons.css';
 
-const Buttons = ({ isEditing, onEditProfile, onSubmitChanges, canSubmit }) => {
+const Buttons = ({
+  isEditing,
+  onEditProfile,
+  onSubmitChanges,
+  onCancelEdit,
+  onAddMushKit,
+  onRemoveMushKit,
+  canSubmit,
+  canAdd,
+  canRemove
+}) => {
   return (
     <div className="form-buttons">
       {isEditing ? (
-        <button
-          type="button"
-          className="submit-button"
-          disabled={!canSubmit}
-          onClick={onSubmitChanges}
-        >
-          Save Changes
-        </button>
+        <>
+          <div className="mushkit-buttons">
+            <button
+              type="button"
+              className="add-mushkit"
+              disabled={!canAdd}
+              onClick={onAddMushKit}
+            >
+              Add MushKit
+            </button>
+
+            <button
+              type="button"
+              className="remove-mushkit"
+              disabled={!canRemove}
+              onClick={onRemoveMushKit}
+            >
+              Remove MushKit
+            </button>
+          </div>
+          <div className="action-buttons">
+            <button
+              type="button"
+              className="submit-button"
+              disabled={!canSubmit}
+              onClick={onSubmitChanges}
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              className="cancel-button"
+              onClick={onCancelEdit}
+            >
+              Cancel Edit
+            </button>
+          </div>
+        </>
       ) : (
-        <button
-          type="button"
-          className="edit-button"
-          onClick={onEditProfile}
-        >
-          Edit Profile
-        </button>
+        <>
+          <div className="mushkit-buttons"></div> 
+          <div className="action-buttons">
+            <button
+              type="button"
+              className="edit-button"
+              onClick={onEditProfile}
+            >
+              Edit Profile
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
