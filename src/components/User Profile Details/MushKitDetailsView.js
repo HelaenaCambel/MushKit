@@ -1,7 +1,7 @@
 import React from "react";
 import "../../component styles/User Profile Details/MushKitDetailsView.css";
 
-const MushKitDetailsView = ({ mushkits }) => {
+const MushKitDetailsView = ({ mushkits, isEditing}) => {
   return (
     <div className="mushkit-section">
       <div className="section-title">MushKit Details</div>
@@ -14,7 +14,7 @@ const MushKitDetailsView = ({ mushkits }) => {
                 type="text"
                 id={`kit_name_${index}`}
                 value={kit.kit_name || ""}
-                disabled
+                disabled={!isEditing}
               />
             </div>
 
@@ -24,7 +24,7 @@ const MushKitDetailsView = ({ mushkits }) => {
                 type="text"
                 id={`wifi_ssid_${index}`}
                 value={kit.wifi_ssid || ""}
-                disabled
+                disabled={!isEditing}
               />
             </div>
 
@@ -34,7 +34,7 @@ const MushKitDetailsView = ({ mushkits }) => {
                 type="text"
                 id={`wifi_pass_${index}`}
                 value={kit.wifi_pass || ""}
-                disabled
+                disabled={!isEditing}
               />
             </div>
           </React.Fragment>

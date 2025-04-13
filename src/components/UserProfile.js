@@ -5,12 +5,18 @@ import { db } from "../database/firebase";
 import SideNavBar from "../static/SideNavBar";
 import UserDetailsView from "../components/User Profile Details/UserDetailsView";
 import MushKitDetailsView from "../components/User Profile Details/MushKitDetailsView";
+import Buttons from "../components/User Profile Details/Buttons";
 import "../component styles/UserProfile.css";
 
 const UserProfile = () => {
   const location = useLocation();
   const userEmail = location.state?.email;  
   const [userData, setUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -41,8 +47,9 @@ const UserProfile = () => {
         <h1>Profile</h1>
         {userData ? (
           <>
-            <UserDetailsView user={userData} />
-            <MushKitDetailsView mushkits={userData.mushkits || []} />
+            <UserDetailsView user={userData} isEditing={isEditing} />
+            <MushKitDetailsView mushkits={userData.mushkits || []} isEditing={isEditing} />
+            <Buttons onEditProfile={handleEditProfile} />
           </>
         ) : (
           <p>Loading user data...</p>

@@ -1,7 +1,7 @@
 import React from "react";
 import "../../component styles/User Profile Details/UserDetailsView.css";
 
-const UserDetailsView = ({ user }) => {
+const UserDetailsView = ({ user, isEditing }) => {
   return (
     <div className="user-section">
       <div className="section-title">User Details</div>  
@@ -12,7 +12,7 @@ const UserDetailsView = ({ user }) => {
             type="text"
             id="owner"
             value={user.owner || ""}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -22,7 +22,7 @@ const UserDetailsView = ({ user }) => {
             type="text"
             id="contact"
             value={user.contact || ""}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -32,7 +32,7 @@ const UserDetailsView = ({ user }) => {
             type="text"
             id="affiliation"
             value={user.affiliation || "N/A"}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -42,7 +42,7 @@ const UserDetailsView = ({ user }) => {
             type="email"
             id="email"
             value={user.email || ""}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -52,7 +52,7 @@ const UserDetailsView = ({ user }) => {
             type="text"
             id="password"
             value={user.password || ""}
-            disabled
+            disabled={!isEditing}
           />
         </div>
 
@@ -62,7 +62,7 @@ const UserDetailsView = ({ user }) => {
             type="text"
             id="pin"
             value={user.pin || ""}
-            disabled
+            disabled={!isEditing}
           />
         </div>
       </div>
