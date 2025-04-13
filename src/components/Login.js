@@ -26,7 +26,7 @@ const Login = () => {
         setErrorMsg("");
         setPinKey((prev) => prev + 1); 
 
-        navigate("/profile", { state: { email } });
+        navigate("/home", { state: { email } });
       } else {
         setLoginAttempts((prev) => prev + 1);
         setErrorMsg("Email and PIN don't match.");
