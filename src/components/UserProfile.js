@@ -68,10 +68,26 @@ const UserProfile = () => {
     }
   };
 
+  const handleAddMushKit = () => {
+    const newMushKit = { kit_name: "", wifi_ssid: "", wifi_pass: "" }; // Default empty kit
+    setEditedUserData((prev) => ({
+      ...prev,
+      mushkits: [...(prev.mushkits || []), newMushKit]
+    }));
+  };
+
+  const handleRemoveMushKit = () => {
+    const currentKits = editedUserData.mushkits || [];
+    if (currentKits.length > 1) {
+      const updatedKits = currentKits.slice(0, -1);
+      setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }));
+    }
+  };
+
   useEffect(() => {
     if (!userData || !editedUserData) return;
     const hasChanges = JSON.stringify(userData) !== JSON.stringify(editedUserData);
-    setCanSubmit(hasChanges); // Enable/Disable Save button based on changes
+    setCanSubmit(hasChanges); 
   }, [editedUserData, userData]);
 
   return (
@@ -100,7 +116,11 @@ const UserProfile = () => {
               onEditProfile={handleEditProfile}
               onSubmitChanges={handleSubmitChanges}
               onCancelEdit={handleCancelEdit}
+              onAddMushKit={handleAddMushKit}
+              onRemoveMushKit={handleRemoveMushKit}
               canSubmit={canSubmit}
+              canAdd={isEditing}
+              canRemove={isEditing && editedUserData.mushkits?.length > 1}
             />
           </>
         ) : (
