@@ -72,3 +72,8 @@
 .forgot-pin a:hover {
     text-decoration: underline;
 }
+
+.login-error-msg {
+    color: red;
+    font-size: 14px;
+  }

@@ -1,24 +1,29 @@
 import React, { useState, useEffect, useCallback } from "react";
-import "./NumPad.css"; 
+import "./NumPad.css";
 
-const NumPad = ({ onSubmit }) => {
-  const [input, setInput] = useState(""); 
+const NumPad = ({ onSubmit, resetKey }) => {
+  const [input, setInput] = useState("");
+
+  // Reset input when `resetKey` changes
+  useEffect(() => {
+    setInput("");
+  }, [resetKey]);
 
   const handleButtonClick = useCallback((value) => {
     if (input.length < 4) {
-      setInput(input + value); 
+      setInput((prev) => prev + value);
     }
   }, [input]);
 
   const handleClear = useCallback(() => {
-    setInput(""); 
+    setInput("");
   }, []);
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     if (input.length === 4) {
-      onSubmit(input); 
-      setInput(""); 
+      onSubmit(input);
+      setInput("");
     }
   }, [onSubmit, input]);
 
@@ -30,7 +35,7 @@ const NumPad = ({ onSubmit }) => {
       handleSubmit(e);
     }
     if (e.key === "Backspace") {
-      handleClear(); 
+      handleClear();
     }
   }, [handleButtonClick, handleSubmit, handleClear, input]);
 
@@ -48,12 +53,12 @@ const NumPad = ({ onSubmit }) => {
       </div>
       <div className="numpad-grid">
         {[...Array(9).keys()].map((i) => (
-          <button key={i} onClick={() => handleButtonClick(i + 1)}>
+          <button key={i} onClick={() => handleButtonClick((i + 1).toString())}>
             {i + 1}
           </button>
         ))}
-        <button onClick={handleClear}>C</button> 
-        <button onClick={() => handleButtonClick(0)}>0</button>
+        <button onClick={handleClear}>C</button>
+        <button onClick={() => handleButtonClick("0")}>0</button>
         <button onClick={handleSubmit} disabled={input.length !== 4}>Enter</button>
       </div>
     </div>

@@ -1,14 +1,17 @@
-import React, {useState }from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../database/firebase";
 import NumPad from "../static/NumPad";
-import "../component styles/Login.css"; 
+import ResetPin from "../dynamic/ResetPin";
+import "../component styles/Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
-  const [loginAttempts, setLoginAttempts] = useState(0);  
+  const [loginAttempts, setLoginAttempts] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showResetBox, setShowResetBox] = useState(false);
+  const [pinKey, setPinKey] = useState(0); // used to reset NumPad
   const navigate = useNavigate();
 
   const handlePinSubmit = async (pin) => {
@@ -21,6 +24,7 @@ const Login = () => {
         console.log("Login successful!");
         setLoginAttempts(0);
         setErrorMsg("");
+        setPinKey(prev => prev + 1); // force reset NumPad
         navigate("/home");
       } else {
         setLoginAttempts((prev) => prev + 1);
@@ -53,17 +57,25 @@ const Login = () => {
           </div>
 
           <h2>Enter PIN</h2>
-          <NumPad onSubmit={handlePinSubmit} />
+          <NumPad key={pinKey} resetKey={pinKey} onSubmit={handlePinSubmit} />
 
           {errorMsg && loginAttempts < 3 && (
-            <p style={{ color: "red", marginTop: "10px", fontSize: "14px" }}>{errorMsg}</p>
+            <p className="login-error-msg">{errorMsg}</p>
           )}
 
           {loginAttempts >= 3 && (
             <div className="forgot-pin">
               <p>
                 Forgot your PIN?{" "}
-                <a href="/reset">Click here to reset PIN.</a>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowResetBox(true);
+                  }}
+                >
+                  Click here to reset PIN.
+                </a>
               </p>
             </div>
           )}
@@ -76,6 +88,13 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {showResetBox && (
+        <ResetPin
+          email={email}
+          onClose={() => setShowResetBox(false)}
+        />
+      )}
     </div>
   );
 };
