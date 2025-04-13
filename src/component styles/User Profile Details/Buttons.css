@@ -1,46 +1,90 @@
 .form-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .edit-button {
-    background-color: #2196F3;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;    
-    margin-right: 60px;
-  }
-  
-  .edit-button:hover {
-    background-color: #1976D2;
-  }
-  
-  .submit-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-right: 60px;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
-  .submit-button:hover {
-    background-color: #388E3C;
-  }
+.mushkit-buttons {
+  display: flex;
+  margin-bottom: 20px;
+}
 
-  .submit-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
+.add-mushkit,
+.remove-mushkit {
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-mushkit {
+  background-color: #2196F3; 
+  margin-left: 35px;
+}
+
+.remove-mushkit {
+  background-color: #f44336;
+  margin-left: 10px;
+}
+
+.edit-button,
+.submit-button,
+.cancel-button {
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-button {
+  background-color: #2196F3; 
+  margin-right: 55px;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  margin-right: 55px;
+}
+
+/*When hovered*/
+.add-mushkit:hover {
+  background-color: #1976D2;
+}
+
+.remove-mushkit:hover {
+  background-color: #d32f2f;
+}
+  
+.edit-button:hover {
+  background-color: #1976D2;
+}
+
+.submit-button:hover {
+  background-color: #388E3C;
+}
+
+.cancel-button:hover {
+  background-color: #d32f2f;
+}
+
+/*When disabled*/
+.remove-mushkit:disabled,
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
