@@ -11,7 +11,7 @@ const Login = () => {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [showResetBox, setShowResetBox] = useState(false);
-  const [pinKey, setPinKey] = useState(0); // used to reset NumPad
+  const [pinKey, setPinKey] = useState(0); 
   const navigate = useNavigate();
 
   const handlePinSubmit = async (pin) => {
@@ -24,11 +24,12 @@ const Login = () => {
         console.log("Login successful!");
         setLoginAttempts(0);
         setErrorMsg("");
-        setPinKey(prev => prev + 1); // force reset NumPad
-        navigate("/home");
+        setPinKey((prev) => prev + 1); 
+
+        navigate("/profile", { state: { email } });
       } else {
         setLoginAttempts((prev) => prev + 1);
-        setErrorMsg("Email and PIN doesn't match.");
+        setErrorMsg("Email and PIN don't match.");
       }
     } catch (error) {
       console.error("Error during login:", error);

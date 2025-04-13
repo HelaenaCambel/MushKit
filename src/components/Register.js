@@ -35,6 +35,7 @@ const Register = () => {
       const docRef = await addDoc(collection(db, "users"), {
         owner: values.owner,
         contact: values.contact,
+        affiliation: values.affiliation,
         email: values.email,
         password: values.password,
         pin: values.pin,
