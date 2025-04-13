@@ -1,22 +1,29 @@
+// src/components/Register.css
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Formik, FieldArray, Form } from 'formik';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../database/firebase.js';
 import ValidationSchema from '../schema/ValidationSchema';
 import "../component styles/Register.css";
 import UserDetails from './Register Details/UserDetails';
 import MushKitDetails from './Register Details/MushKitDetails';
 import Buttons from './Register Details/Buttons';
+import MessageBox from '../static/MessageBox';
 
 const Register = () => {
+  const navigate = useNavigate();  
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showWifiPassword, setShowWifiPassword] = useState(false);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
   const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, actions) => {
     try {
-      const db = getFirestore();
       const docRef = await addDoc(collection(db, "users"), {
         owner: values.owner,
         contact: values.contact,
@@ -26,10 +33,12 @@ const Register = () => {
         mushkits: values.mushkits,
       });
       console.log("Document written with ID: ", docRef.id);
+      actions.resetForm(); 
+      setShowSuccessMessage(true);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-  };
+  };  
 
   return (
     <div>
@@ -124,6 +133,17 @@ const Register = () => {
           );
         }}
       </Formik>
+
+      {showSuccessMessage && (
+        <MessageBox
+          message="Registration successful!"
+          onClose={() => {
+            setShowSuccessMessage(false);
+            navigate('/');
+          }}
+        />
+      )}
+
     </div>
   );
 };
