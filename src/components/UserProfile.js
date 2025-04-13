@@ -18,6 +18,12 @@ const UserProfile = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [userDocId, setUserDocId] = useState(null);
 
+  const handleCancelEdit = () => {
+    setEditedUserData({ ...userData });
+    setIsEditing(false);
+    setCanSubmit(false);
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       if (userEmail) {
@@ -54,7 +60,7 @@ const UserProfile = () => {
 
     try {
       await updateDoc(doc(db, "users", userDocId), editedUserData);
-      setUserData(editedUserData); // Update state after saving
+      setUserData(editedUserData); 
       setIsEditing(false);
       setCanSubmit(false);
     } catch (error) {
@@ -93,6 +99,7 @@ const UserProfile = () => {
               isEditing={isEditing}
               onEditProfile={handleEditProfile}
               onSubmitChanges={handleSubmitChanges}
+              onCancelEdit={handleCancelEdit}
               canSubmit={canSubmit}
             />
           </>
