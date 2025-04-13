@@ -19,7 +19,7 @@ const MushKitDetailsView = ({ mushkits, isEditing}) => {
             </div>
 
             <div className="form-group span-2-3">
-              <label htmlFor={`wifi_ssid_${index}`}>WiFi SSID</label>
+              <label htmlFor={`wifi_ssid_${index}`}>Wi-Fi SSID</label>
               <input
                 type="text"
                 id={`wifi_ssid_${index}`}
@@ -29,7 +29,7 @@ const MushKitDetailsView = ({ mushkits, isEditing}) => {
             </div>
 
             <div className="form-group span-4-5">
-              <label htmlFor={`wifi_pass_${index}`}>WiFi Password</label>
+              <label htmlFor={`wifi_pass_${index}`}>Wi-Fi Password</label>
               <input
                 type="text"
                 id={`wifi_pass_${index}`}
