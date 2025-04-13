@@ -69,7 +69,7 @@ const UserProfile = () => {
   };
 
   const handleAddMushKit = () => {
-    const newMushKit = { kit_name: "", wifi_ssid: "", wifi_pass: "" }; // Default empty kit
+    const newMushKit = { kit_name: "", wifi_ssid: "", wifi_pass: "" }; 
     setEditedUserData((prev) => ({
       ...prev,
       mushkits: [...(prev.mushkits || []), newMushKit]
@@ -87,7 +87,12 @@ const UserProfile = () => {
   useEffect(() => {
     if (!userData || !editedUserData) return;
     const hasChanges = JSON.stringify(userData) !== JSON.stringify(editedUserData);
-    setCanSubmit(hasChanges); 
+
+    const hasEmptyFields = editedUserData.mushkits?.some(
+      (kit) => !kit.kit_name || !kit.wifi_ssid || !kit.wifi_pass
+    );
+
+    setCanSubmit(hasChanges && !hasEmptyFields); 
   }, [editedUserData, userData]);
 
   return (
