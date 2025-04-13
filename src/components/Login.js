@@ -7,6 +7,8 @@ import "../component styles/Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [loginAttempts, setLoginAttempts] = useState(0);  
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
   const handlePinSubmit = async (pin) => {
@@ -17,9 +19,12 @@ const Login = () => {
 
       if (!querySnapshot.empty) {
         console.log("Login successful!");
+        setLoginAttempts(0);
+        setErrorMsg("");
         navigate("/home");
       } else {
-        alert("Invalid email or PIN. Please try again.");
+        setLoginAttempts((prev) => prev + 1);
+        setErrorMsg("Email and PIN doesn't match.");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -50,12 +55,18 @@ const Login = () => {
           <h2>Enter PIN</h2>
           <NumPad onSubmit={handlePinSubmit} />
 
-          <div className="forgot-pin">
-            <p>
-              Forgot your PIN?{" "}
-              <a href="/reset">Click here to reset PIN.</a>
-            </p>
-          </div>
+          {errorMsg && loginAttempts < 3 && (
+            <p style={{ color: "red", marginTop: "10px", fontSize: "14px" }}>{errorMsg}</p>
+          )}
+
+          {loginAttempts >= 3 && (
+            <div className="forgot-pin">
+              <p>
+                Forgot your PIN?{" "}
+                <a href="/reset">Click here to reset PIN.</a>
+              </p>
+            </div>
+          )}
 
           <div className="register-text">
             <p>
