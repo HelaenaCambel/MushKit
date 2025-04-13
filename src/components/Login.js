@@ -1,13 +1,30 @@
 import React, {useState }from "react";
+import { useNavigate } from "react-router-dom";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../database/firebase";
 import NumPad from "../static/NumPad";
 import "../component styles/Login.css"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
-  const handlePinSubmit = (pin) => {
-    console.log("Entered Email:", email);
-    console.log("Entered PIN:", pin);
+  const handlePinSubmit = async (pin) => {
+    try {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email), where("pin", "==", pin));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        console.log("Login successful!");
+        navigate("/home");
+      } else {
+        alert("Invalid email or PIN. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Something went wrong. Please try again later.");
+    }
   };
 
   return (
