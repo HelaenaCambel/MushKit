@@ -3,8 +3,8 @@ import '../../component styles/Register Details/Buttons.css';
 
 const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, onSubmit }) => {
   return (
-    <div className="form-buttons">
-      <div className="lef-buttons">
+    <div className="regform-buttons">
+      <div className="left-buttons">
         <button
           type="button"
           className="add-mushkit-button"
@@ -26,7 +26,7 @@ const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, 
       
       <button
         type="submit"
-        className="submit-button"
+        className="regsubmit-button"
         disabled={!canSubmit}
         onClick={onSubmit}
       >

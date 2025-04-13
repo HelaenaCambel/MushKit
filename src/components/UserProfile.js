@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../database/firebase";
 import SideNavBar from "../static/SideNavBar";
 import UserDetailsView from "../components/User Profile Details/UserDetailsView";
@@ -10,13 +10,13 @@ import "../component styles/UserProfile.css";
 
 const UserProfile = () => {
   const location = useLocation();
-  const userEmail = location.state?.email;  
-  const [userData, setUserData] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const userEmail = location.state?.email;
 
-  const handleEditProfile = () => {
-    setIsEditing(true);
-  };
+  const [userData, setUserData] = useState(null);
+  const [editedUserData, setEditedUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
+  const [userDocId, setUserDocId] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,7 +27,10 @@ const UserProfile = () => {
 
           if (!querySnapshot.empty) {
             const userDoc = querySnapshot.docs[0];
-            setUserData(userDoc.data());
+            const data = userDoc.data();
+            setUserData(data);
+            setEditedUserData(data);
+            setUserDocId(userDoc.id); // Store doc ID for updates
           } else {
             console.warn("No user found with this email.");
           }
@@ -40,6 +43,31 @@ const UserProfile = () => {
     fetchUser();
   }, [userEmail]);
 
+  const handleEditProfile = () => {
+    setEditedUserData({ ...userData });
+    setIsEditing(true);
+    setCanSubmit(false);
+  };
+
+  const handleSubmitChanges = async () => {
+    if (!userDocId) return;
+
+    try {
+      await updateDoc(doc(db, "users", userDocId), editedUserData);
+      setUserData(editedUserData); // Update state after saving
+      setIsEditing(false);
+      setCanSubmit(false);
+    } catch (error) {
+      console.error("Error updating Firestore:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!userData || !editedUserData) return;
+    const hasChanges = JSON.stringify(userData) !== JSON.stringify(editedUserData);
+    setCanSubmit(hasChanges); // Enable/Disable Save button based on changes
+  }, [editedUserData, userData]);
+
   return (
     <div className="profile-container">
       <SideNavBar />
@@ -47,9 +75,26 @@ const UserProfile = () => {
         <h1>Profile</h1>
         {userData ? (
           <>
-            <UserDetailsView user={userData} isEditing={isEditing} />
-            <MushKitDetailsView mushkits={userData.mushkits || []} isEditing={isEditing} />
-            <Buttons onEditProfile={handleEditProfile} />
+            <UserDetailsView
+              user={editedUserData}
+              isEditing={isEditing}
+              onChange={(updatedUser) =>
+                setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
+              }
+            />
+            <MushKitDetailsView
+              mushkits={editedUserData.mushkits || []}
+              isEditing={isEditing}
+              onChange={(updatedKits) =>
+                setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
+              }
+            />
+            <Buttons
+              isEditing={isEditing}
+              onEditProfile={handleEditProfile}
+              onSubmitChanges={handleSubmitChanges}
+              canSubmit={canSubmit}
+            />
           </>
         ) : (
           <p>Loading user data...</p>

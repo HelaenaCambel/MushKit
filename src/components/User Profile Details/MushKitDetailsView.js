@@ -1,7 +1,16 @@
 import React from "react";
 import "../../component styles/User Profile Details/MushKitDetailsView.css";
 
-const MushKitDetailsView = ({ mushkits, isEditing}) => {
+const MushKitDetailsView = ({ mushkits, isEditing, onChange }) => {
+  const handleInputChange = (index, field, value) => {
+    const updatedMushkits = [...mushkits];
+    updatedMushkits[index] = {
+      ...updatedMushkits[index],
+      [field]: value,
+    };
+    onChange(updatedMushkits);
+  };
+
   return (
     <div className="mushkit-section">
       <div className="section-title">MushKit Details</div>
@@ -15,6 +24,9 @@ const MushKitDetailsView = ({ mushkits, isEditing}) => {
                 id={`kit_name_${index}`}
                 value={kit.kit_name || ""}
                 disabled={!isEditing}
+                onChange={(e) =>
+                  handleInputChange(index, "kit_name", e.target.value)
+                }
               />
             </div>
 
@@ -25,6 +37,9 @@ const MushKitDetailsView = ({ mushkits, isEditing}) => {
                 id={`wifi_ssid_${index}`}
                 value={kit.wifi_ssid || ""}
                 disabled={!isEditing}
+                onChange={(e) =>
+                  handleInputChange(index, "wifi_ssid", e.target.value)
+                }
               />
             </div>
 
@@ -35,6 +50,9 @@ const MushKitDetailsView = ({ mushkits, isEditing}) => {
                 id={`wifi_pass_${index}`}
                 value={kit.wifi_pass || ""}
                 disabled={!isEditing}
+                onChange={(e) =>
+                  handleInputChange(index, "wifi_pass", e.target.value)
+                }
               />
             </div>
           </React.Fragment>

@@ -1,4 +1,4 @@
-  .form-buttons {
+  .regform-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
@@ -31,7 +31,7 @@
     margin-left: 10px;
   }
 
-  .submit-button {
+  .regsubmit-button {
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -54,14 +54,14 @@
     background-color: #d32f2f;
   }
 
-  .submit-button:hover {
+  .regsubmit-button:hover {
     background-color: #388E3C;
   }
 
 /*Disable buttons*/
   .add-mushkit-button:disabled,
   .remove-mushkit-button:disabled,
-  .submit-button:disabled {
+  .regsubmit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }

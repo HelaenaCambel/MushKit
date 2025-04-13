@@ -1,10 +1,15 @@
 import React from "react";
 import "../../component styles/User Profile Details/UserDetailsView.css";
 
-const UserDetailsView = ({ user, isEditing }) => {
+const UserDetailsView = ({ user, isEditing, onChange }) => {
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    onChange({ [id]: value });
+  };
+
   return (
     <div className="user-section">
-      <div className="section-title">User Details</div>  
+      <div className="section-title">User Details</div>
       <div className="user-form">
         <div className="form-group">
           <label htmlFor="owner">MushKit Owner</label>
@@ -13,6 +18,7 @@ const UserDetailsView = ({ user, isEditing }) => {
             id="owner"
             value={user.owner || ""}
             disabled={!isEditing}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -23,6 +29,7 @@ const UserDetailsView = ({ user, isEditing }) => {
             id="contact"
             value={user.contact || ""}
             disabled={!isEditing}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -33,6 +40,7 @@ const UserDetailsView = ({ user, isEditing }) => {
             id="affiliation"
             value={user.affiliation || "N/A"}
             disabled={!isEditing}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -43,6 +51,7 @@ const UserDetailsView = ({ user, isEditing }) => {
             id="email"
             value={user.email || ""}
             disabled={!isEditing}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -53,6 +62,7 @@ const UserDetailsView = ({ user, isEditing }) => {
             id="password"
             value={user.password || ""}
             disabled={!isEditing}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -63,6 +73,7 @@ const UserDetailsView = ({ user, isEditing }) => {
             id="pin"
             value={user.pin || ""}
             disabled={!isEditing}
+            onChange={handleInputChange}
           />
         </div>
       </div>
