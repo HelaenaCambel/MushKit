@@ -19,7 +19,7 @@ const ValidationSchema = Yup.object().shape({
     .required('Password is required'),
 
   pin: Yup.string()
-    .matches(/^\d{4}$/, 'PIN must be exactly 4 digits.')
+    .matches(/^\d{4}$/, 'PIN must contain 4 digits only.')
     .required('PIN is required'),
 
   //MushKitDetails

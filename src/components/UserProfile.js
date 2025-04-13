@@ -7,8 +7,9 @@ import UserDetailsView from "../components/User Profile Details/UserDetailsView"
 import MushKitDetailsView from "../components/User Profile Details/MushKitDetailsView";
 import Buttons from "../components/User Profile Details/Buttons";
 import "../component styles/UserProfile.css";
+import ValidationSchema from "../schema/ValidationSchema";
 
-const UserProfile = () => {
+const UserProfile = ( ) => {
   const location = useLocation();
   const userEmail = location.state?.email;
 
@@ -17,6 +18,7 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [userDocId, setUserDocId] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const handleCancelEdit = () => {
     setEditedUserData({ ...userData });
@@ -36,7 +38,7 @@ const UserProfile = () => {
             const data = userDoc.data();
             setUserData(data);
             setEditedUserData(data);
-            setUserDocId(userDoc.id); // Store doc ID for updates
+            setUserDocId(userDoc.id);
           } else {
             console.warn("No user found with this email.");
           }
@@ -86,13 +88,24 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (!userData || !editedUserData) return;
-    const hasChanges = JSON.stringify(userData) !== JSON.stringify(editedUserData);
 
-    const hasEmptyFields = editedUserData.mushkits?.some(
-      (kit) => !kit.kit_name || !kit.wifi_ssid || !kit.wifi_pass
-    );
+    const validateData = async () => {
+      try {
+        await ValidationSchema.validate(editedUserData, { abortEarly: false, context: { mushkits: editedUserData.mushkits } });
+        setErrors({});  
+        const hasChanges = JSON.stringify(userData) !== JSON.stringify(editedUserData);
+        setCanSubmit(hasChanges); 
+      } catch (err) {
+        const newErrors = {};
+        err.inner.forEach(error => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);  
+        setCanSubmit(false);  
+      }
+    };
 
-    setCanSubmit(hasChanges && !hasEmptyFields); 
+    validateData();
   }, [editedUserData, userData]);
 
   return (
@@ -108,6 +121,7 @@ const UserProfile = () => {
               onChange={(updatedUser) =>
                 setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
               }
+              errors={errors}
             />
             <MushKitDetailsView
               mushkits={editedUserData.mushkits || []}
@@ -115,6 +129,7 @@ const UserProfile = () => {
               onChange={(updatedKits) =>
                 setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
               }
+              errors={errors}
             />
             <Buttons
               isEditing={isEditing}

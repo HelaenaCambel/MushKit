@@ -1,7 +1,7 @@
 import React from "react";
 import "../../component styles/User Profile Details/MushKitDetailsView.css";
 
-const MushKitDetailsView = ({ mushkits, isEditing, onChange }) => {
+const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
   const handleInputChange = (index, field, value) => {
     const updatedMushkits = [...mushkits];
     updatedMushkits[index] = {
@@ -28,6 +28,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange }) => {
                   handleInputChange(index, "kit_name", e.target.value)
                 }
               />
+              {errors.kit_name && <span className="error-message">{errors.kit_name}</span>}
             </div>
 
             <div className="form-group span-2-3">
@@ -41,6 +42,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange }) => {
                   handleInputChange(index, "wifi_ssid", e.target.value)
                 }
               />
+              {errors.wifi_ssid && <span className="error-message">{errors.wifi_ssid}</span>}
             </div>
 
             <div className="form-group span-4-5">
@@ -54,6 +56,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange }) => {
                   handleInputChange(index, "wifi_pass", e.target.value)
                 }
               />
+              {errors.wifi_pass && <span className="error-message">{errors.wifi_pass}</span>}
             </div>
           </React.Fragment>
         ))}

@@ -1,7 +1,7 @@
 import React from "react";
 import "../../component styles/User Profile Details/UserDetailsView.css";
 
-const UserDetailsView = ({ user, isEditing, onChange }) => {
+const UserDetailsView = ({ user, isEditing, onChange, errors }) => {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     onChange({ [id]: value });
@@ -20,6 +20,7 @@ const UserDetailsView = ({ user, isEditing, onChange }) => {
             disabled={!isEditing}
             onChange={handleInputChange}
           />
+          {errors.owner && <span className="error-message">{errors.owner}</span>}
         </div>
 
         <div className="form-group">
@@ -31,6 +32,7 @@ const UserDetailsView = ({ user, isEditing, onChange }) => {
             disabled={!isEditing}
             onChange={handleInputChange}
           />
+          {errors.contact && <span className="error-message">{errors.contact}</span>}
         </div>
 
         <div className="form-group">
@@ -53,6 +55,7 @@ const UserDetailsView = ({ user, isEditing, onChange }) => {
             disabled={!isEditing}
             onChange={handleInputChange}
           />
+          {errors.email && <span className="error-message">{errors.email}</span>}
         </div>
 
         <div className="form-group">
@@ -64,6 +67,7 @@ const UserDetailsView = ({ user, isEditing, onChange }) => {
             disabled={!isEditing}
             onChange={handleInputChange}
           />
+          {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
 
         <div className="form-group">
@@ -75,6 +79,7 @@ const UserDetailsView = ({ user, isEditing, onChange }) => {
             disabled={!isEditing}
             onChange={handleInputChange}
           />
+          {errors.pin && <span className="error-message">{errors.pin}</span>}
         </div>
       </div>
     </div>
