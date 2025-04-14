@@ -1,14 +1,14 @@
 import React from 'react';
 import '../../component styles/Register Details/Buttons.css'; 
 
-const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, onSubmit }) => {
+const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, isSubmitting }) => {
   return (
     <div className="regform-buttons">
       <div className="left-buttons">
         <button
           type="button"
           className="add-mushkit-button"
-          disabled={!canAdd}
+          disabled={!canAdd || isSubmitting}
           onClick={onAddMushKit}
         >
           Add MushKit
@@ -17,7 +17,7 @@ const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, 
         <button
           type="button"
           className="remove-mushkit-button"
-          disabled={!canRemove}
+          disabled={!canRemove || isSubmitting}
           onClick={onRemoveMushKit}
         >
           Remove MushKit
@@ -27,9 +27,9 @@ const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, 
       <button
         type="submit"
         className="regsubmit-button"
-        disabled={!canSubmit}
+        disabled={!canSubmit || isSubmitting}
       >
-        Submit Details
+        {isSubmitting ? <div className="spinner" /> : "Submit Details"}
       </button>
     </div>
   );

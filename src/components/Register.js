@@ -16,6 +16,7 @@ const Register = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showWifiPassword, setShowWifiPassword] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const togglePassword = () => setShowPassword(prev => !prev);
   
@@ -28,6 +29,7 @@ const Register = () => {
   };
 
   const handleSubmit = async (values, actions) => {
+    setIsSubmitting(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -57,6 +59,8 @@ const Register = () => {
       } else {
         alert("Registration failed: " + error.message);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -144,7 +148,7 @@ const Register = () => {
                       canRemove={formik.values.mushkits.length > 1}
                       canAdd={isFirstMushKitComplete}
                       canSubmit={formik.isValid && formik.dirty}
-                      onSubmit={formik.handleSubmit}
+                      isSubmitting={isSubmitting}
                     />
                   </>
                 )}
