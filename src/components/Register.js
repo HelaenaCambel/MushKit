@@ -1,5 +1,3 @@
-// src/components/Register.css
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, FieldArray, Form } from 'formik';
@@ -23,6 +21,7 @@ const Register = () => {
   const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
   
   const handleSubmit = async (values, actions) => {
+    console.log("Submitting form", values); 
     try {
       const q = query(collection(db, "users"), where("email", "==", values.email));
       const querySnapshot = await getDocs(q);
@@ -48,7 +47,7 @@ const Register = () => {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-  };
+  };  
 
   return (
     <div>

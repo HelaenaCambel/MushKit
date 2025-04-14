@@ -28,7 +28,6 @@ const Buttons = ({ canAdd, onAddMushKit, canRemove, onRemoveMushKit, canSubmit, 
         type="submit"
         className="regsubmit-button"
         disabled={!canSubmit}
-        onClick={onSubmit}
       >
         Submit Details
       </button>
