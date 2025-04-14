@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import "../../component styles/User Profile Details/UserDetailsView.css";
 
 const UserDetailsView = ({ user, isEditing, onChange, errors }) => {
-  const [passwordTouched, setPasswordTouched] = useState(false); // Track if the password field is touched
-  const [pinTouched, setPinTouched] = useState(false); // Track if the pin field is touched
-  const [tempPassword, setTempPassword] = useState(user.password || ""); // Temporary state to hold password input
-  const [tempPin, setTempPin] = useState(user.pin || ""); // Temporary state to hold PIN input
+  const [passwordTouched, setPasswordTouched] = useState(false); 
+  const [pinTouched, setPinTouched] = useState(false); 
+  const [tempPassword, setTempPassword] = useState(user.password || ""); 
+  const [tempPin, setTempPin] = useState(user.pin || "");
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     onChange({ [id]: value });
 
     if (id === "password") {
-      setTempPassword(value); // Update the temporary password input value
+      setTempPassword(value); 
     }
     if (id === "pin") {
-      setTempPin(value); // Update the temporary pin input value
+      setTempPin(value); 
     }
   };
 
@@ -23,32 +23,30 @@ const UserDetailsView = ({ user, isEditing, onChange, errors }) => {
   const maskPin = (pin) => {
     if (!pin) return "";
     const masked = pin.slice(0, -1).replace(/./g, "*");
-    return masked + pin.slice(-1); // Append the last digit
+    return masked + pin.slice(-1); 
   };
 
   // Function to mask Password (show only the first and last digit)
   const maskPassword = (password) => {
     if (!password) return "";
-    if (password.length <= 2) return password; // If password is too short, show it fully
+    if (password.length <= 2) return password; 
     const firstChar = password[0];
     const lastChar = password[password.length - 1];
     const masked = password.slice(1, -1).replace(/./g, "*");
     return firstChar + masked + lastChar;
   };
 
-  // Handle focus event to clear input and start editing
   const handleFocus = (field) => {
     if (field === "password") {
       setPasswordTouched(true);
-      setTempPassword(""); // Clear the input on focus
+      setTempPassword(""); 
     }
     if (field === "pin") {
       setPinTouched(true);
-      setTempPin(""); // Clear the input on focus
+      setTempPin(""); 
     }
   };
 
-  // Handle blur event to restore masking if no new value is entered
   const handleBlur = (field) => {
     if (field === "password" && !tempPassword) {
       setPasswordTouched(false);
@@ -121,8 +119,8 @@ const UserDetailsView = ({ user, isEditing, onChange, errors }) => {
             }
             disabled={!isEditing}
             onChange={handleInputChange}
-            onFocus={() => handleFocus("password")} // Trigger on focus
-            onBlur={() => handleBlur("password")} // Trigger on blur
+            onFocus={() => handleFocus("password")} 
+            onBlur={() => handleBlur("password")} 
           />
           {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
