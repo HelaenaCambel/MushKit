@@ -15,10 +15,17 @@ const Register = () => {
   const navigate = useNavigate();  
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showWifiPassword, setShowWifiPassword] = useState(false);
+  const [showWifiPassword, setShowWifiPassword] = useState([]);
 
   const togglePassword = () => setShowPassword(prev => !prev);
-  const toggleWifiPassword = () => setShowWifiPassword(prev => !prev);
+  
+  const toggleWifiPassword = (index) => {
+    setShowWifiPassword(prev => {
+      const newState = [...prev];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
 
   const handleSubmit = async (values, actions) => {
     try {
@@ -117,8 +124,8 @@ const Register = () => {
                           key={index}
                           index={index}
                           formik={formik}
-                          showWifiPassword={showWifiPassword}
-                          toggleWifiPassword={toggleWifiPassword}
+                          showWifiPassword={showWifiPassword[index]}
+                          toggleWifiPassword={() => toggleWifiPassword(index)}
                         />
                       ))}
                     </div>
