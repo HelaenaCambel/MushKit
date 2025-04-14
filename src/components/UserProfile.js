@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../database/firebase";
@@ -6,10 +6,12 @@ import SideNavBar from "../static/SideNavBar";
 import UserDetailsView from "../components/User Profile Details/UserDetailsView";
 import MushKitDetailsView from "../components/User Profile Details/MushKitDetailsView";
 import Buttons from "../components/User Profile Details/Buttons";
+import NumPad from "../static/NumPad";
 import "../component styles/UserProfile.css";
 import ValidationSchema from "../schema/ValidationSchema";
+import MessageBox from "../static/MessageBox";
 
-const UserProfile = ( ) => {
+const UserProfile = () => {
   const location = useLocation();
   const userEmail = location.state?.email;
 
@@ -19,6 +21,9 @@ const UserProfile = ( ) => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [userDocId, setUserDocId] = useState(null);
   const [errors, setErrors] = useState({});
+  const [showNumPad, setShowNumPad] = useState(false);
+  const [pinMatched, setPinMatched] = useState(false);
+  const [showMessageBox, setShowMessageBox] = useState(false);  
 
   const handleCancelEdit = () => {
     setEditedUserData({ ...userData });
@@ -57,24 +62,31 @@ const UserProfile = ( ) => {
     setCanSubmit(false);
   };
 
-  const handleSubmitChanges = async () => {
-    if (!userDocId) return;
-
-    try {
-      await updateDoc(doc(db, "users", userDocId), editedUserData);
-      setUserData(editedUserData); 
-      setIsEditing(false);
-      setCanSubmit(false);
-    } catch (error) {
-      console.error("Error updating Firestore:", error);
+  const handleSubmitChanges = useCallback(() => {
+    if (pinMatched) {
+      if (!userDocId) return;
+  
+      updateDoc(doc(db, "users", userDocId), editedUserData)
+        .then(() => {
+          setUserData(editedUserData);
+          setIsEditing(false);
+          setCanSubmit(false);
+          setPinMatched(false);
+          setShowMessageBox(true); 
+        })
+        .catch((error) => {
+          console.error("Error updating Firestore:", error);
+        });
+    } else {
+      setShowNumPad(true);
     }
-  };
+  }, [pinMatched, userDocId, editedUserData]);  // Add dependencies here
 
   const handleAddMushKit = () => {
-    const newMushKit = { kit_name: "", wifi_ssid: "", wifi_pass: "" }; 
+    const newMushKit = { kit_name: "", wifi_ssid: "", wifi_pass: "" };
     setEditedUserData((prev) => ({
       ...prev,
-      mushkits: [...(prev.mushkits || []), newMushKit]
+      mushkits: [...(prev.mushkits || []), newMushKit],
     }));
   };
 
@@ -91,22 +103,35 @@ const UserProfile = ( ) => {
 
     const validateData = async () => {
       try {
-        await ValidationSchema.validate(editedUserData, { abortEarly: false, context: { mushkits: editedUserData.mushkits } });
-        setErrors({});  
+        await ValidationSchema.validate(editedUserData, {
+          abortEarly: false,
+          context: { mushkits: editedUserData.mushkits },
+        });
+        setErrors({});
         const hasChanges = JSON.stringify(userData) !== JSON.stringify(editedUserData);
-        setCanSubmit(hasChanges); 
+        setCanSubmit(hasChanges);
       } catch (err) {
         const newErrors = {};
-        err.inner.forEach(error => {
+        err.inner.forEach((error) => {
           newErrors[error.path] = error.message;
         });
-        setErrors(newErrors);  
-        setCanSubmit(false);  
+        setErrors(newErrors);
+        setCanSubmit(false);
       }
     };
 
     validateData();
   }, [editedUserData, userData]);
+
+  const handlePinSubmit = (pin) => {
+    if (userData.pin === pin) {
+      setPinMatched(true);
+      setShowNumPad(false);
+      setShowMessageBox(true);  // Show message box immediately after PIN match
+    } else {
+      alert("Incorrect PIN. Please try again.");
+    }
+  };   
 
   return (
     <div className="profile-container">
@@ -119,16 +144,14 @@ const UserProfile = ( ) => {
               user={editedUserData}
               isEditing={isEditing}
               onChange={(updatedUser) =>
-                setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
-              }
+                setEditedUserData((prev) => ({ ...prev, ...updatedUser }))}
               errors={errors}
             />
             <MushKitDetailsView
               mushkits={editedUserData.mushkits || []}
               isEditing={isEditing}
               onChange={(updatedKits) =>
-                setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
-              }
+                setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))}
               errors={errors}
             />
             <Buttons
@@ -146,6 +169,31 @@ const UserProfile = ( ) => {
         ) : (
           <p>Loading user data...</p>
         )}
+
+        {showNumPad && (
+          <div className="numPad-modal">
+            <div className="numPad-content">
+              <h2>Please enter your PIN</h2>
+              <NumPad onPinSubmit={handlePinSubmit} />
+              <button
+                className="close-modal"
+                onClick={() => {
+                  setShowNumPad(false);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {showMessageBox && (
+          <MessageBox
+            message="Profile updated successfully."
+            onClose={() => setShowMessageBox(false)}
+          />
+        )}
+
       </div>
     </div>
   );

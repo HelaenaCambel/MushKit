@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./NumPad.css";
 
-const NumPad = ({ onSubmit, resetKey }) => {
+const NumPad = ({ onPinSubmit, onPinInput, resetKey }) => {
   const [input, setInput] = useState("");
 
-  // Reset input when `resetKey` changes
   useEffect(() => {
     setInput("");
   }, [resetKey]);
+
+  useEffect(() => {
+    onPinInput?.(input); // Pass input to parent
+  }, [input, onPinInput]);
 
   const handleButtonClick = useCallback((value) => {
     if (input.length < 4) {
@@ -19,31 +22,27 @@ const NumPad = ({ onSubmit, resetKey }) => {
     setInput("");
   }, []);
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    if (input.length === 4) {
-      onSubmit(input);
-      setInput("");
+  const handleSubmit = useCallback(() => {
+    if (input.length === 4 && onPinSubmit) {
+      onPinSubmit(input); 
     }
-  }, [onSubmit, input]);
+  }, [input, onPinSubmit]);  
 
   const handleKeyDown = useCallback((e) => {
     if (e.key >= "0" && e.key <= "9") {
       handleButtonClick(e.key);
     }
     if (e.key === "Enter" && input.length === 4) {
-      handleSubmit(e);
+      handleSubmit(e);  // Enter triggers submit
     }
     if (e.key === "Backspace") {
-      handleClear();
+      setInput((prev) => prev.slice(0, -1));
     }
-  }, [handleButtonClick, handleSubmit, handleClear, input]);
+  }, [handleButtonClick, handleSubmit, input]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   return (
