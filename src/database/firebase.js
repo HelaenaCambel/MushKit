@@ -1,17 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDezWcudzYDvUGVXxJfLYxYaqK9WdOuubk",
   authDomain: "mushkit-df43f.firebaseapp.com",
+  databaseURL: "https://mushkit-df43f-default-rtdb.asia-southeast1.firebasedatabase.app", // optional but good
   projectId: "mushkit-df43f",
-  storageBucket: "mushkit-df43f.firebasestorage.app",
+  storageBucket: "mushkit-df43f.appspot.com", // fix here: must be `.appspot.com`
   messagingSenderId: "927547852345",
   appId: "1:927547852345:web:438b9068b8a373ff822fe8"
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-export const db = getFirestore(app);  
-export const auth = getAuth(app);
+export { db };
