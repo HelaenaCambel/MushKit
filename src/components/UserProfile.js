@@ -157,7 +157,7 @@ const UserProfile = () => {
         <h1>Profile</h1>
 
         {loading ? (
-          <p>Loading user data...</p> // Show loading message while data is being fetched
+          <p>Loading user data...</p> 
         ) : (
           <>
             {userData ? (
