@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, FieldArray, Form } from 'formik';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../database/firebase.js';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../database/firebase';
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import ValidationSchema from '../schema/ValidationSchema';
 import "../component styles/Register.css";
 import UserDetails from './Register Details/UserDetails';
@@ -13,25 +14,23 @@ import MessageBox from '../static/MessageBox';
 const Register = () => {
   const navigate = useNavigate();  
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showWifiPassword, setShowWifiPassword] = useState(false);
 
-  const togglePassword = () => setShowPassword((prev) => !prev);
-  const toggleWifiPassword = () => setShowWifiPassword((prev) => !prev);
-  
+  const togglePassword = () => setShowPassword(prev => !prev);
+  const toggleWifiPassword = () => setShowWifiPassword(prev => !prev);
+
   const handleSubmit = async (values, actions) => {
-    console.log("Submitting form", values); 
     try {
-      const q = query(collection(db, "users"), where("email", "==", values.email));
-      const querySnapshot = await getDocs(q);
-  
-      if (!querySnapshot.empty) {
-        actions.setFieldError("email", "Already used. Kindly proceed to login and update your existing account if this is you.");
-        return;
-      }
-  
-      const docRef = await addDoc(collection(db, "users"), {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+
+      const uid = userCredential.user.uid;
+
+      await setDoc(doc(db, "users", uid), {
         owner: values.owner,
         contact: values.contact,
         affiliation: values.affiliation,
@@ -40,14 +39,19 @@ const Register = () => {
         pin: values.pin,
         mushkits: values.mushkits,
       });
-  
-      console.log("Document written with ID: ", docRef.id);
-      actions.resetForm(); 
+
+      actions.resetForm();
       setShowSuccessMessage(true);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      if (error.code === 'auth/email-already-in-use') {
+        actions.setFieldError("email", "Email already in use. Please login or use a different email.");
+      } else {
+        alert("Registration failed: " + error.message);
+      }
     }
-  };  
+  };
 
   return (
     <div>
@@ -152,7 +156,6 @@ const Register = () => {
           }}
         />
       )}
-
     </div>
   );
 };
