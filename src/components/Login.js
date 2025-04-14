@@ -2,38 +2,66 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../database/firebase";
-import NumPad from "../static/NumPad";
-import ResetPin from "../dynamic/ResetPin";
+import Reset from "../dynamic/Reset";
+import ValidationSchema from "../schema/ValidationSchema";
 import "../component styles/Login.css";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [showResetBox, setShowResetBox] = useState(false);
-  const [pinKey, setPinKey] = useState(0); 
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handlePinSubmit = async (pin) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword((prev) => !prev);
+
+  const handleLogin = async () => {
     try {
+      const loginSchema = ValidationSchema.pick(["email", "password"]);
+      await loginSchema.validate({ email, password }, { abortEarly: false });
+      setErrors({}); 
+
       const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email), where("pin", "==", pin));
+      const q = query(usersRef, where("email", "==", email), where("password", "==", password));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
         console.log("Login successful!");
         setLoginAttempts(0);
         setErrorMsg("");
-        setPinKey((prev) => prev + 1); 
-
         navigate("/profile", { state: { email } });
       } else {
         setLoginAttempts((prev) => prev + 1);
-        setErrorMsg("Email and PIN don't match.");
+        setErrorMsg("Email and Password didn't match.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      alert("Something went wrong. Please try again later.");
+      if (error.name === "ValidationError") {
+        const fieldErrors = {};
+        error.inner.forEach((err) => {
+          fieldErrors[err.path] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.error("Error during login:", error);
+        setErrors({ general: "Something went wrong. Please try again later." });
+      }
+    }
+  };
+
+  const handleFieldChange = (field, value) => {
+    if (field === "email") setEmail(value);
+    if (field === "password") setPassword(value);
+
+    if (errors[field]) {
+      setErrors((prev) => {
+        const updatedErrors = { ...prev };
+        delete updatedErrors[field];
+        return updatedErrors;
+      });
     }
   };
 
@@ -46,44 +74,72 @@ const Login = () => {
       <div className="login-container">
         <div className="login-form">
           <div className="input-container">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              Email
+              {errors.email && (
+                <span className="login-error-msg"> {errors.email} </span>
+              )}
+            </label>
             <input
               id="email"
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              onChange={(e) => handleFieldChange("email", e.target.value)}
             />
           </div>
 
-          <h2>Enter PIN</h2>
-          <NumPad key={pinKey} resetKey={pinKey} onSubmit={handlePinSubmit} />
+          <div className="input-container password-container">
+            <label htmlFor="password">
+              Password
+              {errors.password && (
+                <span className="login-error-msg"> {errors.password} </span>
+              )}
+            </label>
+            <div className="password-input-wrapper">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => handleFieldChange("password", e.target.value)}
+              />
+              <span className="password-toggle" onClick={togglePassword}>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
+          </div>
+
+          <button className="login" onClick={handleLogin}>
+            Login
+          </button>
 
           {errorMsg && loginAttempts < 3 && (
             <p className="login-error-msg">{errorMsg}</p>
           )}
 
+          {errors.general && (
+            <p className="login-error-msg">{errors.general}</p>
+          )}
+
           {loginAttempts >= 3 && (
-            <div className="forgot-pin">
-              <p>
-                Forgot your PIN?{" "}
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowResetBox(true);
-                  }}
-                >
-                  Click here to reset PIN.
-                </a>
-              </p>
-            </div>
+            <p className="forgot-pass">
+              Forgot your password?{" "}
+              <button
+                className="reset-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowResetBox(true);
+                }}
+              >
+                Reset password.
+              </button>
+            </p>
           )}
 
           <div className="register-text">
             <p>
-              Don't have a PIN yet?{" "}
+              Don't have an account yet?{" "}
               <a href="/register">Click here to register.</a>
             </p>
           </div>
@@ -91,7 +147,7 @@ const Login = () => {
       </div>
 
       {showResetBox && (
-        <ResetPin
+        <Reset
           email={email}
           onClose={() => setShowResetBox(false)}
         />

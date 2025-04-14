@@ -1,4 +1,4 @@
-.login-header {
+  .login-header {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,18 +11,18 @@
     z-index: 1000;
     padding-top: 10px;
     padding-bottom: 10px;
-}
+  }
 
-.login-container {
+  .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #f0f0f0;
     padding-top: 50px;
-}
-
-.login-form {
+  }
+ 
+  .login-form {
     background-color: white;
     padding: 30px;
     padding-bottom: 10px;
@@ -32,7 +32,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+  }
 
   .input-container {
     margin-bottom: 15px;
@@ -46,34 +46,81 @@
     border: 1px solid #ccc;
   }  
 
-.login-form h2 {
+  .login-form h2 {
     margin-top: 0px;
     margin-bottom: 10px;
     text-align: center;
-}
+  }
 
-.register-text,
-.forgot-pin {
+  .forgot-pass,
+  .register-text {
     font-size: 14px;
     text-align: center;
-}
-
-.register-text a {
+  }
+ 
+  .register-text a {
     color: #4CAF50;
     text-decoration: none;
-}
-
-.forgot-pin a {
-    color: #e35151;
+  }
+  
+  .reset-button {
+    background: none;
+    border: none;
+    color: red;
     text-decoration: none;
-}
-
-.register-text a:hover,
-.forgot-pin a:hover {
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+  }
+  
+  .register-text a:hover,
+  .register-text:hover {
     text-decoration: underline;
-}
+  }
 
-.login-error-msg {
+  .login-error-msg {
     color: red;
     font-size: 14px;
   }
+
+  .login {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    width: 80px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .login:hover {
+    background-color: #388E3C;
+  }
+
+  .password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .password-input-wrapper input {
+    width: 100%;
+    padding-right: 40px; 
+  }
+  
+  .password-toggle {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  

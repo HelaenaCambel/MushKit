@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../database/firebase";
-import "./ResetPin.css";
+import "./Reset.css";
 
 const ResetPinBox = ({ email, onClose }) => {
-  const [password, setPassword] = useState("");
-  const [newPin, setNewPin] = useState("");
+  const [pin, setPin] = useState("");
+  const [newPass, setNewPass] = useState("");
   const [message, setMessage] = useState("");
 
   const handleReset = async () => {
     try {
       const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email), where("password", "==", password));
+      const q = query(usersRef, where("email", "==", email), where("pin", "==", pin));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
         await updateDoc(doc(db, "users", userDoc.id), {
-          pin: newPin,
+          password: newPass,
         });
         setMessage("PIN successfully updated.");
         setTimeout(onClose, 2000);
@@ -41,16 +41,16 @@ const ResetPinBox = ({ email, onClose }) => {
           disabled
         />
         <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="pin"
+          placeholder="PIN"
+          value={pin}
+          onChange={(e) => setPin(e.target.value)}
         />
         <input
           type="password"
-          placeholder="New PIN"
-          value={newPin}
-          onChange={(e) => setNewPin(e.target.value)}
+          placeholder="New Password"
+          value={newPass}
+          onChange={(e) => setNewPass(e.target.value)}
         />
         <button className="reset-btn" onClick={handleReset}>Submit</button>
         {message && <p className="reset-message">{message}</p>}
