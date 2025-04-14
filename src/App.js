@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext"; 
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Homepage from "./components/Homepage";
@@ -8,20 +9,22 @@ import UserProfile from "./components/UserProfile";
 
 const App = () => {
   return (
-    <Router>
-      <div className="flex">
-        <div className="content">
-          <Routes>        
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Homepage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/history" element={<DataHistory />} />
-            <Route path="/profile" element={<UserProfile />} />
-          </Routes>
+    <AuthProvider> {/* Wrap the app with AuthProvider */}
+      <Router>
+        <div className="flex">
+          <div className="content">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/home" element={<Homepage />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/history" element={<DataHistory />} />
+              <Route path="/profile" element={<UserProfile />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 };
 

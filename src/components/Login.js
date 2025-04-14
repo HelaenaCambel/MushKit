@@ -6,8 +6,11 @@ import Reset from "../dynamic/Reset";
 import ValidationSchema from "../schema/ValidationSchema";
 import "../component styles/Login.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const Login = () => {
+  usePreventBackNavigation();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginAttempts, setLoginAttempts] = useState(0);

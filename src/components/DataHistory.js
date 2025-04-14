@@ -1,8 +1,11 @@
 import React from "react";
 import SideNavBar from "../static/SideNavBar";
 import "../component styles/DataHistory.css";
+import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const DataHistory = () => {
+  usePreventBackNavigation();
+
   return (
     <div className="history-container">
       <SideNavBar />

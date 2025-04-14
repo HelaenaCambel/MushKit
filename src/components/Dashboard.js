@@ -5,8 +5,10 @@ import GaugeTemp from "../charts/GaugeTemp";
 import GaugeHumid from "../charts/GaugeHumid";
 import WaterLevel from "../dynamic/WaterLevel"; 
 import GrowingLight from "../dynamic/GrowingLight";
+import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const Dashboard = () => {
+  usePreventBackNavigation();
   //For MushKit #1
   const [waterLevel1, setWaterLevel1] = useState("Medium");
   const [lightStatus1, setLightStatus1] = useState("On");

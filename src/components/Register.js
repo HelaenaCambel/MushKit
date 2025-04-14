@@ -10,8 +10,11 @@ import UserDetails from './Register Details/UserDetails';
 import MushKitDetails from './Register Details/MushKitDetails';
 import Buttons from './Register Details/Buttons';
 import MessageBox from '../static/MessageBox';
+import usePreventBackNavigation from '../hooks/usePreventBackNavigation';
 
 const Register = () => {
+  usePreventBackNavigation(); 
+  
   const navigate = useNavigate();  
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
