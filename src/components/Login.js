@@ -33,7 +33,7 @@ const Login = () => {
         console.log("Login successful!");
         setLoginAttempts(0);
         setErrorMsg("");
-        navigate("/profile", { state: { email } });
+        navigate("/profile", { state: { email }, replace: true });
       } else {
         setLoginAttempts((prev) => prev + 1);
         setErrorMsg("Email and Password didn't match.");

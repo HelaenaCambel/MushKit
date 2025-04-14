@@ -14,7 +14,7 @@ const SideNavBar = () => {
     { text: "User Profile", path: "/profile", icon: <User size={20} /> },
   ];
   const handleLogout = () => {
-    navigate("/"); 
+    navigate("/", { replace: true });
   };
 
   return (
