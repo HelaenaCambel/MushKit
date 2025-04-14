@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../database/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../database/firebase"; // Assuming auth is initialized here
+import { useAuth } from "../context/AuthContext"; // Assuming useAuth provides user context
 import Reset from "../dynamic/Reset";
 import ValidationSchema from "../schema/ValidationSchema";
 import "../component styles/Login.css";
@@ -11,6 +12,7 @@ import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 const Login = () => {
   usePreventBackNavigation();
   
+  const { setUser } = useAuth(); // Get setUser function from context to update user state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginAttempts, setLoginAttempts] = useState(0);
@@ -28,33 +30,24 @@ const Login = () => {
       await loginSchema.validate({ email, password }, { abortEarly: false });
       setErrors({}); 
 
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email), where("password", "==", password));
-      const querySnapshot = await getDocs(q);
+      await signInWithEmailAndPassword(auth, email, password);
+      setLoginAttempts(0);
+      setErrorMsg("");
+      
+      setUser({ email }); 
 
-      if (!querySnapshot.empty) {
-        console.log("Login successful!");
-        setLoginAttempts(0);
-        setErrorMsg("");
-        navigate("/profile", { state: { email }, replace: true });
-      } else {
+      navigate("/home", { replace: true });
+    } catch (error) {
+      if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
         setLoginAttempts((prev) => prev + 1);
         setErrorMsg("Email and Password didn't match.");
-      }
-    } catch (error) {
-      if (error.name === "ValidationError") {
-        const fieldErrors = {};
-        error.inner.forEach((err) => {
-          fieldErrors[err.path] = err.message;
-        });
-        setErrors(fieldErrors);
       } else {
         console.error("Error during login:", error);
         setErrors({ general: "Something went wrong. Please try again later." });
       }
     }
   };
-
+  
   const handleFieldChange = (field, value) => {
     if (field === "email") setEmail(value);
     if (field === "password") setPassword(value);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../database/firebase";
 import SideNavBar from "../static/SideNavBar";
 import UserDetailsView from "../components/User Profile Details/UserDetailsView";
@@ -9,16 +9,13 @@ import NumPad from "../static/NumPad";
 import MessageBox from "../static/MessageBox";
 import ValidationSchema from "../schema/ValidationSchema";
 import { useAuth } from "../context/AuthContext";
-import { useLocation } from "react-router-dom";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 import "../component styles/UserProfile.css";
 
 const UserProfile = () => {
   usePreventBackNavigation();
   const { user } = useAuth();
-  const location = useLocation();
-  const userEmail = location.state?.email || user?.email;
-
+  
   const [userData, setUserData] = useState(null);
   const [editedUserData, setEditedUserData] = useState(null);
   const [userDocId, setUserDocId] = useState(null);
@@ -28,34 +25,45 @@ const UserProfile = () => {
   const [showNumPad, setShowNumPad] = useState(false);
   const [pinMatched, setPinMatched] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state for user data
 
-  // Fetch user from Firestore
   useEffect(() => {
     const fetchUser = async () => {
-      if (!userEmail) return;
-
+      if (!user) {
+        console.log("User is not authenticated."); 
+        return;
+      }
+  
+      if (!user.uid) {
+        console.log("No user UID found.");
+        return;
+      }
+  
       try {
-        const q = query(collection(db, "users"), where("email", "==", userEmail));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          const userDoc = querySnapshot.docs[0];
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+  
+        if (userDoc.exists()) {
           const userData = userDoc.data();
+          console.log("User data fetched:", userData);
           setUserData(userData);
           setEditedUserData(userData);
           setUserDocId(userDoc.id);
         } else {
-          console.warn("No user document matched this email:", userEmail);
+          console.warn("No user document found for UID:", user.uid);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false); 
       }
     };
-
-    fetchUser();
-  }, [userEmail]);
-
-  // Validate form and check for changes
+  
+    if (user) {
+      fetchUser();
+    }
+  }, [user]); 
+  
   useEffect(() => {
     if (!userData || !editedUserData) return;
 
@@ -125,6 +133,7 @@ const UserProfile = () => {
         })
         .catch((error) => {
           console.error("Error updating Firestore:", error);
+          alert("Error updating profile. Please try again later.");
         });
     } else {
       setShowNumPad(true);
@@ -147,40 +156,46 @@ const UserProfile = () => {
       <div className="profile-content">
         <h1>Profile</h1>
 
-        {userData ? (
-          <>
-            <UserDetailsView
-              user={editedUserData}
-              isEditing={isEditing}
-              onChange={(updatedUser) =>
-                setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
-              }
-              errors={errors}
-            />
-
-            <MushKitDetailsView
-              mushkits={editedUserData.mushkits || []}
-              isEditing={isEditing}
-              onChange={(updatedKits) =>
-                setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
-              }
-              errors={errors}
-            />
-
-            <Buttons
-              isEditing={isEditing}
-              onEditProfile={handleEditProfile}
-              onSubmitChanges={handleSubmitChanges}
-              onCancelEdit={handleCancelEdit}
-              onAddMushKit={handleAddMushKit}
-              onRemoveMushKit={handleRemoveMushKit}
-              canSubmit={canSubmit}
-              canAdd={isEditing}
-              canRemove={isEditing && editedUserData?.mushkits?.length > 1}
-            />
-          </>
+        {loading ? (
+          <p>Loading user data...</p> // Show loading message while data is being fetched
         ) : (
-          <p>Loading user data...</p>
+          <>
+            {userData ? (
+              <>
+                <UserDetailsView
+                  user={editedUserData}
+                  isEditing={isEditing}
+                  onChange={(updatedUser) =>
+                    setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
+                  }
+                  errors={errors}
+                />
+
+                <MushKitDetailsView
+                  mushkits={editedUserData.mushkits || []}
+                  isEditing={isEditing}
+                  onChange={(updatedKits) =>
+                    setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
+                  }
+                  errors={errors}
+                />
+
+                <Buttons
+                  isEditing={isEditing}
+                  onEditProfile={handleEditProfile}
+                  onSubmitChanges={handleSubmitChanges}
+                  onCancelEdit={handleCancelEdit}
+                  onAddMushKit={handleAddMushKit}
+                  onRemoveMushKit={handleRemoveMushKit}
+                  canSubmit={canSubmit}
+                  canAdd={isEditing}
+                  canRemove={isEditing && editedUserData?.mushkits?.length > 1}
+                />
+              </>
+            ) : (
+              <p>No user data available</p> // Show message if no user data found
+            )}
+          </>
         )}
 
         {showNumPad && (

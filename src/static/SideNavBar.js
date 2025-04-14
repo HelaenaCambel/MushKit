@@ -5,11 +5,11 @@ import "./SideNavBar.css";
 import { Home, LayoutDashboard, History, User, LogOut } from "lucide-react";
 
 const SideNavBar = () => {
-  const [isExpanded, setExpendState] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth(); 
-  
+  const { user } = useAuth();
+
   const menuItems = [
     { text: "Home", path: "/home", icon: <Home size={20} /> },
     { text: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
@@ -32,7 +32,7 @@ const SideNavBar = () => {
           )}
           <button
             className={isExpanded ? "hamburger hamburger-in" : "hamburger hamburger-out"}
-            onClick={() => setExpendState(!isExpanded)}
+            onClick={() => setIsExpanded(!isExpanded)}
           >
             <span></span>
             <span></span>
@@ -55,17 +55,13 @@ const SideNavBar = () => {
 
       <div className="nav-footer">
         {isExpanded && (
-          <div className="nav-details">
-            <div className="nav-footer-info">
-              {user ? (
-                <>
-                  <p className="nav-footer-user-name">{user.email}</p>
-                </>
-              ) : (
-                <p className="nav-footer-user-name">Not logged in</p>
-              )}
-              <p className="nav-footer-user-position">by CGR 2025</p>
-            </div>
+          <div className="nav-footer-info">
+            {user ? (
+              <p className="nav-footer-user-name">{user.email}</p>
+            ) : (
+              <p className="nav-footer-user-name">Not logged in</p>
+            )}
+            <p className="nav-footer-user-position">by CGR 2025</p>
           </div>
         )}
         <button onClick={handleLogout} className="logout-icon">

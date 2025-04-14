@@ -9,7 +9,7 @@ import UserProfile from "./components/UserProfile";
 
 const App = () => {
   return (
-    <AuthProvider> {/* Wrap the app with AuthProvider */}
+    <AuthProvider> 
       <Router>
         <div className="flex">
           <div className="content">
