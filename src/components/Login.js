@@ -72,78 +72,85 @@ const Login = () => {
       </div>
 
       <div className="login-container">
-        <div className="login-form">
-          <div className="input-container">
-            <label htmlFor="email">
-              Email
-              {errors.email && (
-                <span className="login-error-msg"> {errors.email} </span>
-              )}
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => handleFieldChange("email", e.target.value)}
-            />
-          </div>
-
-          <div className="input-container password-container">
-            <label htmlFor="password">
-              Password
-              {errors.password && (
-                <span className="login-error-msg"> {errors.password} </span>
-              )}
-            </label>
-            <div className="password-input-wrapper">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();      
+          }}
+        >
+          <div className="login-form">
+            <div className="input-container">
+              <label htmlFor="email">
+                Email
+                {errors.email && (
+                  <span className="login-error-msg"> {errors.email} </span>
+                )}
+              </label>
               <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => handleFieldChange("password", e.target.value)}
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => handleFieldChange("email", e.target.value)}
               />
-              <span className="password-toggle" onClick={togglePassword}>
-                {showPassword ? <FaEye /> : <FaEyeSlash />}
-              </span>
+            </div>
+
+            <div className="input-container password-container">
+              <label htmlFor="password">
+                Password
+                {errors.password && (
+                  <span className="login-error-msg"> {errors.password} </span>
+                )}
+              </label>
+              <div className="password-input-wrapper">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => handleFieldChange("password", e.target.value)}
+                />
+                <span className="password-toggle" onClick={togglePassword}>
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
+            </div>
+
+            <button className="login" onClick={handleLogin} type="submit">
+              Login
+            </button>
+
+            {errorMsg && loginAttempts < 3 && (
+              <p className="login-error-msg">{errorMsg}</p>
+            )}
+
+            {errors.general && (
+              <p className="login-error-msg">{errors.general}</p>
+            )}
+
+            {loginAttempts >= 3 && (
+              <p className="forgot-pass">
+                Forgot your password?{" "}
+                <button
+                  className="reset-button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowResetBox(true);
+                  }}
+                >
+                  Reset password.
+                </button>
+              </p>
+            )}
+
+            <div className="register-text">
+              <p>
+                Don't have an account yet?{" "}
+                <a href="/register">Click here to register.</a>
+              </p>
             </div>
           </div>
-
-          <button className="login" onClick={handleLogin}>
-            Login
-          </button>
-
-          {errorMsg && loginAttempts < 3 && (
-            <p className="login-error-msg">{errorMsg}</p>
-          )}
-
-          {errors.general && (
-            <p className="login-error-msg">{errors.general}</p>
-          )}
-
-          {loginAttempts >= 3 && (
-            <p className="forgot-pass">
-              Forgot your password?{" "}
-              <button
-                className="reset-button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowResetBox(true);
-                }}
-              >
-                Reset password.
-              </button>
-            </p>
-          )}
-
-          <div className="register-text">
-            <p>
-              Don't have an account yet?{" "}
-              <a href="/register">Click here to register.</a>
-            </p>
-          </div>
-        </div>
+        </form>
       </div>
 
       {showResetBox && (
