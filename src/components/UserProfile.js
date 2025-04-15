@@ -47,9 +47,12 @@ const UserProfile = () => {
 
         if (userDoc.exists()) {
           const data = userDoc.data();
-          setUserData(data);
-          setEditedUserData(data);
-          setUserDocId(user.uid);
+          setTimeout(() => {
+            setUserData(data);
+            setEditedUserData(data);
+            setUserDocId(user.uid);
+            setIsLoading(false);
+          }, 500);
         } else {
           console.warn("User document not found.");
         }
@@ -156,7 +159,7 @@ const UserProfile = () => {
         {isLoading ? (
           <LoadingSpinner />
         ) : !userData ? (
-          <p>No user data available.</p>
+          <LoadingSpinner />
         ) : (
           <>
             <UserDetailsView
