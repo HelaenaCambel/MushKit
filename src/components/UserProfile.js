@@ -106,10 +106,13 @@ const UserProfile = () => {
   const handleAddMushKit = () => {
     setEditedUserData((prev) => ({
       ...prev,
-      mushkits: [...(prev.mushkits || []), { kit_name: "", wifi_ssid: "", wifi_pass: "" }],
+      mushkits: [
+        ...(prev.mushkits || []),
+        { kit_name: "", wifi_ssid: "", wifi_pass: "", kit_id: "", justAdded: true },
+      ],
     }));
   };
-
+  
   const handleRemoveMushKit = () => {
     if ((editedUserData.mushkits || []).length > 1) {
       setEditedUserData((prev) => ({
@@ -121,11 +124,20 @@ const UserProfile = () => {
 
   const handleSubmitChanges = useCallback(() => {
     if (!userDocId) return;
-
+  
     if (pinMatched) {
-      updateDoc(doc(db, "users", userDocId), editedUserData)
+      const cleanedData = {
+        ...editedUserData,
+        mushkits: editedUserData.mushkits.map((kit) => {
+          const { justAdded, ...rest } = kit;
+          return rest;
+        }),
+      };
+  
+      updateDoc(doc(db, "users", userDocId), cleanedData)
         .then(() => {
-          setUserData(editedUserData);
+          setUserData(cleanedData);
+          setEditedUserData(cleanedData);
           setIsEditing(false);
           setCanSubmit(false);
           setPinMatched(false);
@@ -138,7 +150,7 @@ const UserProfile = () => {
     } else {
       setShowNumPad(true);
     }
-  }, [pinMatched, userDocId, editedUserData]);
+  }, [pinMatched, userDocId, editedUserData]);  
 
   const handlePinSubmit = (pin) => {
     if (userData?.pin === pin) {

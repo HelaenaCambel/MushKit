@@ -37,7 +37,10 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
                 type="text"
                 id={`kit_id_${index}`}
                 value={kit.kit_id || ""}
-                disabled
+                disabled={!isEditing || (kit.kit_id && !kit.justAdded)}
+                onChange={(e) =>
+                  handleInputChange(index, "kit_id", e.target.value)
+                }
               />
             </div>
 
