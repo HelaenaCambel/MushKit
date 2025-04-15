@@ -8,7 +8,6 @@
     cursor: pointer;
   }
 
-  .water-status span:hover,
   .light-status span:hover {
     background-color: #d0d0d0;
   }

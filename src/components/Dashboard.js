@@ -75,14 +75,7 @@ const Dashboard = () => {
             </div>
 
             <div className="spanned-cell">
-              <WaterLevel
-                value={waterLevels[index]}
-                onChange={(newValue) => {
-                  const updated = [...waterLevels];
-                  updated[index] = newValue;
-                  setWaterLevels(updated);
-                }}
-              />
+              <WaterLevel value={waterLevels[index]} />
               <GrowingLight
                 value={lightStatus[index]}
                 onChange={(newValue) => {
