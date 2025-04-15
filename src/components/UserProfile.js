@@ -12,10 +12,20 @@ import { useAuth } from "../context/AuthContext";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 import "../component styles/UserProfile.css";
 
+const LoadingSpinner = () => (
+  <div className="mushroom-loading">
+    <img
+      src="/mushroom.svg"
+      alt="Loading spinner"
+      className="loading-spinner"
+    />
+  </div>
+);
+
 const UserProfile = () => {
   usePreventBackNavigation();
   const { user } = useAuth();
-  
+
   const [userData, setUserData] = useState(null);
   const [editedUserData, setEditedUserData] = useState(null);
   const [userDocId, setUserDocId] = useState(null);
@@ -25,45 +35,34 @@ const UserProfile = () => {
   const [showNumPad, setShowNumPad] = useState(false);
   const [pinMatched, setPinMatched] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
-  const [loading, setLoading] = useState(true); // Loading state for user data
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (!user) {
-        console.log("User is not authenticated."); 
-        return;
-      }
-  
-      if (!user.uid) {
-        console.log("No user UID found.");
-        return;
-      }
-  
+      if (!user?.uid) return;
+
       try {
         const userRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userRef);
-  
+
         if (userDoc.exists()) {
-          const userData = userDoc.data();
-          console.log("User data fetched:", userData);
-          setUserData(userData);
-          setEditedUserData(userData);
-          setUserDocId(userDoc.id);
+          const data = userDoc.data();
+          setUserData(data);
+          setEditedUserData(data);
+          setUserDocId(user.uid);
         } else {
-          console.warn("No user document found for UID:", user.uid);
+          console.warn("User document not found.");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
-        setLoading(false); 
+        setIsLoading(false);
       }
     };
-  
-    if (user) {
-      fetchUser();
-    }
-  }, [user]); 
-  
+
+    fetchUser();
+  }, [user]);
+
   useEffect(() => {
     if (!userData || !editedUserData) return;
 
@@ -91,30 +90,28 @@ const UserProfile = () => {
 
   const handleEditProfile = () => {
     setIsEditing(true);
-    setCanSubmit(false);
     setEditedUserData({ ...userData });
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setCanSubmit(false);
     setEditedUserData({ ...userData });
+    setErrors({});
+    setCanSubmit(false);
   };
 
   const handleAddMushKit = () => {
-    const newMushKit = { kit_name: "", wifi_ssid: "", wifi_pass: "" };
     setEditedUserData((prev) => ({
       ...prev,
-      mushkits: [...(prev.mushkits || []), newMushKit],
+      mushkits: [...(prev.mushkits || []), { kit_name: "", wifi_ssid: "", wifi_pass: "" }],
     }));
   };
 
   const handleRemoveMushKit = () => {
-    const kits = editedUserData.mushkits || [];
-    if (kits.length > 1) {
+    if ((editedUserData.mushkits || []).length > 1) {
       setEditedUserData((prev) => ({
         ...prev,
-        mushkits: kits.slice(0, -1),
+        mushkits: prev.mushkits.slice(0, -1),
       }));
     }
   };
@@ -132,8 +129,8 @@ const UserProfile = () => {
           setShowMessageBox(true);
         })
         .catch((error) => {
-          console.error("Error updating Firestore:", error);
-          alert("Error updating profile. Please try again later.");
+          console.error("Error updating profile:", error);
+          alert("Failed to update profile.");
         });
     } else {
       setShowNumPad(true);
@@ -146,7 +143,7 @@ const UserProfile = () => {
       setShowNumPad(false);
       handleSubmitChanges();
     } else {
-      alert("Incorrect PIN. Please try again.");
+      alert("Incorrect PIN.");
     }
   };
 
@@ -156,45 +153,41 @@ const UserProfile = () => {
       <div className="profile-content">
         <h1>Profile</h1>
 
-        {loading ? (
-          <p>Loading user data...</p> 
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : !userData ? (
+          <p>No user data available.</p>
         ) : (
           <>
-            {userData ? (
-              <>
-                <UserDetailsView
-                  user={editedUserData}
-                  isEditing={isEditing}
-                  onChange={(updatedUser) =>
-                    setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
-                  }
-                  errors={errors}
-                />
+            <UserDetailsView
+              user={editedUserData}
+              isEditing={isEditing}
+              onChange={(updatedUser) =>
+                setEditedUserData((prev) => ({ ...prev, ...updatedUser }))
+              }
+              errors={errors}
+            />
 
-                <MushKitDetailsView
-                  mushkits={editedUserData.mushkits || []}
-                  isEditing={isEditing}
-                  onChange={(updatedKits) =>
-                    setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
-                  }
-                  errors={errors}
-                />
+            <MushKitDetailsView
+              mushkits={editedUserData.mushkits || []}
+              isEditing={isEditing}
+              onChange={(updatedKits) =>
+                setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
+              }
+              errors={errors}
+            />
 
-                <Buttons
-                  isEditing={isEditing}
-                  onEditProfile={handleEditProfile}
-                  onSubmitChanges={handleSubmitChanges}
-                  onCancelEdit={handleCancelEdit}
-                  onAddMushKit={handleAddMushKit}
-                  onRemoveMushKit={handleRemoveMushKit}
-                  canSubmit={canSubmit}
-                  canAdd={isEditing}
-                  canRemove={isEditing && editedUserData?.mushkits?.length > 1}
-                />
-              </>
-            ) : (
-              <p>No user data available</p> // Show message if no user data found
-            )}
+            <Buttons
+              isEditing={isEditing}
+              onEditProfile={handleEditProfile}
+              onSubmitChanges={handleSubmitChanges}
+              onCancelEdit={handleCancelEdit}
+              onAddMushKit={handleAddMushKit}
+              onRemoveMushKit={handleRemoveMushKit}
+              canSubmit={canSubmit}
+              canAdd={isEditing}
+              canRemove={isEditing && editedUserData?.mushkits?.length > 1}
+            />
           </>
         )}
 

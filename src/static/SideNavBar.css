@@ -10,15 +10,6 @@
 	z-index: 1000;
 }
 
-/*
-.side-nav-container {
-	position: fixed;			This makes it fixed on the left side 
-	top: 0;  					Sticks to the top 
-	left: 0;
-	z-index: 1000; 				Ensures it's on top of the content 
-}
-*/
-
 .side-nav-container-NX {
 	width: 85px;
 }

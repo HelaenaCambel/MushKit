@@ -1,72 +1,73 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../database/firebase";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
 import Reset from "../dynamic/Reset";
 import ValidationSchema from "../schema/ValidationSchema";
 import "../component styles/Login.css";
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
-const Login = ({isSubmitting}) => {
+const Login = () => {
   usePreventBackNavigation();
-  
+
   const { setUser } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
-  const [showResetBox, setShowResetBox] = useState(false);
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
-
+  const [showResetBox, setShowResetBox] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const togglePassword = () => setShowPassword((prev) => !prev);
   const [loading, setLoading] = useState(false);
 
+  const togglePassword = () => setShowPassword((prev) => !prev);
+
   const handleLogin = async () => {
-    setLoading(true); 
-  
+    setLoading(true);
+    setErrorMsg("");
+
     try {
       const loginSchema = ValidationSchema.pick(["email", "password"]);
       await loginSchema.validate({ email, password }, { abortEarly: false });
       setErrors({});
-  
-      await signInWithEmailAndPassword(auth, email, password);
+
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+
       setLoginAttempts(0);
-      setErrorMsg("");
-  
-      setUser({ email });
       navigate("/home", { replace: true });
     } catch (error) {
-      if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-        setLoginAttempts((prev) => prev + 1);
-        setErrorMsg("Email and Password didn't match.");
-      } else if (error.name === "ValidationError") {
+      if (error.name === "ValidationError") {
         const newErrors = {};
         error.inner.forEach((e) => {
           newErrors[e.path] = e.message;
         });
         setErrors(newErrors);
+      } else if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+        setLoginAttempts((prev) => prev + 1);
+        setErrorMsg("Email and password didn't match.");
       } else {
-        console.error("Error during login:", error);
+        console.error("Login error:", error);
         setErrors({ general: "Something went wrong. Please try again later." });
       }
     } finally {
       setLoading(false);
     }
-  };  
-  
+  };
+
   const handleFieldChange = (field, value) => {
     if (field === "email") setEmail(value);
     if (field === "password") setPassword(value);
 
     if (errors[field]) {
       setErrors((prev) => {
-        const updatedErrors = { ...prev };
-        delete updatedErrors[field];
-        return updatedErrors;
+        const updated = { ...prev };
+        delete updated[field];
+        return updated;
       });
     }
   };
@@ -81,16 +82,14 @@ const Login = ({isSubmitting}) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleLogin();      
+            if (!loading) handleLogin();
           }}
         >
           <div className="login-form">
             <div className="input-container">
               <label htmlFor="email">
                 Email
-                {errors.email && (
-                  <span className="login-error-msg"> {errors.email} </span>
-                )}
+                {errors.email && <span className="login-error-msg"> {errors.email} </span>}
               </label>
               <input
                 id="email"
@@ -104,9 +103,7 @@ const Login = ({isSubmitting}) => {
             <div className="input-container password-container">
               <label htmlFor="password">
                 Password
-                {errors.password && (
-                  <span className="login-error-msg"> {errors.password} </span>
-                )}
+                {errors.password && <span className="login-error-msg"> {errors.password} </span>}
               </label>
               <div className="password-input-wrapper">
                 <input
@@ -122,7 +119,7 @@ const Login = ({isSubmitting}) => {
               </div>
             </div>
 
-            <button className="login" onClick={handleLogin} type="submit" disabled={loading}>
+            <button className="login" type="submit" disabled={loading}>
               {loading ? <div className="login-spinner" /> : "Login"}
             </button>
 
@@ -152,7 +149,7 @@ const Login = ({isSubmitting}) => {
             <div className="register-text">
               <p>
                 Don't have an account yet?{" "}
-                <a href="/register">Click here to register.</a>
+                <Link to="/register">Click here to register.</Link>
               </p>
             </div>
           </div>
@@ -160,10 +157,7 @@ const Login = ({isSubmitting}) => {
       </div>
 
       {showResetBox && (
-        <Reset
-          email={email}
-          onClose={() => setShowResetBox(false)}
-        />
+        <Reset email={email} onClose={() => setShowResetBox(false)} />
       )}
     </div>
   );
