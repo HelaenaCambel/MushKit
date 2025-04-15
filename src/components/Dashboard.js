@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../database/firebase";
+import { useAuth } from "../context/AuthContext";
 import SideNavBar from "../static/SideNavBar";
 import "../component styles/Dashboard.css";
 import GaugeTemp from "../charts/GaugeTemp";
@@ -9,13 +12,34 @@ import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const Dashboard = () => {
   usePreventBackNavigation();
-  //For MushKit #1
-  const [waterLevel1, setWaterLevel1] = useState("Medium");
-  const [lightStatus1, setLightStatus1] = useState("On");
+  const { user } = useAuth();
 
-  //For MushKit #2
-  const [waterLevel2, setWaterLevel2] = useState("Low");
-  const [lightStatus2, setLightStatus2] = useState("Off");
+  const [mushkits, setMushkits] = useState([]);
+  const [waterLevels, setWaterLevels] = useState([]);
+  const [lightStatuses, setLightStatuses] = useState([]);
+
+  useEffect(() => {
+    const fetchMushKits = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          const kits = data.mushkits || [];
+          setMushkits(kits);
+          setWaterLevels(kits.map(() => "Medium"));
+          setLightStatuses(kits.map(() => "On"));
+        }
+      } catch (error) {
+        console.error("Failed to fetch MushKit data:", error);
+      }
+    };
+
+    fetchMushKits();
+  }, [user]);
 
   return (
     <div className="dashboard-container">
@@ -23,41 +47,40 @@ const Dashboard = () => {
       <div>
         <h1>Dashboard</h1>
 
-        <div className="gauge-section1">
-          <div className="section-title">MushKit #1</div>
+        {mushkits.map((kit, index) => (
+          <div key={index} className={`gauge-section${index + 1}`}>
+            <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div>
 
-          <div className="gauge-temp">
-            <GaugeTemp value={13} label="C°" max={60} />
-          </div>
-          <div className="gauge-humid">
-            <GaugeHumid value={80} label="%" max={100} />
-          </div>
-          <div className="spanned-cell">
-            <WaterLevel value={waterLevel1} onChange={setWaterLevel1} />
-            <GrowingLight value={lightStatus1} onChange={setLightStatus1} />
-          </div>
+            <div className="gauge-temp">
+              <GaugeTemp value={20 + index * 3} label="C°" max={60} />
+            </div>
+            <div className="gauge-humid">
+              <GaugeHumid value={60 + index * 5} label="%" max={100} />
+            </div>
 
-          <div className="gauge-label">Temperature</div>
-          <div className="gauge-label">Humidity</div>
-        </div>
+            <div className="spanned-cell">
+              <WaterLevel
+                value={waterLevels[index]}
+                onChange={(newValue) => {
+                  const updated = [...waterLevels];
+                  updated[index] = newValue;
+                  setWaterLevels(updated);
+                }}
+              />
+              <GrowingLight
+                value={lightStatuses[index]}
+                onChange={(newValue) => {
+                  const updated = [...lightStatuses];
+                  updated[index] = newValue;
+                  setLightStatuses(updated);
+                }}
+              />
+            </div>
 
-        <div className="gauge-section2">
-          <div className="section-title">MushKit #2</div>
-
-          <div className="gauge-temp">
-            <GaugeTemp value={23} label="C°" max={60} />
+            <div className="gauge-label">Temperature</div>
+            <div className="gauge-label">Humidity</div>
           </div>
-          <div className="gauge-humid">
-            <GaugeHumid value={70} label="%" max={100} />
-          </div>
-          <div className="spanned-cell">
-            <WaterLevel value={waterLevel2} onChange={setWaterLevel2} />
-            <GrowingLight value={lightStatus2} onChange={setLightStatus2} />
-          </div>
-
-          <div className="gauge-label">Temperature</div>
-          <div className="gauge-label">Humidity</div>
-        </div>
+        ))}
       </div>
     </div>
   );
