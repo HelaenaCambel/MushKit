@@ -23,7 +23,23 @@ function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword })
         )}
       </div>
 
-      <div className="form-group span-2-3">
+      <div className="form-group">
+        <label htmlFor={getField("kit_id")}>MushKit ID No.</label>
+        <input
+          type="text"
+          id={`kit_id_${index}`}
+          name={getField("kit_id")}
+          placeholder="Enter MushKit ID No."
+          value={formik.values.mushkits[index].kit_id}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {formik.touched.mushkits?.[index]?.kit_id && formik.errors.mushkits?.[index]?.kit_id && (
+          <div className="error">{formik.errors.mushkits[index].kit_id}</div>
+        )}
+      </div>
+
+      <div className="form-group">
         <label htmlFor={getField("wifi_ssid")}>SSID (Wi-Fi Name)</label>
         <input
           type="text"
@@ -39,7 +55,7 @@ function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword })
         )}
       </div>
 
-      <div className="form-group password-group span-4-5">
+      <div className="form-group password-group">
         <label htmlFor={getField("wifi_pass")}>Wi-Fi Password</label>
         <div className="password-wrapper">
           <input

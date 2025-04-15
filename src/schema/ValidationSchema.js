@@ -37,6 +37,9 @@ const ValidationSchema = Yup.object().shape({
           const previousKits = allMushkits.slice(0, currentIndex);
           return previousKits.every(kit => kit.kit_name?.toLowerCase() !== value.toLowerCase());
         }),
+      kit_id: Yup.string()
+        .matches(/^\d{4}$/, 'MushKit ID contains 4 digits only.')
+        .required('*MushKit is required'),
       wifi_ssid: Yup.string().required('*SSID is required.'),
       wifi_pass: Yup.string().required('*Password is required'),
     })

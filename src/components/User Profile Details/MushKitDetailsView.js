@@ -18,7 +18,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
         {mushkits.map((kit, index) => (
           <React.Fragment key={index}>
             <div className="form-group">
-              <label htmlFor={`kit_name_${index}`}>Kit Name</label>
+              <label htmlFor={`kit_name_${index}`}>MushKit Name</label>
               <input
                 type="text"
                 id={`kit_name_${index}`}
@@ -31,7 +31,17 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
               {errors.kit_name && <span className="error-message">{errors.kit_name}</span>}
             </div>
 
-            <div className="form-group span-2-3">
+            <div className="form-group">
+              <label htmlFor={`kit_id_${index}`}>MushKit ID No.</label>
+              <input
+                type="text"
+                id={`kit_id_${index}`}
+                value={kit.kit_id || ""}
+                disabled
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor={`wifi_ssid_${index}`}>Wi-Fi SSID</label>
               <input
                 type="text"
@@ -45,7 +55,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
               {errors.wifi_ssid && <span className="error-message">{errors.wifi_ssid}</span>}
             </div>
 
-            <div className="form-group span-4-5">
+            <div className="form-group">
               <label htmlFor={`wifi_pass_${index}`}>Wi-Fi Password</label>
               <input
                 type="text"
