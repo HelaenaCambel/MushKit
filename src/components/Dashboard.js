@@ -64,7 +64,7 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
 
         {mushkits.map((kit, index) => (
-          <div key={index} className={`gauge-section${index + 1}`}>
+          <div key={index} className={`gauge-section`}>
             <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div>
 
             <div className="gauge-temp">
