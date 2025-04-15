@@ -13,33 +13,49 @@ import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 const Dashboard = () => {
   usePreventBackNavigation();
   const { user } = useAuth();
+  const [temp, setTemp] = useState(0);
+  const [humid, setHumid] = useState(0);
 
   const [mushkits, setMushkits] = useState([]);
   const [waterLevels, setWaterLevels] = useState([]);
-  const [lightStatuses, setLightStatuses] = useState([]);
+  const [lightStatus, setLightStatus] = useState([]);
 
   useEffect(() => {
     const fetchMushKits = async () => {
       if (!user?.uid) return;
-
+  
       try {
         const userRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userRef);
-
+  
         if (userDoc.exists()) {
           const data = userDoc.data();
           const kits = data.mushkits || [];
           setMushkits(kits);
-          setWaterLevels(kits.map(() => "Medium"));
-          setLightStatuses(kits.map(() => "On"));
+        }
+  
+        const latestRef = doc(db, "sensorData", "latest");
+        const latestDoc = await getDoc(latestRef);
+  
+        if (latestDoc.exists()) {
+          const sensorData = latestDoc.data();
+          const humidity = sensorData.humidity || 0;
+          const temperature = sensorData.temperature || 0;
+          const water = sensorData.waterStatus || "Unknown";
+          const light = sensorData.lightStatus || "Unknown";
+  
+          setWaterLevels(Array(userDoc.data().mushkits.length).fill(water));
+          setLightStatus(Array(userDoc.data().mushkits.length).fill(light));
+          setTemp(temperature);
+          setHumid(humidity);
         }
       } catch (error) {
-        console.error("Failed to fetch MushKit data:", error);
+        console.error("Failed to fetch data:", error);
       }
     };
-
+  
     fetchMushKits();
-  }, [user]);
+  }, [user]);  
 
   return (
     <div className="dashboard-container">
@@ -52,10 +68,10 @@ const Dashboard = () => {
             <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div>
 
             <div className="gauge-temp">
-              <GaugeTemp value={20 + index * 3} label="C°" max={60} />
+              <GaugeTemp value={temp} label="C°" max={60} />
             </div>
             <div className="gauge-humid">
-              <GaugeHumid value={60 + index * 5} label="%" max={100} />
+              <GaugeHumid value={humid} label="%" max={100} />
             </div>
 
             <div className="spanned-cell">
@@ -68,11 +84,11 @@ const Dashboard = () => {
                 }}
               />
               <GrowingLight
-                value={lightStatuses[index]}
+                value={lightStatus[index]}
                 onChange={(newValue) => {
-                  const updated = [...lightStatuses];
+                  const updated = [...lightStatus];
                   updated[index] = newValue;
-                  setLightStatuses(updated);
+                  setLightStatus(updated);
                 }}
               />
             </div>
