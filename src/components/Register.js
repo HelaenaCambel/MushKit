@@ -101,14 +101,17 @@ const Register = () => {
         onSubmit={handleSubmit}
       >
         {formik => {
-          const firstKit = formik.values.mushkits[0];
-          const isFirstMushKitComplete =
-            firstKit.kit_name.trim() !== '' &&
-            firstKit.wifi_ssid.trim() !== '' &&
-            firstKit.wifi_pass.trim() !== '' &&
-            !formik.errors.mushkits?.[0]?.kit_name &&
-            !formik.errors.mushkits?.[0]?.wifi_ssid &&
-            !formik.errors.mushkits?.[0]?.wifi_pass;
+          const lastIndex = formik.values.mushkits.length - 1;
+          const lastKit = formik.values.mushkits[lastIndex];
+          
+          const isLastMushKitComplete =
+            lastKit.kit_name.trim() !== '' &&
+            lastKit.wifi_ssid.trim() !== '' &&
+            lastKit.wifi_pass.trim() !== '' &&
+            !formik.errors.mushkits?.[lastIndex]?.kit_name &&
+            !formik.errors.mushkits?.[lastIndex]?.wifi_ssid &&
+            !formik.errors.mushkits?.[lastIndex]?.wifi_pass;
+          
 
           return (
             <Form className='register-form'>
@@ -139,7 +142,7 @@ const Register = () => {
 
                     <Buttons
                       onAddMushKit={() => {
-                        if (isFirstMushKitComplete) {
+                        if (isLastMushKitComplete) {
                           push({ kit_name: '', wifi_ssid: '', wifi_pass: '' });
                         }
                       }}
@@ -149,7 +152,7 @@ const Register = () => {
                         }
                       }}
                       canRemove={formik.values.mushkits.length > 1}
-                      canAdd={isFirstMushKitComplete}
+                      canAdd={isLastMushKitComplete}
                       canSubmit={formik.isValid && formik.dirty}
                       isSubmitting={isSubmitting}
                     />
