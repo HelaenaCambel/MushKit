@@ -83,6 +83,7 @@
 }
 
 /*When disabled*/
+.add-mushkit:disabled,
 .remove-mushkit:disabled,
 .submit-button:disabled {
   background-color: #ccc;

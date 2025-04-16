@@ -112,7 +112,6 @@ const Register = () => {
             !formik.errors.mushkits?.[lastIndex]?.wifi_ssid &&
             !formik.errors.mushkits?.[lastIndex]?.wifi_pass;
           
-
           return (
             <Form className='register-form'>
               <div className="details-section-user">

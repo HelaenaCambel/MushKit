@@ -36,6 +36,7 @@ const UserProfile = () => {
   const [pinMatched, setPinMatched] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [canAddMushKit, setCanAddMushKit] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -90,6 +91,33 @@ const UserProfile = () => {
 
     validateData();
   }, [editedUserData, userData]);
+
+  useEffect(() => {
+    if (!editedUserData?.mushkits?.length) {
+      setCanAddMushKit(true);
+      return;
+    }
+  
+    const latestKitIndex = editedUserData.mushkits.length - 1;
+    const latestKit = editedUserData.mushkits?.[latestKitIndex];
+  
+    if (!latestKit) {
+      setCanAddMushKit(false);
+      return;
+    }
+  
+    const requiredFields = ["kit_name", "wifi_ssid", "wifi_pass"];
+  
+    const isComplete = requiredFields.every(
+      (field) => latestKit[field]?.trim() !== ""
+    );
+  
+    const hasErrors = requiredFields.some(
+      (field) => !!errors[`mushkits[${latestKitIndex}].${field}`]
+    );
+  
+    setCanAddMushKit(isComplete && !hasErrors);
+  }, [editedUserData, errors]);  
 
   const handleEditProfile = () => {
     setIsEditing(true);
@@ -200,7 +228,7 @@ const UserProfile = () => {
               onAddMushKit={handleAddMushKit}
               onRemoveMushKit={handleRemoveMushKit}
               canSubmit={canSubmit}
-              canAdd={isEditing}
+              canAdd={isEditing && canAddMushKit}
               canRemove={isEditing && editedUserData?.mushkits?.length > 1}
             />
           </>
