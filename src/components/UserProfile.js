@@ -249,7 +249,10 @@ const UserProfile = () => {
         {showMessageBox && (
           <MessageBox
             message="Profile updated successfully."
-            onClose={() => setShowMessageBox(false)}
+            onClose={() => {
+              setShowMessageBox(false);
+              setShowNumPad(false); 
+            }}
           />
         )}
       </div>
