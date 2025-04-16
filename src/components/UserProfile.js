@@ -35,6 +35,8 @@ const UserProfile = () => {
   const [showNumPad, setShowNumPad] = useState(false);
   const [pinMatched, setPinMatched] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
+  const [messageBoxContent, setMessageBoxContent] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [canAddMushKit, setCanAddMushKit] = useState(true);
 
@@ -162,6 +164,10 @@ const UserProfile = () => {
         }),
       };
   
+      setIsUpdating(true);
+      setMessageBoxContent("Profile updating...");
+      setShowMessageBox(true);
+
       updateDoc(doc(db, "users", userDocId), cleanedData)
         .then(() => {
           setUserData(cleanedData);
@@ -169,7 +175,11 @@ const UserProfile = () => {
           setIsEditing(false);
           setCanSubmit(false);
           setPinMatched(false);
-          setShowMessageBox(true);
+
+          setTimeout(() => {
+            setMessageBoxContent("Profile updated successfully.");
+            setIsUpdating(false);
+          }, 1000);
         })
         .catch((error) => {
           console.error("Error updating profile:", error);
@@ -248,12 +258,13 @@ const UserProfile = () => {
 
         {showMessageBox && (
           <MessageBox
-            message="Profile updated successfully."
+            message={messageBoxContent}
+            isLoading={isUpdating}
             onClose={() => {
               setShowMessageBox(false);
-              setShowNumPad(false); 
+              setShowNumPad(false);
             }}
-          />
+          />               
         )}
       </div>
     </div>
