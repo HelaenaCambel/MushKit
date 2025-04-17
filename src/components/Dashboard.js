@@ -92,13 +92,7 @@ const Dashboard = () => {
 
             <div className="status-cell">
               <WaterLevel value={waterLevels[index]} />
-              <GrowingLight
-                value={lightStatus[index]}
-                onChange={(newValue) => {
-                  const updated = [...lightStatus];
-                  updated[index] = newValue;
-                  setLightStatus(updated);
-                }}
+              <GrowingLight value={lightStatus[index]}
               />
             </div>
 
