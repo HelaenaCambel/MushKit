@@ -22,19 +22,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!user?.uid) return;
-  
+
     const userRef = doc(db, "users", user.uid);
-  
+
     const unsubscribeUser = onSnapshot(userRef, (userDoc) => {
       if (userDoc.exists()) {
         const data = userDoc.data();
         const kits = data.mushkits || [];
         setMushkits(kits);
-  
+
         if (kits.length > 0) {
           const kitId = kits[0].kit_id;
           const sensorRef = doc(db, "sensorData", kitId);
-  
+
           const unsubscribeSensor = onSnapshot(sensorRef, (sensorDoc) => {
             if (sensorDoc.exists()) {
               const sensorData = sensorDoc.data();
@@ -42,20 +42,20 @@ const Dashboard = () => {
               const temperature = sensorData.temperature || 0;
               const water = sensorData.waterStatus || "Unknown";
               const light = sensorData.lightStatus || "Unknown";
-  
+
               setTemp(temperature);
               setHumid(humidity);
               setWaterLevels(Array(kits.length).fill(water));
               setLightStatus(Array(kits.length).fill(light));
             }
           });
-  
+
           return () => unsubscribeSensor();
         }
       }
     });
     return () => unsubscribeUser();
-  }, [user]);  
+  }, [user]);
 
   return (
     <div className="dashboard-container">
@@ -64,8 +64,8 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
 
         {mushkits.map((kit, index) => (
-          <div key={index} className={`gauge-section`}>
-            <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div>
+          <div key={index} className="gauge-section"> {/* Corrected className here */}
+            <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div> {/* Corrected template literal here */}
 
             <div className="gauge-temp">
               <GaugeTemp value={temp} label="C°" max={60} />
