@@ -74,7 +74,7 @@ const Dashboard = () => {
               <GaugeHumid value={humid} label="%" max={100} />
             </div>
 
-            <div className="spanned-cell">
+            <div className="status-cell">
               <WaterLevel value={waterLevels[index]} />
               <GrowingLight
                 value={lightStatus[index]}
@@ -84,6 +84,12 @@ const Dashboard = () => {
                   setLightStatus(updated);
                 }}
               />
+            </div>
+
+            <div className="time-cell">
+              <div className="time-text"> 
+                <h3> Last Updated: </h3>
+              </div>
             </div>
 
             <div className="gauge-label">Temperature</div>
