@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "../database/firebase";
 import SideNavBar from "../static/SideNavBar";
 import UserDetailsView from "../components/User Profile Details/UserDetailsView";
@@ -152,10 +152,46 @@ const UserProfile = () => {
     }
   };
 
-  const handleSubmitChanges = useCallback(() => {
+  const handleSubmitChanges = useCallback(async () => {
     if (!userDocId) return;
   
-    if (pinMatched) {
+    if (pinMatched) {  
+      const usersSnapshot = await getDocs(collection(db, "users"));
+      const existingKitIds = [];
+
+      usersSnapshot.forEach((doc) => {
+        const userData = doc.data();
+        if (userData.mushkits && Array.isArray(userData.mushkits)) {
+          userData.mushkits.forEach(kit => {
+            if (kit.kit_id && doc.id !== userDocId) { 
+              existingKitIds.push(kit.kit_id);
+            }
+          });
+        }
+      });
+
+      let hasKitError = false;
+      for (let index = 0; index < editedUserData.mushkits.length; index++) {
+        const id = editedUserData.mushkits[index].kit_id.trim();
+
+        if (existingKitIds.includes(id)) {
+          alert(`MushKit ID# ${id} is already used.`);
+          hasKitError = true;
+          continue;
+        }
+
+        const sensorDocRef = doc(db, "sensorData", id);
+        const sensorDocSnap = await getDoc(sensorDocRef);
+
+        if (!sensorDocSnap.exists()) {
+          alert(`MushKit ID# ${id} is not yet available.`);
+          hasKitError = true;
+        }
+      }
+      if (hasKitError) {
+        return;
+      }
+
       const cleanedData = {
         ...editedUserData,
         mushkits: editedUserData.mushkits.map((kit) => {
@@ -167,7 +203,7 @@ const UserProfile = () => {
       setIsUpdating(true);
       setMessageBoxContent("Profile updating...");
       setShowMessageBox(true);
-
+  
       updateDoc(doc(db, "users", userDocId), cleanedData)
         .then(() => {
           setUserData(cleanedData);
@@ -175,7 +211,7 @@ const UserProfile = () => {
           setIsEditing(false);
           setCanSubmit(false);
           setPinMatched(false);
-
+  
           setTimeout(() => {
             setMessageBoxContent("Profile updated successfully.");
             setIsUpdating(false);
