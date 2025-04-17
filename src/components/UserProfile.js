@@ -172,7 +172,7 @@ const UserProfile = () => {
       });
   
       const currentKitId = latestKit?.kit_id.trim();
-      const isKitIdFilled = currentKitId.length > 0; // Check if field is filled
+      const isKitIdFilled = currentKitId.length > 0;
 
       if (isKitIdFilled && editedUserData.mushkits.some((kit, index) => index !== editedUserData.mushkits.length - 1 && kit.kit_id.trim() === currentKitId)) {
         setErrors((prevErrors) => ({

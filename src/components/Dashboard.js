@@ -6,19 +6,16 @@ import SideNavBar from "../static/SideNavBar";
 import "../component styles/Dashboard.css";
 import GaugeTemp from "../charts/GaugeTemp";
 import GaugeHumid from "../charts/GaugeHumid";
-import WaterLevel from "../dynamic/WaterLevel"; 
+import WaterLevel from "../dynamic/WaterLevel";
 import GrowingLight from "../dynamic/GrowingLight";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const Dashboard = () => {
   usePreventBackNavigation();
   const { user } = useAuth();
-  const [temp, setTemp] = useState(0);
-  const [humid, setHumid] = useState(0);
-  const [time, setTime] = useState(null);
+
   const [mushkits, setMushkits] = useState([]);
-  const [waterLevels, setWaterLevels] = useState([]);
-  const [lightStatus, setLightStatus] = useState([]);
+  const [sensorDataByKit, setSensorDataByKit] = useState({});
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -31,47 +28,48 @@ const Dashboard = () => {
         const kits = data.mushkits || [];
         setMushkits(kits);
 
-        if (kits.length > 0) {
-          const kitId = kits[0].kit_id;
-          const sensorRef = doc(db, "sensorData", kitId);
+        const unsubscribes = [];
+
+        kits.forEach((kit) => {
+          const sensorRef = doc(db, "sensorData", kit.kit_id);
 
           const unsubscribeSensor = onSnapshot(sensorRef, (sensorDoc) => {
             if (sensorDoc.exists()) {
-              const sensorData = sensorDoc.data();
-              const humidity = sensorData.humidity || 0;
-              const temperature = sensorData.temperature || 0;
-              const water = sensorData.waterStatus || "Unknown";
-              const light = sensorData.lightStatus || "Unknown";
-              const timestamp = sensorData.timestamp || "";
-
-              setTemp(temperature);
-              setHumid(humidity);
-              setWaterLevels(Array(kits.length).fill(water));
-              setLightStatus(Array(kits.length).fill(light));
-              setTime(timestamp);
+              const sensor = sensorDoc.data();
+              setSensorDataByKit((prevData) => ({
+                ...prevData,
+                [kit.kit_id]: {
+                  temperature: sensor.temperature || 0,
+                  humidity: sensor.humidity || 0,
+                  waterStatus: sensor.waterStatus || "Unknown",
+                  lightStatus: sensor.lightStatus || "Unknown",
+                  timestamp: sensor.timestamp || "",
+                },
+              }));
             }
           });
 
-          return () => unsubscribeSensor();
-        }
+          unsubscribes.push(unsubscribeSensor);
+        });
+
+        return () => {
+          unsubscribes.forEach((unsubscribe) => unsubscribe());
+        };
       }
     });
+
     return () => unsubscribeUser();
   }, [user]);
 
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "Not Available";
-  
+
     const date = new Date(timestamp);
-  
     const optionsDate = { year: "numeric", month: "long", day: "numeric" };
     const optionsTime = { hour: "numeric", minute: "2-digit", hour12: true };
-  
-    const formattedDate = date.toLocaleDateString("en-US", optionsDate);
-    const formattedTime = date.toLocaleTimeString("en-US", optionsTime);
-  
-    return `${formattedDate} @ ${formattedTime}`;
-  };  
+
+    return `${date.toLocaleDateString("en-US", optionsDate)} @ ${date.toLocaleTimeString("en-US", optionsTime)}`;
+  };
 
   return (
     <div className="dashboard-container">
@@ -79,35 +77,41 @@ const Dashboard = () => {
       <div>
         <h1>Dashboard</h1>
 
-        {mushkits.map((kit, index) => (
-          <div key={index} className="gauge-section"> 
-            <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div> 
+        {mushkits.map((kit, index) => {
+          const data = sensorDataByKit[kit.kit_id] || {};
 
-            <div className="gauge-temp">
-              <GaugeTemp value={temp} label="C°" max={60} />
-            </div>
-            <div className="gauge-humid">
-              <GaugeHumid value={humid} label="%" max={100} />
-            </div>
-
-            <div className="status-cell">
-              <WaterLevel value={waterLevels[index]} />
-              <GrowingLight value={lightStatus[index]}
-              />
-            </div>
-
-            <div className="time-cell">   
-              <h3> Last Updated: </h3>
-              <div className="time-text"> 
-                <p>{formatTimestamp(time)}</p> 
-                <p>MushKit ID# {kit.kit_id}</p>
+          return (
+            <div key={index} className="gauge-section">
+              <div className="section-title">
+                {kit.kit_name || `MushKit #${index + 1}`}
               </div>
-            </div>
 
-            <div className="gauge-label">Temperature</div>
-            <div className="gauge-label">Humidity</div>
-          </div>
-        ))}
+              <div className="gauge-temp">
+                <GaugeTemp value={data.temperature || 0} label="C°" max={60} />
+              </div>
+
+              <div className="gauge-humid">
+                <GaugeHumid value={data.humidity || 0} label="%" max={100} />
+              </div>
+
+              <div className="status-cell">
+                <WaterLevel value={data.waterStatus} />
+                <GrowingLight value={data.lightStatus} />
+              </div>
+
+              <div className="time-cell">
+                <h3>Last Updated:</h3>
+                <div className="time-text">
+                  <p>{formatTimestamp(data.timestamp)}</p>
+                  <p>MushKit ID# {kit.kit_id}</p>
+                </div>
+              </div>
+
+              <div className="gauge-label">Temperature</div>
+              <div className="gauge-label">Humidity</div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
