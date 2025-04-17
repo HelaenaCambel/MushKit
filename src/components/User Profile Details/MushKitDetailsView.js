@@ -42,6 +42,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
                   handleInputChange(index, "kit_id", e.target.value)
                 }
               />
+              {errors.kit_id && <span className="error-message">{errors.kit_id}</span>}
             </div>
 
             <div className="form-group">
