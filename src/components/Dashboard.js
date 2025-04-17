@@ -32,22 +32,25 @@ const Dashboard = () => {
           const data = userDoc.data();
           const kits = data.mushkits || [];
           setMushkits(kits);
-        }
   
-        const latestRef = doc(db, "sensorData", "0001");
-        const latestDoc = await getDoc(latestRef);
+          if (kits.length > 0) {
+            const kitId = kits[0].kit_id;
+            const latestRef = doc(db, "sensorData", kitId);
+            const latestDoc = await getDoc(latestRef);
   
-        if (latestDoc.exists()) {
-          const sensorData = latestDoc.data();
-          const humidity = sensorData.humidity || 0;
-          const temperature = sensorData.temperature || 0;
-          const water = sensorData.waterStatus || "Unknown";
-          const light = sensorData.lightStatus || "Unknown";
+            if (latestDoc.exists()) {
+              const sensorData = latestDoc.data();
+              const humidity = sensorData.humidity || 0;
+              const temperature = sensorData.temperature || 0;
+              const water = sensorData.waterStatus || "Unknown";
+              const light = sensorData.lightStatus || "Unknown";
   
-          setWaterLevels(Array(userDoc.data().mushkits.length).fill(water));
-          setLightStatus(Array(userDoc.data().mushkits.length).fill(light));
-          setTemp(temperature);
-          setHumid(humidity);
+              setWaterLevels(Array(kits.length).fill(water));
+              setLightStatus(Array(kits.length).fill(light));
+              setTemp(temperature);
+              setHumid(humidity);
+            }
+          }
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
