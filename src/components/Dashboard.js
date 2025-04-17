@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../database/firebase";
 import { useAuth } from "../context/AuthContext";
 import SideNavBar from "../static/SideNavBar";
@@ -21,43 +21,40 @@ const Dashboard = () => {
   const [lightStatus, setLightStatus] = useState([]);
 
   useEffect(() => {
-    const fetchMushKits = async () => {
-      if (!user?.uid) return;
+    if (!user?.uid) return;
   
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userRef);
+    const userRef = doc(db, "users", user.uid);
   
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          const kits = data.mushkits || [];
-          setMushkits(kits);
+    const unsubscribeUser = onSnapshot(userRef, (userDoc) => {
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        const kits = data.mushkits || [];
+        setMushkits(kits);
   
-          if (kits.length > 0) {
-            const kitId = kits[0].kit_id;
-            const latestRef = doc(db, "sensorData", kitId);
-            const latestDoc = await getDoc(latestRef);
+        if (kits.length > 0) {
+          const kitId = kits[0].kit_id;
+          const sensorRef = doc(db, "sensorData", kitId);
   
-            if (latestDoc.exists()) {
-              const sensorData = latestDoc.data();
+          const unsubscribeSensor = onSnapshot(sensorRef, (sensorDoc) => {
+            if (sensorDoc.exists()) {
+              const sensorData = sensorDoc.data();
               const humidity = sensorData.humidity || 0;
               const temperature = sensorData.temperature || 0;
               const water = sensorData.waterStatus || "Unknown";
               const light = sensorData.lightStatus || "Unknown";
   
-              setWaterLevels(Array(kits.length).fill(water));
-              setLightStatus(Array(kits.length).fill(light));
               setTemp(temperature);
               setHumid(humidity);
+              setWaterLevels(Array(kits.length).fill(water));
+              setLightStatus(Array(kits.length).fill(light));
             }
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
+          });
   
-    fetchMushKits();
+          return () => unsubscribeSensor();
+        }
+      }
+    });
+    return () => unsubscribeUser();
   }, [user]);  
 
   return (
