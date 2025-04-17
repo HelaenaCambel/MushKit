@@ -34,7 +34,7 @@ const Dashboard = () => {
           setMushkits(kits);
         }
   
-        const latestRef = doc(db, "sensorData", "latest");
+        const latestRef = doc(db, "sensorData", "0001");
         const latestDoc = await getDoc(latestRef);
   
         if (latestDoc.exists()) {
