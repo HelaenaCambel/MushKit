@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, FieldArray, Form } from 'formik';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, getDoc } from 'firebase/firestore';
 import { auth, db } from '../database/firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import ValidationSchema from '../schema/ValidationSchema';
@@ -33,15 +33,55 @@ const Register = () => {
 
   const handleSubmit = async (values, actions) => {
     setIsSubmitting(true);
+  
     try {
+      const usersSnapshot = await getDocs(collection(db, "users"));
+      const existingKitIds = [];
+  
+      usersSnapshot.forEach((doc) => {
+        const userData = doc.data();
+        if (userData.mushkits && Array.isArray(userData.mushkits)) {
+          userData.mushkits.forEach(kit => {
+            if (kit.kit_id) {
+              existingKitIds.push(kit.kit_id);
+            }
+          });
+        }
+      });
+  
+      let hasKitError = false;
+  
+      for (let index = 0; index < values.mushkits.length; index++) {
+        const id = values.mushkits[index].kit_id.trim();
+  
+        if (existingKitIds.includes(id)) {
+          actions.setFieldError(`mushkits[${index}].kit_id`, "MushKit ID# is already used.");
+          hasKitError = true;
+          continue;
+        }
+  
+        const sensorDocRef = doc(db, "sensorData", id);
+        const sensorDocSnap = await getDoc(sensorDocRef);
+  
+        if (!sensorDocSnap.exists()) {
+          actions.setFieldError(`mushkits[${index}].kit_id`, "MushKit ID# is not yet available.");
+          hasKitError = true;
+        }
+      }
+  
+      if (hasKitError) {
+        setIsSubmitting(false);
+        return;
+      }
+  
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
-
+  
       const uid = userCredential.user.uid;
-
+  
       await setDoc(doc(db, "users", uid), {
         owner: values.owner,
         contact: values.contact,
@@ -51,12 +91,13 @@ const Register = () => {
         pin: values.pin,
         mushkits: values.mushkits,
       });
-
+  
       actions.resetForm();
       setShowSuccessMessage(true);
+  
     } catch (error) {
       console.error("Registration error:", error);
-
+  
       if (error.code === 'auth/email-already-in-use') {
         actions.setFieldError("email", "Email already in use. Please login or use a different email.");
       } else {
