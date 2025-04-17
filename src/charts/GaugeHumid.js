@@ -28,23 +28,20 @@ const GaugeHumid = ({ value = 70 }) => {
     series: [
       {
         type: 'gauge',
-        center: ['50%', '60%'],
+        center: ['50%', '50%'],
         startAngle: 200,
         endAngle: -20,
         min: 0,
         max: 100,
         itemStyle: { color: getColorByHumidity(value) },
-        progress: { show: true, width: 20 },
+        progress: { show: true, width: 30 },
         pointer: { show: false },
-        axisLine: { lineStyle: { width: 20 } },
+        axisLine: { lineStyle: { width: 30 } },
         axisTick: { show: false },
         splitLine: { show: false },
         axisLabel: { show: false },
         detail: {
           valueAnimation: true,
-          width: '60%',
-          lineHeight: 40,
-          borderRadius: 8,
           offsetCenter: [0, '0%'],
           fontSize: 30,
           fontWeight: 'bolder',
@@ -56,7 +53,7 @@ const GaugeHumid = ({ value = 70 }) => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '200px', width: '100%' }} />;
+  return <ReactECharts option={option} style={{ height: '265px', width: '100%' }} />;
 };
 
 export default GaugeHumid;

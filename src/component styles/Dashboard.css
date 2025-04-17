@@ -8,6 +8,7 @@
 	grid-template-rows: auto auto auto;
 	gap: 0px; 
 	max-width: 1300px;
+	height: 260px;
 	margin: auto;
 	margin-bottom: 30px; 
 	padding: 20px;
@@ -31,7 +32,6 @@
   .gauge-temp,
   .gauge-humid {
 	display: flex;
-	max-height: 200px;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column; 
@@ -42,7 +42,7 @@
   .gauge-label {
 	font-size: 1.2rem;
 	font-weight: bold;
-	margin-top: -80px;
+	margin-top: -140px;
   }
 
   .status-cell {
@@ -52,6 +52,7 @@
 	align-items: center;
 	flex-direction: column;
 	padding: 10px;
+	margin-top: -50px;
   }
 
   .time-cell {
@@ -61,6 +62,7 @@
 	align-items: center;
 	flex-direction: column;
 	padding: 10px 14px;
+	margin-top: -60px;
   }
 
   .time-text {
