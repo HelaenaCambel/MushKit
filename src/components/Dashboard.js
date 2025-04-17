@@ -96,10 +96,11 @@ const Dashboard = () => {
               />
             </div>
 
-            <div className="time-cell">
+            <div className="time-cell">   
+              <h3> Last Updated: </h3>
               <div className="time-text"> 
-                <h3> Last Updated: </h3>
                 <p>{formatTimestamp(time)}</p> 
+                <p>MushKit ID# {kit.kit_id}</p>
               </div>
             </div>
 

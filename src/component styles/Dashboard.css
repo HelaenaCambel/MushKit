@@ -60,5 +60,14 @@
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	padding: 10px;
+	padding: 10px 14px;
   }
+
+  .time-text {
+	color: #444;
+  }
+  
+  .time-text p {
+	margin: 2px 0;
+  }
+  
