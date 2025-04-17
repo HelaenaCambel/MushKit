@@ -87,11 +87,11 @@ const Dashboard = () => {
               </div>
 
               <div className="gauge-temp">
-                <GaugeTemp value={data.temperature || 0} label="C°" max={60} />
+                <GaugeTemp value={data.temperature || 0}/>
               </div>
 
               <div className="gauge-humid">
-                <GaugeHumid value={data.humidity || 0} label="%" max={100} />
+                <GaugeHumid value={data.humidity || 0}/>
               </div>
 
               <div className="status-cell">
