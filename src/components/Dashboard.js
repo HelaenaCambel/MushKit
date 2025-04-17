@@ -11,7 +11,8 @@ import GrowingLight from "../dynamic/GrowingLight";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const Dashboard = () => {
-  usePreventBackNavigation();
+  usePreventBackNavigation();  
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const { user } = useAuth();
 
   const [mushkits, setMushkits] = useState([]);
@@ -73,9 +74,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <SideNavBar />
+      <SideNavBar onToggle={setIsSidebarExpanded} />
       <div>
-        <h1>Dashboard</h1>
+        <div className={`page-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+          <h1>Dashboard</h1>
+        </div>
 
         {mushkits.map((kit, index) => {
           const data = sensorDataByKit[kit.kit_id] || {};

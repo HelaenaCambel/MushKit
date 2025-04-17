@@ -4,11 +4,17 @@ import { useAuth } from "../context/AuthContext";
 import "./SideNavBar.css";
 import { Home, LayoutDashboard, History, User, LogOut } from "lucide-react";
 
-const SideNavBar = () => {
+const SideNavBar = ( {onToggle} ) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  const handleToggle = () => {
+    const newState = !isExpanded;
+    setIsExpanded(newState);
+    onToggle(newState); 
+  };
 
   const menuItems = [
     { text: "Home", path: "/home", icon: <Home size={20} /> },
@@ -32,7 +38,7 @@ const SideNavBar = () => {
           )}
           <button
             className={isExpanded ? "hamburger hamburger-in" : "hamburger hamburger-out"}
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleToggle}
           >
             <span></span>
             <span></span>

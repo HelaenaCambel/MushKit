@@ -24,6 +24,7 @@ const LoadingSpinner = () => (
 
 const UserProfile = () => {
   usePreventBackNavigation();
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const { user } = useAuth();
 
   const [userData, setUserData] = useState(null);
@@ -247,9 +248,11 @@ const UserProfile = () => {
 
   return (
     <div className="profile-container">
-      <SideNavBar />
+      <SideNavBar onToggle={setIsSidebarExpanded} />
       <div className="profile-content">
-        <h1>Profile</h1>
+        <div className={`page-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+          <h1>Data History</h1>
+        </div>
 
         {isLoading ? (
           <LoadingSpinner />
