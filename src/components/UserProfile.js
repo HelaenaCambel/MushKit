@@ -158,7 +158,9 @@ const UserProfile = () => {
     if (pinMatched) {  
       const usersSnapshot = await getDocs(collection(db, "users"));
       const existingKitIds = [];
-
+      const latestKit = editedUserData.mushkits[editedUserData.mushkits.length - 1];
+  
+      // Collect existing kit IDs from other users
       usersSnapshot.forEach((doc) => {
         const userData = doc.data();
         if (userData.mushkits && Array.isArray(userData.mushkits)) {
@@ -169,29 +171,28 @@ const UserProfile = () => {
           });
         }
       });
-
-      let hasKitError = false;
-      for (let index = 0; index < editedUserData.mushkits.length; index++) {
-        const id = editedUserData.mushkits[index].kit_id.trim();
-
-        if (existingKitIds.includes(id)) {
-          alert(`MushKit ID# ${id} is already used.`);
-          hasKitError = true;
-          continue;
-        }
-
-        const sensorDocRef = doc(db, "sensorData", id);
-        const sensorDocSnap = await getDoc(sensorDocRef);
-
-        if (!sensorDocSnap.exists()) {
-          alert(`MushKit ID# ${id} is not yet available.`);
-          hasKitError = true;
-        }
+  
+      // Check if the latest kit_id already exists within the user's MushKits
+      const currentKitId = latestKit?.kit_id.trim();
+      if (currentKitId && editedUserData.mushkits.some((kit, index) => index !== editedUserData.mushkits.length - 1 && kit.kit_id.trim() === currentKitId)) {
+        alert(`MushKit ID# ${currentKitId} is already used in your profile.`);
+        return; // Stop the process if there's a duplicate kit_id in the same user
       }
-      if (hasKitError) {
+  
+      // Check if the latest kit_id already exists in other users' profiles or sensor data
+      if (existingKitIds.includes(currentKitId)) {
+        alert(`MushKit ID# ${currentKitId} is already used by another user.`);
         return;
       }
-
+  
+      const sensorDocRef = doc(db, "sensorData", currentKitId);
+      const sensorDocSnap = await getDoc(sensorDocRef);
+  
+      if (!sensorDocSnap.exists()) {
+        alert(`MushKit ID# ${currentKitId} is not yet available.`);
+        return;
+      }
+  
       const cleanedData = {
         ...editedUserData,
         mushkits: editedUserData.mushkits.map((kit) => {
