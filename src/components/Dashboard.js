@@ -15,7 +15,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const [temp, setTemp] = useState(0);
   const [humid, setHumid] = useState(0);
-
+  const [time, setTime] = useState(null);
   const [mushkits, setMushkits] = useState([]);
   const [waterLevels, setWaterLevels] = useState([]);
   const [lightStatus, setLightStatus] = useState([]);
@@ -42,11 +42,13 @@ const Dashboard = () => {
               const temperature = sensorData.temperature || 0;
               const water = sensorData.waterStatus || "Unknown";
               const light = sensorData.lightStatus || "Unknown";
+              const timestamp = sensorData.timestamp || "";
 
               setTemp(temperature);
               setHumid(humidity);
               setWaterLevels(Array(kits.length).fill(water));
               setLightStatus(Array(kits.length).fill(light));
+              setTime(timestamp);
             }
           });
 
@@ -57,6 +59,12 @@ const Dashboard = () => {
     return () => unsubscribeUser();
   }, [user]);
 
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return "Not Available";
+    const date = new Date(timestamp);
+    return date.toLocaleString(); 
+  };  
+
   return (
     <div className="dashboard-container">
       <SideNavBar />
@@ -64,8 +72,8 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
 
         {mushkits.map((kit, index) => (
-          <div key={index} className="gauge-section"> {/* Corrected className here */}
-            <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div> {/* Corrected template literal here */}
+          <div key={index} className="gauge-section"> 
+            <div className="section-title">{kit.kit_name || `MushKit #${index + 1}`}</div> 
 
             <div className="gauge-temp">
               <GaugeTemp value={temp} label="C°" max={60} />
@@ -89,6 +97,7 @@ const Dashboard = () => {
             <div className="time-cell">
               <div className="time-text"> 
                 <h3> Last Updated: </h3>
+                <p>{formatTimestamp(time)}</p> 
               </div>
             </div>
 
