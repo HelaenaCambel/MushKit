@@ -85,7 +85,7 @@ const Dashboard = () => {
 
           return (
             <div key={index} className="gauge-section">
-              <div className="section-title">
+              <div className="section-dashtitle">
                 {kit.kit_name || `MushKit #${index + 1}`}
               </div>
 
