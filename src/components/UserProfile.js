@@ -156,52 +156,57 @@ const UserProfile = () => {
   const handleSubmitChanges = useCallback(async () => {
     if (!userDocId) return;
   
-    if (pinMatched) {  
-      const usersSnapshot = await getDocs(collection(db, "users"));
-      const existingKitIds = [];
-      const latestKit = editedUserData.mushkits[editedUserData.mushkits.length - 1];
+    // Check for kit_id errors first
+    const usersSnapshot = await getDocs(collection(db, "users"));
+    const existingKitIds = [];
+    const latestKit = editedUserData.mushkits[editedUserData.mushkits.length - 1];
   
-      usersSnapshot.forEach((doc) => {
-        const userData = doc.data();
-        if (userData.mushkits && Array.isArray(userData.mushkits)) {
-          userData.mushkits.forEach(kit => {
-            if (kit.kit_id && doc.id !== userDocId) { 
-              existingKitIds.push(kit.kit_id);
-            }
-          });
-        }
-      });
+    usersSnapshot.forEach((doc) => {
+      const userData = doc.data();
+      if (userData.mushkits && Array.isArray(userData.mushkits)) {
+        userData.mushkits.forEach(kit => {
+          if (kit.kit_id && doc.id !== userDocId) { 
+            existingKitIds.push(kit.kit_id);
+          }
+        });
+      }
+    });
   
-      const currentKitId = latestKit?.kit_id.trim();
-      const isKitIdFilled = currentKitId.length > 0;
-
-      if (isKitIdFilled && editedUserData.mushkits.some((kit, index) => index !== editedUserData.mushkits.length - 1 && kit.kit_id.trim() === currentKitId)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is already used in your profile.`,
-        }));
-        return;
-      }
-
-      if (isKitIdFilled && existingKitIds.includes(currentKitId)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is already used by another user.`,
-        }));
-        return;
-      }
-
-      const sensorDocRef = doc(db, "sensorData", currentKitId);
-      const sensorDocSnap = await getDoc(sensorDocRef);
-
-      if (isKitIdFilled && !sensorDocSnap.exists()) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is not yet available.`,
-        }));
-        return;
-      }
+    const currentKitId = latestKit?.kit_id.trim();
+    const isKitIdFilled = currentKitId.length > 0;
   
+    if (isKitIdFilled && editedUserData.mushkits.some((kit, index) => index !== editedUserData.mushkits.length - 1 && kit.kit_id.trim() === currentKitId)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is already used in your profile.`,
+      }));
+      setCanSubmit(false);  // Disable Save Changes due to kit_id error
+      return;
+    }
+  
+    if (isKitIdFilled && existingKitIds.includes(currentKitId)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is already used by another user.`,
+      }));
+      setCanSubmit(false);  // Disable Save Changes due to kit_id error
+      return;
+    }
+  
+    const sensorDocRef = doc(db, "sensorData", currentKitId);
+    const sensorDocSnap = await getDoc(sensorDocRef);
+  
+    if (isKitIdFilled && !sensorDocSnap.exists()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is not yet available.`,
+      }));
+      setCanSubmit(false);  // Disable Save Changes due to kit_id error
+      return;
+    }
+  
+    // Check pin after kit_id error check
+    if (pinMatched) {
       const cleanedData = {
         ...editedUserData,
         mushkits: editedUserData.mushkits.map((kit) => {
