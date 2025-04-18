@@ -57,8 +57,10 @@ const DataHistory = () => {
           {mushkits.map((kit, index) => (
             <div key={index} className="mushkit-section">
               <div className="mushkit-left">
-                <h2>{kit.kit_name}</h2>
-                <p>MushKit ID#{kit.kit_id}</p>
+                <div className="section-name">
+                  <h2>{kit.kit_name}</h2>
+                  <p>MushKit ID# {kit.kit_id}</p>
+                </div>
 
                 <table className="history-table">
                   <thead>
@@ -107,7 +109,7 @@ const DataHistory = () => {
               </div>
 
               <div className="mushkit-right"> 
-                <DataChart />
+                <DataChart historyData={currentRows} />
               </div>
             </div>
           ))}
