@@ -24,7 +24,7 @@ const transformHistoryData = (data) => {
 };
 
 const DataChart = ({ historyData }) => {
-  const chartData = transformHistoryData(historyData);
+  const chartData = transformHistoryData(historyData).reverse();
   return (
     <div style={{ width: '100%', margin: '20px 0' }}>
       {/* Temperature Chart */}
