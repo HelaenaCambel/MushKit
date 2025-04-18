@@ -11,9 +11,15 @@ import {
 
 const transformHistoryData = (data) => {
   return data.map(entry => ({
-    name: entry.timestamp.split(' ')[1],
-    temp: parseFloat(entry.temperature.replace('°C', '')),
-    humid: parseFloat(entry.humidity.replace('%', ''))
+    name: entry.timestamp?.split(' ')[1] || '',
+
+    temp: typeof entry.temperature === 'number'
+      ? entry.temperature
+      : parseFloat(entry.temperature) || 0,
+
+    humid: typeof entry.humidity === 'number'
+      ? entry.humidity
+      : parseFloat(entry.humidity) || 0
   }));
 };
 
