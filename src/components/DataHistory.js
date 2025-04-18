@@ -34,53 +34,60 @@ const DataHistory = () => {
       }
     };
 
-    const fetchHistoryDataForKit = async (kitId) => {
-      const historyRef = collection(db, "sensorHistory", kitId, "readings");
-      const snapshot = await getDocs(historyRef);
-      const readings = snapshot.docs.map(doc => ({
-        ...doc.data(),
-        timestamp: formatTimestamp(doc.id) // convert ID to readable timestamp
-      })).sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1)); // newest first
-
-      setHistoryDataByKit(prev => ({ ...prev, [kitId]: readings }));
-      setCurrentPage(prev => ({ ...prev, [kitId]: 1 }));
-    };
-
     fetchUserKits();
   }, [user]);
 
-  const formatTimestamp = (id) => {
-    const year = id.substring(0, 4);
-    const month = id.substring(4, 6);
-    const day = id.substring(6, 8);
-    const hour = id.substring(8, 10);
-    const minute = id.substring(10, 12);
-    
-    const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
-  
-    const options = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true, 
-    };
-    return date.toLocaleString('en-US', options);
+  const fetchHistoryDataForKit = async (kitId) => {
+    const historyRef = collection(db, "sensorHistory", kitId, "readings");
+    const snapshot = await getDocs(historyRef);
+
+    const uniquePerMinute = new Map();
+
+    snapshot.docs.forEach((doc) => {
+      const data = doc.data();
+      const id = doc.id;
+
+      const date = new Date(
+        `${id.substring(0, 4)}-${id.substring(4, 6)}-${id.substring(6, 8)}T${id.substring(8, 10)}:${id.substring(10, 12)}:00`
+      );
+
+      const key = date.toLocaleString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+
+      if (!uniquePerMinute.has(key)) {
+        uniquePerMinute.set(key, {
+          ...data,
+          timestamp: key,
+        });
+      }
+    });
+
+    const readings = Array.from(uniquePerMinute.values()).sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
+
+    setHistoryDataByKit((prev) => ({ ...prev, [kitId]: readings }));
+    setCurrentPage((prev) => ({ ...prev, [kitId]: 1 }));
   };
 
   const handlePrevious = (kitId) => {
-    setCurrentPage(prev => ({
+    setCurrentPage((prev) => ({
       ...prev,
-      [kitId]: Math.max(1, prev[kitId] - 1)
+      [kitId]: Math.max(1, prev[kitId] - 1),
     }));
   };
 
   const handleNext = (kitId, total) => {
     const maxPage = Math.ceil(total / ROWS_PER_PAGE);
-    setCurrentPage(prev => ({
+    setCurrentPage((prev) => ({
       ...prev,
-      [kitId]: Math.min(prev[kitId] + 1, maxPage)
+      [kitId]: Math.min(prev[kitId] + 1, maxPage),
     }));
   };
 
