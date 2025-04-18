@@ -1,19 +1,28 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
 const sampleData = [
-  { name: '10:00', uv: 4000, pv: 2400 },
-  { name: '11:00', uv: 3000, pv: 1398 },
-  { name: '12:00', uv: 2000, pv: 9800 },
-  { name: '01:00', uv: 2780, pv: 3908 },
-  { name: '02:00', uv: 1890, pv: 4800 },
-  { name: '03:00', uv: 2390, pv: 3800 },
-  { name: '04:00', uv: 3490, pv: 4300 },
+  { name: '10:00', temp: 24, humid: 60 },
+  { name: '11:00', temp: 25, humid: 58 },
+  { name: '12:00', temp: 26, humid: 62 },
+  { name: '01:00', temp: 27, humid: 59 },
+  { name: '02:00', temp: 25, humid: 61 },
+  { name: '03:00', temp: 24, humid: 63 },
+  { name: '04:00', temp: 23, humid: 64 },
 ];
 
 const DataChart = () => {
   return (
     <div style={{ width: '100%', margin: '20px 0' }}>
+      {/* Temperature Chart */}
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart
           data={sampleData}
@@ -24,10 +33,11 @@ const DataChart = () => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
+          <Area type="monotone" dataKey="temp" stroke="#ff7300" fill="#ff7300" />
         </AreaChart>
       </ResponsiveContainer>
 
+      {/* Humidity Chart */}
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart
           data={sampleData}
@@ -38,7 +48,7 @@ const DataChart = () => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="pv" stroke="#82ca9d" fill="#82ca9d" />
+          <Area type="monotone" dataKey="humid" stroke="#00b894" fill="#00b894" />
         </AreaChart>
       </ResponsiveContainer>
     </div>
