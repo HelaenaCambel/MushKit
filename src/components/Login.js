@@ -73,7 +73,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-wrapper">
       <div className="login-header">
         <h1>MushKit</h1>
       </div>
@@ -100,7 +100,7 @@ const Login = () => {
               />
             </div>
 
-            <div className="input-container password-container">
+            <div className="input-container">
               <label htmlFor="password">
                 Password
                 {errors.password && <span className="login-error-msg"> {errors.password} </span>}
