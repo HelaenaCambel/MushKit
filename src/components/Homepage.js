@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <SideNavBar onToggle={setIsSidebarExpanded} />
-      <div className={`page-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+      <div className={`home-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
         <h1>Home</h1>
       </div>
     </div>

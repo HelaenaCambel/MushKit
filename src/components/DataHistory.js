@@ -11,7 +11,7 @@ const DataHistory = () => {
     <div className="history-container">
       <SideNavBar onToggle={setIsSidebarExpanded} />
       <div>
-        <div className={`page-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+        <div className={`history-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
           <h1>Data History</h1>
         </div>
       </div>

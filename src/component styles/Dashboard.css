@@ -3,23 +3,11 @@
 	padding-top: 90px; 
   }
   
-  h1 {
+  .dashboard-header h1 {
 	position: fixed;
 	top: -22px;
 	left: 85px;
 	right: 0;
-	background-color: #fff; 
-	padding: 10px 20px;
-	font-size: 2rem;
-	font-weight: bold;
-	z-index: 1000;
-	border-bottom: 2px solid #ccc;
-	margin-bottom: 10px;
-  }
-
-  .page-header h1 {
-	position: fixed;
-	top: -22px;
 	background-color: #fff;
 	padding: 10px 20px;
 	font-size: 2rem;
@@ -30,12 +18,12 @@
 	transition: left 0.3s ease;
   }
   
-  .page-header.expanded h1 {
+  .dashboard-header.expanded h1 {
 	left: 300px;
 	transition: left 0.3s ease;
   }
   
-  .page-header.collapsed h1 {
+  .dashboard-header.collapsed h1 {
 	left: 85px; 
   }
   

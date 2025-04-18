@@ -250,8 +250,8 @@ const UserProfile = () => {
     <div className="profile-container">
       <SideNavBar onToggle={setIsSidebarExpanded} />
       <div className="profile-content">
-        <div className={`page-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
-          <h1>Data History</h1>
+        <div className={`profile-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+          <h1>User Profile</h1>
         </div>
 
         {isLoading ? (

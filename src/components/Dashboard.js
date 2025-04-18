@@ -76,7 +76,7 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <SideNavBar onToggle={setIsSidebarExpanded} />
       <div>
-        <div className={`page-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+        <div className={`dashboard-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
           <h1>Dashboard</h1>
         </div>
 
