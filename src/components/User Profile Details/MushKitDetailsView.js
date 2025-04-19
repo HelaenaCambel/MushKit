@@ -1,7 +1,8 @@
 import React from "react";
 import "../../component styles/User Profile Details/MushKitDetailsView.css";
+import { MdDelete } from "react-icons/md";
 
-const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
+const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove, errors }) => {
   const handleInputChange = (index, field, value) => {
     const updatedMushkits = [...mushkits];
     updatedMushkits[index] = {
@@ -11,10 +12,20 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
     onChange(updatedMushkits);
   };
 
+  const handleRemoveClick = (index) => {
+    if (onRemove && mushkits.length > 1) {
+      onRemove(index);
+    }
+  };
+
   return (
     <div className="mushkit-section">
-      <div className="mushkit-form">
-        <div className="section-mushtitle">MushKit Details</div>
+      <div className={isEditing ? "mushkit-form-edit" : "mushkit-form-view"}>
+        <div
+          className="section-mushtitle"
+          style={{ gridColumn: `span ${isEditing ? 5 : 4}` }}
+        > MushKit Details
+        </div>
         {mushkits.map((kit, index) => (
           <React.Fragment key={index}>
             <div className="form-group">
@@ -76,6 +87,12 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
               />
               {errors.wifi_pass && <span className="error-message">{errors.wifi_pass}</span>}
             </div>
+
+            {isEditing && (
+              <div className="remove-icon" onClick={() => handleRemoveClick(index)}>
+                <MdDelete size={28} />
+              </div>
+            )}
           </React.Fragment>
         ))}
       </div>

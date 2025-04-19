@@ -144,14 +144,12 @@ const UserProfile = () => {
     }));
   };
   
-  const handleRemoveMushKit = () => {
+  const handleRemoveMushKit = (indexToRemove) => {
     if ((editedUserData.mushkits || []).length > 1) {
-      setEditedUserData((prev) => ({
-        ...prev,
-        mushkits: prev.mushkits.slice(0, -1),
-      }));
+      const updatedKits = editedUserData.mushkits.filter((_, index) => index !== indexToRemove);
+      setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }));
     }
-  };
+  };  
 
   const handleSubmitChanges = useCallback(async () => {
     if (!userDocId) return;
@@ -278,6 +276,7 @@ const UserProfile = () => {
               onChange={(updatedKits) =>
                 setEditedUserData((prev) => ({ ...prev, mushkits: updatedKits }))
               }
+              onRemove={handleRemoveMushKit}
               errors={errors}
             />
 

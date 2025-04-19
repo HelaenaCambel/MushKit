@@ -7,10 +7,8 @@ const Buttons = ({
   onSubmitChanges,
   onCancelEdit,
   onAddMushKit,
-  onRemoveMushKit,
   canSubmit,
   canAdd,
-  canRemove
 }) => {
   return (
     <div className="form-buttons">
@@ -24,15 +22,6 @@ const Buttons = ({
               onClick={onAddMushKit}
             >
               Add MushKit
-            </button>
-
-            <button
-              type="button"
-              className="remove-mushkit"
-              disabled={!canRemove}
-              onClick={onRemoveMushKit}
-            >
-              Remove MushKit
             </button>
           </div>
           <div className="action-buttons">
