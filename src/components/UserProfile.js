@@ -11,6 +11,7 @@ import ValidationSchema from "../schema/ValidationSchema";
 import { useAuth } from "../context/AuthContext";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 import "../component styles/UserProfile.css";
+import "../component styles/UserProfileMedia.css";
 
 const LoadingSpinner = () => (
   <div className="mushroom-loading">

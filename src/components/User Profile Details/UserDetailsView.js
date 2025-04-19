@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../component styles/User Profile Details/UserDetailsView.css";
+import "../../component styles/User Profile Details/UserDetailsViewMedia.css";
 
 const UserDetailsView = ({ user, isEditing, onChange, errors }) => {
   const [passwordTouched, setPasswordTouched] = useState(false); 

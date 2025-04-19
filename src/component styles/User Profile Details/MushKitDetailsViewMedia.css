@@ -1,0 +1,68 @@
+  .mushkit-section {
+    max-width: 1300px;
+    margin: auto;
+    margin-top: 20px;
+    margin-left: 35px;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mushkit-form-view {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 16px;
+    width: 92.5%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  
+  .mushkit-form-edit {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 24px;
+    padding: 16px;
+    width: 92.5%;
+    max-width: none;
+    margin: 0 auto;
+  }  
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }  
+  
+  .section-mushtitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: transparent; 
+    border: none;                 
+    padding: 0;
+    grid-column: span 5;
+    margin-left: -45px;
+  }
+
+  .remove-icon {
+    color: #d35c58; 
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 3px;
+  }
+  
+  .remove-icon:hover {
+    color: #cd2620;
+  }
+  
+  .remove-icon-disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  

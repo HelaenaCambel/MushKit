@@ -4,6 +4,7 @@ import { db } from "../database/firebase";
 import { useAuth } from "../context/AuthContext";
 import SideNavBar from "../static/SideNavBar";
 import "../component styles/Dashboard.css";
+import "../component styles/DashboardMedia.css";
 import GaugeTemp from "../charts/GaugeTemp";
 import GaugeHumid from "../charts/GaugeHumid";
 import WaterLevel from "../dynamic/WaterLevel";

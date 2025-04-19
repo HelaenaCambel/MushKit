@@ -6,6 +6,7 @@ import { auth, db } from '../database/firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import ValidationSchema from '../schema/ValidationSchema';
 import "../component styles/Register.css";
+import "../component styles/RegisterMedia.css";
 import UserDetails from './Register Details/UserDetails';
 import MushKitDetails from './Register Details/MushKitDetails';
 import Buttons from './Register Details/Buttons';

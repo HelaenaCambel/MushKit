@@ -1,0 +1,100 @@
+  .dashboard-container {
+	margin-left: 100px;
+	padding-top: 90px; 
+  }
+  
+  .dashboard-header h1 {
+	position: fixed;
+	top: -22px;
+	left: 85px;
+	right: 0;
+	background-color: #fff;
+	padding: 10px 20px;
+	font-size: 2rem;
+	font-weight: bold;
+	z-index: 1000;
+	border-bottom: 2px solid #ccc;
+	margin-bottom: 10px;
+	transition: left 0.3s ease;
+  }
+  
+  .dashboard-header.expanded h1 {
+	left: 300px;
+	transition: left 0.3s ease;
+  }
+  
+  .dashboard-header.collapsed h1 {
+	left: 85px; 
+  }
+  
+  .gauge-section {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto auto auto;
+	gap: 0px; 
+	max-width: 1300px;
+	height: 260px;
+	margin: auto;
+	margin-bottom: 30px; 
+	padding: 20px;
+	border: 2px solid #ccc;
+	border-radius: 10px;
+	background-color: #f9f9f9;
+	align-items: center;
+	text-align: center;
+  }
+
+  .section-dashtitle {
+	grid-column: span 4;
+	font-size: 1.5rem;
+	font-weight: bold;
+	text-align: left;
+	background-color: transparent; 
+	border: none;                 
+	padding: 0;
+  }
+  
+  .gauge-temp,
+  .gauge-humid {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column; 
+	padding: 0;
+	margin-bottom: 0;
+  }
+  
+  .gauge-label {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin-top: -140px;
+  }
+
+  .status-cell {
+	grid-column: 3; 
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 10px;
+	margin-top: -50px;
+  }
+
+  .time-cell {
+	grid-column: 4; 
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 10px 14px;
+	margin-top: -60px;
+  }
+
+  .time-text {
+	color: #444;
+  }
+  
+  .time-text p {
+	margin: 2px 0;
+  }
+  

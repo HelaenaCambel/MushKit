@@ -1,5 +1,6 @@
 import React from "react";
 import "../../component styles/User Profile Details/MushKitDetailsView.css";
+import "../../component styles/User Profile Details/MushKitDetailsViewMedia.css";
 import { MdDelete } from "react-icons/md";
 
 const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove, errors }) => {

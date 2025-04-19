@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SideNavBar from "../static/SideNavBar";
 import "../component styles/Homepage.css";
+import "../component styles/HomepageMedia.css";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 
 const Home = () => {

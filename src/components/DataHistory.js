@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SideNavBar from "../static/SideNavBar";
 import "../component styles/DataHistory.css";
+import "../component styles/DataHistoryMedia.css";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 import { useAuth } from "../context/AuthContext";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
