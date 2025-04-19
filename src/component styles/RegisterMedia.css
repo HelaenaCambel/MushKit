@@ -1,20 +1,19 @@
 @media (max-width: 480px) {
   .register-header {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 16px;
+  	display: flex;
+  	justify-content: space-between;
+  	align-items: center;
     background-color: var(--dark);
     color: var(--light);
     position: fixed;
     top: 0;
-    left: 0;
     width: 100%;
     z-index: 1000;
+    padding: 3px;
   }
   
   .login-text {
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     font-weight: bold;
     margin-top: 8px;
@@ -35,14 +34,13 @@
     background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 6px 12px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 6px;
     margin-bottom: 4px;
-    width: 100%;
+    width: 25%;
     transition: background-color 0.2s ease;
   }
 
