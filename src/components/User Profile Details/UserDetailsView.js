@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../component styles/User Profile Details/UserDetailsView.css";
 import "../../component styles/User Profile Details/UserDetailsViewMedia.css";
 
@@ -7,6 +7,15 @@ const UserDetailsView = ({ user, isEditing, onChange, errors }) => {
   const [pinTouched, setPinTouched] = useState(false); 
   const [tempPassword, setTempPassword] = useState(user.password || ""); 
   const [tempPin, setTempPin] = useState(user.pin || "");
+
+  useEffect(() => {
+    if (!isEditing) {
+      setPasswordTouched(false);
+      setPinTouched(false);
+      setTempPassword(user.password || "");
+      setTempPin(user.pin || "");
+    }
+  }, [isEditing, user.password, user.pin]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
