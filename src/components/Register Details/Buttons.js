@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../component styles/Register Details/Buttons.css'; 
+import '../../component styles/Register Details/ButtonsMedia.css'; 
 
 const Buttons = ({ canAdd, onAddMushKit, canSubmit, isSubmitting }) => {
   return (

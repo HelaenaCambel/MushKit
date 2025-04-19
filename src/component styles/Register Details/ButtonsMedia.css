@@ -1,0 +1,33 @@
+@media (max-width: 480px) {
+  .regform-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .left-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .add-mushkit-button,
+  .remove-mushkit-button,
+  .regsubmit-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    margin: 0;
+  }
+
+  .add-mushkit-button {
+    margin-left: 0;
+  }
+
+  .regsubmit-button {
+    margin-right: 0;
+  }
+}
