@@ -36,7 +36,7 @@ const DataChart = ({ historyData }) => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" tick={{ fontSize: 12 }}/>
-          <YAxis domain={[0, 40]} tick={{ fontSize: 12 }}
+          <YAxis tick={{ fontSize: 12 }}
           />
           <Tooltip />
           <Area type="monotone" dataKey="temp" stroke="#ff7300" fill="#ff7300" />

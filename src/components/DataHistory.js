@@ -40,17 +40,17 @@ const DataHistory = () => {
   const fetchHistoryDataForKit = async (kitId) => {
     const historyRef = collection(db, "sensorHistory", kitId, "readings");
     const snapshot = await getDocs(historyRef);
-
+  
     const uniquePerMinute = new Map();
-
+  
     snapshot.docs.forEach((doc) => {
       const data = doc.data();
       const id = doc.id;
-
+  
       const date = new Date(
-        `${id.substring(0, 4)}-${id.substring(4, 6)}-${id.substring(6, 8)}T${id.substring(8, 10)}:${id.substring(10, 12)}:00`
+        `${id.substring(0, 4)}-${id.substring(4, 6)}-${id.substring(6, 8)}T${id.substring(8, 10)}:${id.substring(10, 12)}:${id.substring(12, 14)}`
       );
-
+  
       const key = date.toLocaleString("en-US", {
         year: "numeric",
         month: "2-digit",
@@ -59,22 +59,23 @@ const DataHistory = () => {
         minute: "2-digit",
         hour12: true,
       });
-
-      if (!uniquePerMinute.has(key)) {
+  
+      const existing = uniquePerMinute.get(key);
+      if (!existing || date > new Date(existing.rawDate)) {
         uniquePerMinute.set(key, {
           ...data,
           timestamp: key,
+          rawDate: date.toISOString(),
         });
       }
     });
-
-    const readings = Array.from(uniquePerMinute.values()).sort(
-      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-    );
-
+  
+    const readings = Array.from(uniquePerMinute.values())
+      .sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
+  
     setHistoryDataByKit((prev) => ({ ...prev, [kitId]: readings }));
     setCurrentPage((prev) => ({ ...prev, [kitId]: 1 }));
-  };
+  };  
 
   const handlePrevious = (kitId) => {
     setCurrentPage((prev) => ({
@@ -128,8 +129,8 @@ const DataHistory = () => {
                       {currentRows.map((entry, idx) => (
                         <tr key={idx}>
                           <td>{entry.timestamp}</td>
-                          <td>{entry.temperature}°C</td>
-                          <td>{entry.humidity}%</td>
+                          <td>{entry.temperature} °C</td>
+                          <td>{entry.humidity} %</td>
                           <td>{entry.waterStatus}</td>
                           <td>{entry.lightStatus}</td>
                         </tr>
