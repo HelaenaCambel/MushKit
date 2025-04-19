@@ -4,7 +4,7 @@ import "../component styles/DataHistory.css";
 import "../component styles/DataHistoryMedia.css";
 import usePreventBackNavigation from "../hooks/usePreventBackNavigation";
 import { useAuth } from "../context/AuthContext";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../database/firebase";
 import DataChart from "../charts/DataChart";
 
@@ -16,11 +16,14 @@ const DataHistory = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [mushkits, setMushkits] = useState([]);
   const [historyDataByKit, setHistoryDataByKit] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState({});
 
   useEffect(() => {
-    const fetchUserKits = async () => {
-      if (!user?.uid) return;
+    if (!user?.uid) return;
+
+    const unsubscribes = [];
+
+    const fetchUserKitsAndSubscribe = async () => {
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
@@ -29,54 +32,58 @@ const DataHistory = () => {
         const kits = data.mushkits || [];
         setMushkits(kits);
 
-        for (const kit of kits) {
-          await fetchHistoryDataForKit(kit.kit_id);
-        }
+        kits.forEach((kit) => {
+          const historyRef = collection(db, "sensorHistory", kit.kit_id, "readings");
+
+          const unsubscribe = onSnapshot(historyRef, (snapshot) => {
+            const uniquePerMinute = new Map();
+
+            snapshot.docs.forEach((doc) => {
+              const data = doc.data();
+              const id = doc.id;
+
+              const date = new Date(
+                `${id.substring(0, 4)}-${id.substring(4, 6)}-${id.substring(6, 8)}T${id.substring(8, 10)}:${id.substring(10, 12)}:${id.substring(12, 14)}`
+              );
+
+              const key = date.toLocaleString("en-US", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              });
+
+              const existing = uniquePerMinute.get(key);
+              if (!existing || date > new Date(existing.rawDate)) {
+                uniquePerMinute.set(key, {
+                  ...data,
+                  timestamp: key,
+                  rawDate: date.toISOString(),
+                });
+              }
+            });
+
+            const readings = Array.from(uniquePerMinute.values()).sort(
+              (a, b) => new Date(b.rawDate) - new Date(a.rawDate)
+            );
+
+            setHistoryDataByKit((prev) => ({ ...prev, [kit.kit_id]: readings }));
+            setCurrentPage((prev) => ({ ...prev, [kit.kit_id]: 1 }));
+          });
+
+          unsubscribes.push(unsubscribe);
+        });
       }
     };
 
-    fetchUserKits();
-  }, [user]);
+    fetchUserKitsAndSubscribe();
 
-  const fetchHistoryDataForKit = async (kitId) => {
-    const historyRef = collection(db, "sensorHistory", kitId, "readings");
-    const snapshot = await getDocs(historyRef);
-  
-    const uniquePerMinute = new Map();
-  
-    snapshot.docs.forEach((doc) => {
-      const data = doc.data();
-      const id = doc.id;
-  
-      const date = new Date(
-        `${id.substring(0, 4)}-${id.substring(4, 6)}-${id.substring(6, 8)}T${id.substring(8, 10)}:${id.substring(10, 12)}:${id.substring(12, 14)}`
-      );
-  
-      const key = date.toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
-  
-      const existing = uniquePerMinute.get(key);
-      if (!existing || date > new Date(existing.rawDate)) {
-        uniquePerMinute.set(key, {
-          ...data,
-          timestamp: key,
-          rawDate: date.toISOString(),
-        });
-      }
-    });
-  
-    const readings = Array.from(uniquePerMinute.values())
-      .sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
-  
-    setHistoryDataByKit((prev) => ({ ...prev, [kitId]: readings }));
-    setCurrentPage((prev) => ({ ...prev, [kitId]: 1 }));
-  };  
+    return () => {
+      unsubscribes.forEach((unsub) => unsub());
+    };
+  }, [user]);
 
   const handlePrevious = (kitId) => {
     setCurrentPage((prev) => ({
