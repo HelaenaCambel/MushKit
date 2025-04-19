@@ -44,12 +44,12 @@
   .section-name h2 {
 	margin-top: -10px;
 	margin-bottom: -20px;
-	margin-left: -20px;
   }
 
   .section-name p {
 	color: rgb(94, 91, 91);
 	margin-bottom: 10px;
+	margin-right: 20px;
   }
 
   .history-table {
