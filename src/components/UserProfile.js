@@ -36,6 +36,7 @@ const UserProfile = () => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [showNumPad, setShowNumPad] = useState(false);
   const [pinMatched, setPinMatched] = useState(false);
+  const [isPinIncorrect, setIsPinIncorrect] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [messageBoxContent, setMessageBoxContent] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
@@ -238,15 +239,24 @@ const UserProfile = () => {
     }
   }, [pinMatched, userDocId, editedUserData]);  
 
-  const handlePinSubmit = (pin) => {
-    if (userData?.pin === pin) {
+  const handlePinSubmit = useCallback((enteredPin) => {
+    if (!userData || !userData.pin) return;
+  
+    if (enteredPin === userData.pin) {
       setPinMatched(true);
       setShowNumPad(false);
-      handleSubmitChanges();
+      setIsPinIncorrect(false); // clear red border
+      handleSubmitChanges(); // re-submit after PIN success
     } else {
-      alert("Incorrect PIN.");
+      setIsPinIncorrect(true); // trigger red border
     }
-  };
+  }, [userData, handleSubmitChanges]);
+  
+  const handlePinInputChange = (pinInput) => {
+    if (isPinIncorrect && pinInput.length > 0) {
+      setIsPinIncorrect(false);
+    }
+  };  
 
   return (
     <div className="profile-container">
@@ -299,7 +309,12 @@ const UserProfile = () => {
           <div className="numPad-modal">
             <div className="numPad-content">
               <h2>Please enter your PIN</h2>
-              <NumPad onPinSubmit={handlePinSubmit} />
+              <NumPad
+                onPinSubmit={handlePinSubmit}
+                resetKey={isEditing} 
+                hasError={isPinIncorrect}
+                onChange={handlePinInputChange} 
+              />
               <button className="close-modal" onClick={() => setShowNumPad(false)}>
                 Close
               </button>

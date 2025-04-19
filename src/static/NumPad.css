@@ -44,3 +44,16 @@
 .numpad-grid button:active {
     background-color: #ccc;
 }
+
+.numpad-input {
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  .numpad-input.input-error {
+    border-color: red;
+  }
+  

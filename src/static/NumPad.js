@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./NumPad.css";
 
-const NumPad = ({ onPinSubmit, onPinInput, resetKey }) => {
+const NumPad = ({ onPinSubmit, onPinInput, resetKey, hasError }) => {
   const [input, setInput] = useState("");
 
   useEffect(() => {
@@ -9,7 +9,7 @@ const NumPad = ({ onPinSubmit, onPinInput, resetKey }) => {
   }, [resetKey]);
 
   useEffect(() => {
-    onPinInput?.(input); // Pass input to parent
+    onPinInput?.(input); 
   }, [input, onPinInput]);
 
   const handleButtonClick = useCallback((value) => {
@@ -33,7 +33,7 @@ const NumPad = ({ onPinSubmit, onPinInput, resetKey }) => {
       handleButtonClick(e.key);
     }
     if (e.key === "Enter" && input.length === 4) {
-      handleSubmit(e);  // Enter triggers submit
+      handleSubmit(e);  
     }
     if (e.key === "Backspace") {
       setInput((prev) => prev.slice(0, -1));
@@ -48,7 +48,9 @@ const NumPad = ({ onPinSubmit, onPinInput, resetKey }) => {
   return (
     <div className="numpad-container">
       <div className="numpad-display">
-        <input type="text" value={input} readOnly maxLength="4" />
+        <input type="text" value={input} readOnly maxLength="4" 
+          className={`numpad-input ${hasError ? "input-error" : ""}`}
+        />
       </div>
       <div className="numpad-grid">
         {[...Array(9).keys()].map((i) => (
