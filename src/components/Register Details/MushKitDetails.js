@@ -1,5 +1,6 @@
 import React from 'react';
 import "../../component styles/Register Details/MushKitDetails.css";
+import "../../component styles/Register Details/MushKitDetailsMedia.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 

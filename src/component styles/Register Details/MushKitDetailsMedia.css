@@ -1,0 +1,39 @@
+  @media (max-width: 768px) {
+    .mushkit-details-form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .mushkit-details-form {
+      grid-template-columns: 1fr;
+      padding: 12px;
+      gap: 16px;
+    }
+  
+    .form-group label {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+  
+    .form-group input {
+      font-size: 14px;
+      padding: 6px;
+    }
+  
+    .password-wrapper input {
+      padding-right: 28px;
+    }
+  
+    .eye-icon {
+      right: 10px;
+    }
+  
+    .regremove-icon {
+      font-size: 20px;
+      margin-top: 4px;
+      justify-content: flex-end;
+    }
+  }
+  
+  
