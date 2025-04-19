@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import "../../component styles/Register Details/UserDetails.css";
+import "../../component styles/Register Details/UserDetailsMedia.css";
 
 function UserDetails( {formik, showPassword, togglePassword} ) {
   return (

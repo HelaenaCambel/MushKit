@@ -49,16 +49,5 @@
     color: #333;
   }  
 
-  @media (max-width: 768px) {
-    .user-details-form {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
   
-  @media (max-width: 480px) {
-    .user-details-form {
-      grid-template-columns: 1fr;
-      padding: 16px;
-    }
-  }
   
