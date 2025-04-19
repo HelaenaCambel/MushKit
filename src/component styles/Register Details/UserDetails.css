@@ -55,7 +55,7 @@
     }
   }
   
-  @media (max-width: 500px) {
+  @media (max-width: 480px) {
     .user-details-form {
       grid-template-columns: 1fr;
       padding: 16px;
