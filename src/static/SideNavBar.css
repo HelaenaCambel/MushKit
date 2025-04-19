@@ -51,7 +51,6 @@
 	border-radius: 15px;
 	height: 5px;
 	width: 35px;
-
 	transition: 0.4s;
 }
 
@@ -128,6 +127,7 @@
 	bottom: 0;
 	grid-template-rows: 1fr;
 	grid-template-columns: 2fr 1fr;
+	transition: 0.4s;
 }
 
 .nav-details {
@@ -141,25 +141,34 @@
 .nav-footer-user-name {
 	font-size: 18px;
 	font-weight: 900;
+	margin-left: 10px;
+	margin-top: 30px;
 }
 
-.nav-footer-user-position {
-	margin-top: -15px;
-	color: var(--gray);
-	padding-left: 20px;
-}
 .logout-icon {
 	width: 40px;
 	margin: auto;
 	border-radius: 50px;
 	padding: 10px;
-	margin-left: 15px;
+	margin-right: 20px;	
+	transition: opacity 0.3s ease 0.2s;
+	opacity: 1;
 }
+.logout-icon-NX {
+	width: 40px;
+	margin: auto;
+	border-radius: 50px;
+	padding: 10px;
+	margin-left: 20px;
+	opacity: 1;
+	pointer-events: none;
+}
+
 .logout-icon:hover {
-	background-color: red;
+	background-color: rgb(224, 73, 73);
 	color: white; 
 }
 
-h2{
+.nav-brand h2{
 	padding-left: 20px;
 }

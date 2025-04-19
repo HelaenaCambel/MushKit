@@ -67,10 +67,12 @@ const SideNavBar = ( {onToggle} ) => {
             ) : (
               <p className="nav-footer-user-name">Not logged in</p>
             )}
-            <p className="nav-footer-user-position">by CGR 2025</p>
           </div>
         )}
-        <button onClick={handleLogout} className="logout-icon">
+        <button
+          onClick={handleLogout}
+          className={isExpanded ? "logout-icon" : "logout-icon logout-icon-NX"}
+        >
           <LogOut size={20} />
         </button>
       </div>
