@@ -1,6 +1,6 @@
   .mushkit-details-form {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr) auto;
     gap: 24px;
     padding: 16px;
     max-width: 1200px;
@@ -48,6 +48,25 @@
   .eye-icon:hover {
     color: #333;
   }  
+
+  .regremove-icon {
+    color: #d35c58; 
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 3px;
+  }
+  
+  .regremove-icon:hover {
+    color: #cd2620;
+  }
+  
+  .regremove-icon-disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 
   @media (max-width: 768px) {
     .user-details-form {

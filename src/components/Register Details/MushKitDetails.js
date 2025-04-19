@@ -1,8 +1,9 @@
 import React from 'react';
 import "../../component styles/Register Details/MushKitDetails.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
-function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword }) {
+function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword, remove, mushkitCount }) {
   const getField = (field) => `mushkits[${index}].${field}`;
 
   return (
@@ -75,6 +76,13 @@ function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword })
           <div className="error">{formik.errors.mushkits[index].wifi_pass}</div>
         )}
       </div>
+
+      <div
+        className={`regremove-icon ${mushkitCount === 1 ? "regremove-icon-disabled" : ""}`}
+        onClick={mushkitCount === 1 ? undefined : () => remove(index)}
+      >
+        <MdDelete size={28} />
+      </div>   
     </div>
   );
 }

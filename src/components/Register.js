@@ -176,6 +176,8 @@ const Register = () => {
                           formik={formik}
                           showWifiPassword={showWifiPassword[index]}
                           toggleWifiPassword={() => toggleWifiPassword(index)}
+                          remove={remove}
+                          mushkitCount={formik.values.mushkits.length}
                         />
                       ))}
                     </div>
@@ -186,12 +188,6 @@ const Register = () => {
                           push({ kit_name: '', wifi_ssid: '', wifi_pass: '' });
                         }
                       }}
-                      onRemoveMushKit={() => {
-                        if (formik.values.mushkits.length > 1) {
-                          remove(formik.values.mushkits.length - 1);
-                        }
-                      }}
-                      canRemove={formik.values.mushkits.length > 1}
                       canAdd={isLastMushKitComplete}
                       canSubmit={formik.isValid && formik.dirty}
                       isSubmitting={isSubmitting}
