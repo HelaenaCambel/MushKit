@@ -89,7 +89,10 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove
             </div>
 
             {isEditing && (
-              <div className="remove-icon" onClick={() => handleRemoveClick(index)}>
+              <div
+                className={`remove-icon ${mushkits.length === 1 ? "remove-icon-disabled" : ""}`}
+                onClick={mushkits.length === 1 ? undefined : () => handleRemoveClick(index)}
+              >
                 <MdDelete size={28} />
               </div>
             )}

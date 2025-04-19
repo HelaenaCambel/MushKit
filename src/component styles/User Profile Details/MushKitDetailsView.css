@@ -60,3 +60,9 @@
     color: #cd2620;
   }
   
+  .remove-icon-disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
