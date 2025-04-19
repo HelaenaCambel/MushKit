@@ -1,26 +1,38 @@
-.mushkit-section {
-	max-width: 1300px;
-	margin: auto;
+  .mushkit-section {
+    max-width: 1300px;
+    margin: auto;
     margin-top: 20px;
     margin-left: 35px;
-	padding: 20px;
-	border: 2px solid #ccc;
-	border-radius: 10px;
-	background-color: #f9f9f9;
-	align-items: center;
-	text-align: center;
-}
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    align-items: center;
+    text-align: center;
+  }
 
   .mushkit-form {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4);
     gap: 24px;
     padding: 16px;
-    max-width: 1200px;
-    margin: auto;
+    width: 92.5%;   
+    max-width: none;
+    margin: 0 auto;   
   }
 
   .form-group {
     display: flex;
     flex-direction: column;
+  }  
+  
+  .section-mushtitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: left;
+    background-color: transparent; 
+    border: none;                 
+    padding: 0;
+    grid-column: span 4;
+    margin-left: -45px;
   }

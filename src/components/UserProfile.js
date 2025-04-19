@@ -156,7 +156,6 @@ const UserProfile = () => {
   const handleSubmitChanges = useCallback(async () => {
     if (!userDocId) return;
   
-    // Check for kit_id errors first
     const usersSnapshot = await getDocs(collection(db, "users"));
     const existingKitIds = [];
     const latestKit = editedUserData.mushkits[editedUserData.mushkits.length - 1];
@@ -180,7 +179,7 @@ const UserProfile = () => {
         ...prevErrors,
         [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is already used in your profile.`,
       }));
-      setCanSubmit(false);  // Disable Save Changes due to kit_id error
+      setCanSubmit(false);  
       return;
     }
   
@@ -189,7 +188,7 @@ const UserProfile = () => {
         ...prevErrors,
         [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is already used by another user.`,
       }));
-      setCanSubmit(false);  // Disable Save Changes due to kit_id error
+      setCanSubmit(false);  
       return;
     }
   
@@ -201,11 +200,10 @@ const UserProfile = () => {
         ...prevErrors,
         [`mushkits[${editedUserData.mushkits.length - 1}].kit_id`]: `MushKit ID# ${currentKitId} is not yet available.`,
       }));
-      setCanSubmit(false);  // Disable Save Changes due to kit_id error
+      setCanSubmit(false); 
       return;
     }
   
-    // Check pin after kit_id error check
     if (pinMatched) {
       const cleanedData = {
         ...editedUserData,

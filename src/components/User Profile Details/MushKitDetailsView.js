@@ -13,8 +13,8 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, errors }) => {
 
   return (
     <div className="mushkit-section">
-      <div className="section-title">MushKit Details</div>
       <div className="mushkit-form">
+        <div className="section-mushtitle">MushKit Details</div>
         {mushkits.map((kit, index) => (
           <React.Fragment key={index}>
             <div className="form-group">
