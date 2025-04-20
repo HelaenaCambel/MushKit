@@ -1,93 +1,110 @@
-@media (max-width: 480px) { 
-  .dashboard-container {
-	margin-left: 0;
-	padding-top: 70px; 
-  }
+@media (max-width: 480px) {
+	.dashboard-container {
+	  margin-left: 0;
+	  padding-top: 63px; 
+	  min-height: 90vh;
+	}
   
-  .dashboard-header h1 {
-	top: 0;
-	left: 0;
-	padding: 10px 10px;
-	padding-top: 6px;
-	font-size: 1.3rem;
-	border-bottom: 1px solid #ccc;
-	text-align: flex-start;
-	margin-top: 55px;
-  }
+	.dashboard-header h1 {
+		top: 0;
+		left: 0;
+		padding: 10px 10px;
+		padding-top: 6px;
+		font-size: 1.3rem;
+		border-bottom: 1px solid #ccc;
+		text-align: flex-start;
+		margin-top: 53px;
+	}
   
-  .dashboard-header.expanded h1,
-  .dashboard-header.collapsed h1 {
-	left: 0;
-  }
+	.dashboard-header.expanded h1,
+	.dashboard-header.collapsed h1 {
+	  left: 0;
+	}
   
-  .gauge-section {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-template-rows: auto auto auto;
-	gap: 0px; 
-	max-width: 1300px;
-	height: 260px;
-	margin: auto;
-	margin-bottom: 30px; 
-	padding: 20px;
-	border: 2px solid #ccc;
-	border-radius: 10px;
-	background-color: #f9f9f9;
-	align-items: center;
-	text-align: center;
-  }
+	.gauge-section {
+	  display: grid;
+	  grid-template-columns: 1fr 1fr;
+	  grid-template-rows: auto;
+	  width: 90vw;
+	  height: auto;
+	  padding: 16px;
+	  border: 2px solid #ccc;
+	  border-radius: 10px;
+	  background-color: #f9f9f9;
+	  align-items: center;
+	  text-align: center;
+	  margin-top: 50px;
+	}
 
-  .section-dashtitle {
-	grid-column: span 4;
-	font-size: 1.5rem;
-	font-weight: bold;
-	text-align: left;
-	background-color: transparent; 
-	border: none;                 
-	padding: 0;
+	.gauge-section + .gauge-section {
+		margin-top: 5px; 
+	  }
+  
+	.section-dashtitle {
+	  grid-column: span 2;
+	  font-size: 1.4rem;
+	  font-weight: bold;
+	  text-align: left;
+	  padding-bottom: 10px;
+	}
+  
+	.gauge-temp,
+	.gauge-humid {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  flex-direction: column;
+	  margin-top: -60px;
+	  transform: scale(0.75); 
+	  transform-origin: center;
+	}
+
+	.gauge-temp {
+		margin-left: -35px;
+	}
+
+	.gauge-humid {
+		margin-left: -90px;
+	}
+  
+	.gauge-label {
+	  font-size: 1rem;
+	  font-weight: bold;
+	  margin-top: -610px;
+	  margin-left: -38px;
+	  margin-bottom: -200px;
+	}
+  
+	.humid-label {
+		margin-left: -52px;
+	}
+
+	.status-cell,
+	.time-cell {
+	  grid-column: span 1;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  flex-direction: column;
+	  padding: 10px;
+	  margin: 0;
+	  transform: scale(0.9); 
+	  transform-origin: center;
+	  margin-top: -100px;
+	  margin-left: -20px;
+	}
+  
+	.time-cell {
+		margin-left: -60px;
+		margin-top: -80px;
+	}
+
+	.time-text {
+	  color: #444;
+	}
+  
+	.time-text p {
+	  margin: 2px 0;
+	}
   }
   
-  .gauge-temp,
-  .gauge-humid {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column; 
-	padding: 0;
-	margin-bottom: 0;
-  }
-  
-  .gauge-label {
-	font-size: 1.2rem;
-	font-weight: bold;
-	margin-top: -140px;
-  }
-
-  .status-cell {
-	grid-column: 3; 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	padding: 10px;
-	margin-top: -50px;
-  }
-
-  .time-cell {
-	grid-column: 4; 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	padding: 10px 14px;
-	margin-top: -60px;
-  }
-
-  .time-text {
-	color: #444;
-  }
-  
-  .time-text p {
-	margin: 2px 0;
-  }
-}

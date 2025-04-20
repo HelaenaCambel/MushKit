@@ -99,8 +99,8 @@ const Dashboard = () => {
               </div>
 
               <div className="status-cell">
-                <WaterLevel value={data.waterStatus} />
                 <GrowingLight value={data.lightStatus} />
+                <WaterLevel value={data.waterStatus} />
               </div>
 
               <div className="time-cell">
@@ -111,8 +111,8 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="gauge-label">Temperature</div>
-              <div className="gauge-label">Humidity</div>
+              <div className="gauge-label"> <div className="temp-label"> Temperature </div> </div>
+              <div className="gauge-label"> <div className="humid-label">  Humidity  </div> </div>
             </div>
           );
         })}
