@@ -1,21 +1,23 @@
-.user-section {
-	max-width: 1300px;
-	margin: auto;
-    margin-top: 10px;
-    margin-left: 35px;
-	padding: 20px;
-	border: 2px solid #ccc;
-	border-radius: 10px;
-	background-color: #f9f9f9;
-	align-items: center;
-	text-align: center;
-}
+@media (max-width: 480px) {
+    .user-section {
+        max-width: 1300px;
+        margin: auto;
+        margin-top: 10px;
+        margin-left: 35px;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        align-items: center;
+        text-align: center;
+    }
 
-.user-form {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    padding: 16px;
-    max-width: 1200px;
-    margin: auto;
-  }
+    .user-form {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        padding: 16px;
+        max-width: 1200px;
+        margin: auto;
+    }
+}

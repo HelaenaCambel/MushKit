@@ -1,3 +1,4 @@
+@media (max-width: 480px) {
   .mushkit-section {
     max-width: 1300px;
     margin: auto;
@@ -65,4 +66,4 @@
     cursor: not-allowed;
     pointer-events: none;
   }
-  
+}
