@@ -161,7 +161,6 @@
 	padding: 10px;
 	margin-left: 20px;
 	opacity: 1;
-	pointer-events: none;
 }
 
 .logout-icon:hover {
