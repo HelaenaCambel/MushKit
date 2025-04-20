@@ -55,16 +55,19 @@
     transition: color 0.2s ease;
     display: flex;
     align-items: flex-end;
-    margin-bottom: 3px;
+    grid-column: span 2; 
+    justify-content: flex-end;
+    margin-top: -12px;
   }
-  
+
   .remove-icon:hover {
     color: #cd2620;
   }
-  
+
   .remove-icon-disabled {
     color: #ccc;
     cursor: not-allowed;
     pointer-events: none;
+    grid-column: span 2; 
   }
 }
