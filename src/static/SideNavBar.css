@@ -169,6 +169,10 @@
 	color: white; 
 }
 
+.logout-menu-item{
+	display: none;
+}
+
 .nav-brand h2{
 	padding-left: 20px;
 }

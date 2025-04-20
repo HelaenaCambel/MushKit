@@ -56,7 +56,12 @@ const SideNavBar = ( {onToggle} ) => {
               <span className="menu-item-icon">{icon}</span>
               {isExpanded && <p>{text}</p>}
             </Link>
-          ))}
+          ))} 
+          <div className="logout-menu-item" onClick={handleLogout}>
+            <span className="menu-item-icon">
+              <LogOut size={20} />
+            </span>
+          </div> 
         </div>
       </div>
 
