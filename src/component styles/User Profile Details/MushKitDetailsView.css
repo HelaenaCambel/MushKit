@@ -31,6 +31,14 @@
     margin: 0 auto;
   }  
 
+  .section-mushtitle.span-5 {
+    grid-column: span 5;
+  }
+  
+  .section-mushtitle.span-4 {
+    grid-column: span 4;
+  }  
+
   .form-group {
     display: flex;
     flex-direction: column;

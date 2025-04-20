@@ -1,20 +1,22 @@
 @media (max-width: 480px) {
   .mushkit-section {
-    max-width: 1300px;
-    margin: auto;
-    margin-top: 20px;
-    margin-left: 35px;
-    padding: 20px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     background-color: #f9f9f9;
-    align-items: center;
     text-align: center;
+    width: 90vw;
+    margin-top: 15px;
+  }
+
+  .section-mushtitle.span-5,
+  .section-mushtitle.span-4 {
+    grid-column: span 2;
   }
 
   .mushkit-form-view {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
     padding: 16px;
     width: 92.5%;
@@ -24,7 +26,7 @@
   
   .mushkit-form-edit {
     display: grid;
-    grid-template-columns: repeat(4, 1fr) auto;
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
     padding: 16px;
     width: 92.5%;
@@ -35,17 +37,16 @@
   .form-group {
     display: flex;
     flex-direction: column;
+    margin-top: -10px;
   }  
   
   .section-mushtitle {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
-    text-align: left;
-    background-color: transparent; 
-    border: none;                 
     padding: 0;
-    grid-column: span 5;
-    margin-left: -45px;
+    margin-left: -15px;
+    margin-top: -15px;
+    margin-bottom: -5px;
   }
 
   .remove-icon {

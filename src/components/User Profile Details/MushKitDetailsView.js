@@ -22,11 +22,11 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove
   return (
     <div className="mushkit-section">
       <div className={isEditing ? "mushkit-form-edit" : "mushkit-form-view"}>
-        <div
-          className="section-mushtitle"
-          style={{ gridColumn: `span ${isEditing ? 5 : 4}` }}
-        > MushKit Details
-        </div>
+      <div
+        className={`section-mushtitle ${isEditing ? "span-5" : "span-4"}`}
+      >
+        MushKit Details
+      </div>
         {mushkits.map((kit, index) => (
           <React.Fragment key={index}>
             <div className="form-group">

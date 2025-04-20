@@ -1,7 +1,8 @@
 @media (max-width: 480px) {
  .profile-container {
-	margin-left: 0;
-	padding-top: 70px; 
+	margin: 0;
+	padding-top: 63px; 
+	margin-left: -23px;
   }
   
   .profile-header h1 {
@@ -12,7 +13,7 @@
 	font-size: 1.3rem;
 	border-bottom: 1px solid #ccc;
 	text-align: flex-start;
-	margin-top: 55px;
+	margin-top: 53px;
   }  
   
   .profile-header.expanded h1,

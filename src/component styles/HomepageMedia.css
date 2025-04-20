@@ -1,7 +1,7 @@
 @media (max-width: 480px) {
 	.home-container {
 	  margin-left: 0;
-	  padding-top: 70px; 
+	  padding-top: 63px; 
 	}
   
 	.home-header h1 {
@@ -12,7 +12,7 @@
 	  font-size: 1.3rem;
 	  border-bottom: 1px solid #ccc;
 	  text-align: flex-start;
-	  margin-top: 55px;
+	  margin-top: 53px;
 	}
   
 	.home-header.expanded h1,
