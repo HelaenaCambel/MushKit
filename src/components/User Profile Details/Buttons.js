@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../component styles/User Profile Details/Buttons.css';
+import '../../component styles/User Profile Details/ButtonsMedia.css';
 
 const Buttons = ({
   isEditing,

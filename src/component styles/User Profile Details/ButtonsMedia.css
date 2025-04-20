@@ -2,7 +2,7 @@
   .form-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 15px;
     margin-bottom: 20px;
   }
 
@@ -14,11 +14,9 @@
   .add-mushkit{
     color: white;
     border: none;
-    padding: 10px 15px;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
     border-radius: 6px;
-    cursor: pointer;
     transition: background-color 0.2s ease;
   }
 
@@ -37,17 +35,15 @@
   .cancel-button {
     color: white;
     border: none;
-    padding: 10px 15px;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
     border-radius: 6px;
-    cursor: pointer;
     transition: background-color 0.2s ease;
   }
 
   .edit-button {
     background-color: #2196F3;
-    margin-right: 0; 
+    margin-right: 15px; 
   }
 
   .submit-button {
@@ -58,7 +54,7 @@
 
   .cancel-button {
     background-color: #f44336;
-    margin-right: 55px;
+    margin-right: 15px;
   }
 
   /*When disabled*/
