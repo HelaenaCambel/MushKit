@@ -1,0 +1,71 @@
+@media (max-width: 480px) {
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .mushkit-buttons {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .add-mushkit{
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .add-mushkit {
+    background-color: #2196F3; 
+    margin-left: 35px;
+  }
+
+  .remove-mushkit {
+    background-color: #f44336;
+    margin-left: 10px;
+  }
+
+  .edit-button,
+  .submit-button,
+  .cancel-button {
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .edit-button {
+    background-color: #2196F3;
+    margin-right: 0; 
+  }
+
+  .submit-button {
+    background-color: #4CAF50;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+
+  .cancel-button {
+    background-color: #f44336;
+    margin-right: 55px;
+  }
+
+  /*When disabled*/
+  .add-mushkit:disabled,
+  .remove-mushkit:disabled,
+  .submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
