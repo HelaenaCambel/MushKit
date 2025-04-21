@@ -3,6 +3,7 @@
 		margin-left: 0;
 		padding-top: 63px; 
 		min-height: 90vh;
+		justify-items: center;
 	}
   
 	.history-header h1 {
