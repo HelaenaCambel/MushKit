@@ -24,8 +24,8 @@
 	.data-container {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;  /* Center vertically */
-		align-items: center;      /* Center horizontally */
+		justify-content: center; 
+		align-items: center;     
 		margin: 10px auto auto -33px;  /* top right bottom left */
 		transform: scale(.97);
 	}
