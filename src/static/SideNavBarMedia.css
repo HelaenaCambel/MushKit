@@ -1,4 +1,4 @@
-@media (max-width: 480px) {
+@media (max-width: 30em) {
 	.side-nav-container {
 		width: 100%;
 		height: auto;
@@ -32,19 +32,19 @@
 		margin: 0;
 		padding: 5px;
 		height: auto;
-		font-size: 10px;
+		font-size: 0.625rem; /* 10px = 0.625rem */
 		text-align: center;
 		gap: 3px;
+		font-size: clamp(10px, 2vw, 14px);
 	}
 
 	.logout-menu-item {
 		display: flex;
-		margin-left: 280px;
+		margin-left: 17.5em; /* 280px = 17.5em */
 	}
   
 	.nav-heading,
 	.nav-footer {
 	  	display: none;
 	}
-  }
-  
+}
