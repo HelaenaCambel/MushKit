@@ -18,3 +18,25 @@
         margin: auto;
     }
 }
+
+@media (max-width: 320px) {
+    .user-section {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        text-align: center;
+        margin: 45px auto auto auto;
+        max-width: 280px;
+        transform: scale(0.9);
+    }
+
+    .user-form {
+        grid-template-columns: repeat(1, 1fr);
+        display: grid;
+        gap: 24px;
+        padding: 16px;
+        max-width: 1200px;
+        margin: auto;
+    }
+}

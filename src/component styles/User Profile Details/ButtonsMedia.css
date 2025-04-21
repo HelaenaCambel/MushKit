@@ -65,3 +65,65 @@
     cursor: not-allowed;
   }
 }
+
+@media (max-width: 320px) {
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 6px;
+    flex-wrap: nowrap; /* prevent wrapping */
+  }
+
+  .mushkit-buttons,
+  .action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .edit-button {
+    background-color: #2196F3;
+    width: 85vw;  
+    text-align: center; 
+    margin-right: 23px;
+  }
+
+  .edit-button,
+  .add-mushkit,
+  .submit-button,
+  .cancel-button {
+    color: white;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    padding: 8px 6px;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .add-mushkit {
+    background-color: #2196F3;
+  }
+
+  .submit-button {
+    background-color: #4CAF50;
+  }
+
+  .cancel-button {
+    background-color: #f44336;
+    margin-left: -9px;
+    margin-right: 30px;
+    max-height: 43px;
+  }
+
+  /* When disabled */
+  .add-mushkit:disabled,
+  .submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}

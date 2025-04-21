@@ -22,11 +22,11 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove
   return (
     <div className="mushkit-section">
       <div className={isEditing ? "mushkit-form-edit" : "mushkit-form-view"}>
-      <div
-        className={`section-mushtitle ${isEditing ? "span-5" : "span-4"}`}
-      >
-        MushKit Details
-      </div>
+        <div
+          className={`section-mushtitle ${isEditing ? "span-5" : "span-4"}`}
+        >
+          MushKit Details
+        </div>
         {mushkits.map((kit, index) => (
           <React.Fragment key={index}>
             <div className="form-group">
@@ -68,7 +68,7 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove
                 id={`wifi_ssid_${index}`}
                 value={kit.wifi_ssid || ""}
                 disabled={!isEditing}
-                onChange={(e) =>
+                  onChange={(e) =>
                   handleInputChange(index, "wifi_ssid", e.target.value)
                 }
               />

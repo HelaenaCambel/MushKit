@@ -71,3 +71,50 @@
     grid-column: span 2; 
   }
 }
+
+@media (max-width: 320px) {
+  .mushkit-section {
+    padding: 10px;
+    background-color: #f9f9f9;
+    max-width: 280px;
+    transform: scale(.9);
+    margin: -35px auto -25px auto;
+  }
+
+  .mushkit-section .form-group{
+    width: 95%;
+  }
+
+  .mushkit-form-view,
+  .mushkit-form-edit {
+    grid-template-columns: repeat(1, 1fr);
+    display: grid;
+    gap: 24px;
+    padding: 16px;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  .section-mushtitle.span-5,
+  .section-mushtitle.span-4 {
+    grid-column: 1;
+  }
+
+  .remove-icon {
+    color: #d35c58; 
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    grid-column: 1; 
+    justify-content: flex-end;
+    margin-top: -12px;
+  }
+
+  .remove-icon-disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+    grid-column: 1; 
+  }
+}
