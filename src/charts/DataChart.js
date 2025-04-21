@@ -28,6 +28,7 @@ const DataChart = ({ historyData }) => {
   return (
     <div style={{ width: '100%', margin: '20px 0' }}>
       {/* Temperature Chart */}
+      <h4 className="chart-title">Temperature</h4>
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart
           data={chartData}
@@ -44,6 +45,7 @@ const DataChart = ({ historyData }) => {
       </ResponsiveContainer>
 
       {/* Humidity Chart */}
+      <h4 className="chart-title">Humidity</h4>
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart
           data={chartData}

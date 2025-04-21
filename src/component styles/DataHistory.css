@@ -106,5 +106,8 @@
   .pagination-buttons span{
 	color: rgb(69, 68, 68);
   }
-  
-  
+
+  .chart-title {
+	margin-bottom: -10px;
+	margin-left: 10px;
+  }  
