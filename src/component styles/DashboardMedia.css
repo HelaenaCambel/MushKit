@@ -22,18 +22,18 @@
 	}
   
 	.gauge-section {
-	  display: grid;
-	  grid-template-columns: 1fr 1fr;
-	  grid-template-rows: auto;
-	  width: 90vw;
-	  height: auto;
-	  padding: 16px;
-	  border: 2px solid #ccc;
-	  border-radius: 10px;
-	  background-color: #f9f9f9;
-	  align-items: center;
-	  text-align: center;
-	  margin-top: 50px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto;
+		width: 90vw;
+		height: auto;
+		padding: 16px;
+		border: 2px solid #ccc;
+		border-radius: 10px;
+		background-color: #f9f9f9;
+		align-items: center;
+		text-align: center;
+		margin: 50px auto 20px auto;	/*top right bottom left*/
 	}
 
 	.gauge-section + .gauge-section {
@@ -57,46 +57,40 @@
 	  margin-top: -60px;
 	  transform: scale(0.75); 
 	  transform-origin: center;
-	}
-
-	.gauge-temp {
-		margin-left: -35px;
+	  margin-left: 0;
+	  align-self: center;	  
 	}
 
 	.gauge-humid {
-		margin-left: -90px;
+		margin-left: -20px;
 	}
-  
+
 	.gauge-label {
-	  font-size: 1rem;
-	  font-weight: bold;
-	  margin-top: -610px;
-	  margin-left: -38px;
-	  margin-bottom: -200px;
+		font-size: 1rem;
+		font-weight: bold;
+		text-align: center;
+		margin: -190px auto auto auto; /*top right bottom left*/
 	}
-  
+	
 	.humid-label {
-		margin-left: -52px;
-	}
+		margin-left: -15px;
+	}	
 
 	.status-cell,
 	.time-cell {
-	  grid-column: span 1;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-	  flex-direction: column;
-	  padding: 10px;
-	  margin: 0;
-	  transform: scale(0.9); 
-	  transform-origin: center;
-	  margin-top: -100px;
-	  margin-left: -20px;
+		grid-column: span 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		padding: 10px;
+		margin: -120px auto -10px auto; /*top right bottom left*/
+		transform: scale(0.9);
+		transform-origin: center;
 	}
   
 	.time-cell {
-		margin-left: -60px;
-		margin-top: -80px;
+		margin: -98px auto auto auto; 	/*top right bottom left*/
 	}
 
 	.time-text {
