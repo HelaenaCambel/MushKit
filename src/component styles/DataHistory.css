@@ -78,10 +78,14 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	transform: scale(.95);
+	margin-left: -15px;
+	margin-bottom: -10px;
   }
 
   .pagination-buttons {
 	margin-top: 10px;
+	margin-bottom: -60px;
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -110,4 +114,5 @@
   .chart-title {
 	margin-bottom: -10px;
 	margin-left: 10px;
+	font-size: 0.85rem;
   }  

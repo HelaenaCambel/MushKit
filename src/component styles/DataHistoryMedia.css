@@ -105,5 +105,9 @@
 	.pagination-buttons span {
 	  color: rgb(69, 68, 68);
 	}
+
+	.recharts-cartesian-axis-tick-value {
+		font-size: 10px !important;
+	}
   }
   
