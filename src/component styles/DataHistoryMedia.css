@@ -109,5 +109,9 @@
 	.recharts-cartesian-axis-tick-value {
 		font-size: 10px !important;
 	}
+
+	.chart-title {
+		font-size: 0.85rem;
+	}  
   }
   
