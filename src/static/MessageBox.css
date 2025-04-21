@@ -45,3 +45,9 @@
       transform: rotate(360deg);
     }
   }
+
+@media (max-width: 480px) {
+  .message-box {
+    transform: scale(0.8);
+  }
+}
