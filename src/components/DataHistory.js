@@ -8,6 +8,16 @@ import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../database/firebase";
 import DataChart from "../charts/DataChart";
 
+const LoadingSpinner = () => (
+  <div className="mushroom-loading">
+    <img
+      src="/mushroom.svg"
+      alt="Loading spinner"
+      className="loading-spinner"
+    />
+  </div>
+);
+
 const ROWS_PER_PAGE = 10;
 
 const DataHistory = () => {
@@ -17,6 +27,7 @@ const DataHistory = () => {
   const [mushkits, setMushkits] = useState([]);
   const [historyDataByKit, setHistoryDataByKit] = useState({});
   const [currentPage, setCurrentPage] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -32,7 +43,7 @@ const DataHistory = () => {
         const kits = data.mushkits || [];
         setMushkits(kits);
 
-        kits.forEach((kit) => {
+        kits.forEach((kit, kitIndex) => {
           const historyRef = collection(db, "sensorHistory", kit.kit_id, "readings");
 
           const unsubscribe = onSnapshot(historyRef, (snapshot) => {
@@ -71,6 +82,10 @@ const DataHistory = () => {
 
             setHistoryDataByKit((prev) => ({ ...prev, [kit.kit_id]: readings }));
             setCurrentPage((prev) => ({ ...prev, [kit.kit_id]: 1 }));
+
+            if (kitIndex === kits.length - 1) {
+              setIsLoading(false);
+            }
           });
 
           unsubscribes.push(unsubscribe);
@@ -107,75 +122,81 @@ const DataHistory = () => {
         <div className={`history-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
           <h1>Data History</h1>
         </div>
-        <div className="data-container">
-          {mushkits.map((kit, index) => {
-            const kitId = kit.kit_id;
-            const historyData = historyDataByKit[kitId] || [];
-            const page = currentPage[kitId] || 1;
-            const startIndex = (page - 1) * ROWS_PER_PAGE;
-            const currentRows = historyData.slice(startIndex, startIndex + ROWS_PER_PAGE);
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <div className="data-container">
+              {mushkits.map((kit, index) => {
+                const kitId = kit.kit_id;
+                const historyData = historyDataByKit[kitId] || [];
+                const page = currentPage[kitId] || 1;
+                const startIndex = (page - 1) * ROWS_PER_PAGE;
+                const currentRows = historyData.slice(startIndex, startIndex + ROWS_PER_PAGE);
 
-            return (
-              <div key={index} className="mushkit-section">
-                <div className="mushkit-left">
-                  <div className="section-name">
-                    <h2>{kit.kit_name}</h2>
-                    <p>MushKit ID# {kitId}</p>
+                return (
+                  <div key={index} className="mushkit-section">
+                    <div className="mushkit-left">
+                      <div className="section-name">
+                        <h2>{kit.kit_name}</h2>
+                        <p>MushKit ID# {kitId}</p>
+                      </div>
+
+                      <table className="history-table">
+                        <thead>
+                          <tr>
+                            <th>Timestamp</th>
+                            <th>Temperature</th>
+                            <th>Humidity</th>
+                            <th>Water Level</th>
+                            <th>Light Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentRows.map((entry, idx) => (
+                            <tr key={idx}>
+                              <td>{entry.timestamp}</td>
+                              <td>{entry.temperature} °C</td>
+                              <td>{entry.humidity} %</td>
+                              <td>{entry.waterStatus}</td>
+                              <td>{entry.lightStatus}</td>
+                            </tr>
+                          ))}
+                          {Array.from({ length: ROWS_PER_PAGE - currentRows.length }).map((_, idx) => (
+                            <tr key={`empty-${idx}`}>
+                              <td style={{ height: "21.6px" }}></td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      <div className="pagination-buttons">
+                        <button onClick={() => handlePrevious(kitId)} disabled={page === 1}>
+                          Previous
+                        </button>
+                        <span style={{ margin: "0 10px" }}>Page {page}</span>
+                        <button
+                          onClick={() => handleNext(kitId, historyData.length)}
+                          disabled={startIndex + ROWS_PER_PAGE >= historyData.length}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="mushkit-right">
+                      <DataChart historyData={currentRows} />
+                    </div>
                   </div>
-
-                  <table className="history-table">
-                    <thead>
-                      <tr>
-                        <th>Timestamp</th>
-                        <th>Temperature</th>
-                        <th>Humidity</th>
-                        <th>Water Level</th>
-                        <th>Light Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentRows.map((entry, idx) => (
-                        <tr key={idx}>
-                          <td>{entry.timestamp}</td>
-                          <td>{entry.temperature} °C</td>
-                          <td>{entry.humidity} %</td>
-                          <td>{entry.waterStatus}</td>
-                          <td>{entry.lightStatus}</td>
-                        </tr>
-                      ))}
-                      {Array.from({ length: ROWS_PER_PAGE - currentRows.length }).map((_, idx) => (
-                        <tr key={`empty-${idx}`}>
-                          <td style={{ height: "21.6px" }}></td>
-                          <td>&nbsp;</td>
-                          <td>&nbsp;</td>
-                          <td>&nbsp;</td>
-                          <td>&nbsp;</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-
-                  <div className="pagination-buttons">
-                    <button onClick={() => handlePrevious(kitId)} disabled={page === 1}>
-                      Previous
-                    </button>
-                    <span style={{ margin: "0 10px" }}>Page {page}</span>
-                    <button
-                      onClick={() => handleNext(kitId, historyData.length)}
-                      disabled={startIndex + ROWS_PER_PAGE >= historyData.length}
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mushkit-right">
-                  <DataChart historyData={currentRows} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
