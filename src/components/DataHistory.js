@@ -7,6 +7,9 @@ import { useAuth } from "../context/AuthContext";
 import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "../database/firebase";
 import DataChart from "../charts/DataChart";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver"; 
+import { FaDownload } from "react-icons/fa";
 
 const LoadingSpinner = () => (
   <div className="mushroom-loading">
@@ -115,6 +118,35 @@ const DataHistory = () => {
     }));
   };
 
+  // Excel Download Handler
+  const handleDownloadExcel = (kitId, kitName) => {
+    const historyData = historyDataByKit[kitId];
+    if (!historyData || historyData.length === 0) return;
+
+    const sheetData = historyData.map((entry) => ({
+      Timestamp: entry.timestamp,
+      "Temperature in °C": entry.temperature,
+      "Humidity in %": entry.humidity,
+      "Water Level": entry.waterStatus,
+      "Light Status": entry.lightStatus,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(sheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data History");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(blob, `${kitName}_DataHistory.xlsx`);
+  };
+
   return (
     <div className="history-container">
       <SideNavBar onToggle={setIsSidebarExpanded} />
@@ -174,16 +206,26 @@ const DataHistory = () => {
                         </tbody>
                       </table>
 
-                      <div className="pagination-buttons">
-                        <button onClick={() => handlePrevious(kitId)} disabled={page === 1}>
-                          Previous
-                        </button>
-                        <span style={{ margin: "0 10px" }}>Page {page}</span>
+                      <div className="pagination-download-row">
+                        <div className="pagination-buttons">
+                          <button onClick={() => handlePrevious(kitId)} disabled={page === 1}>
+                            Previous
+                          </button>
+                          <span style={{ margin: "0 10px" }}>Page {page}</span>
+                          <button
+                            onClick={() => handleNext(kitId, historyData.length)}
+                            disabled={startIndex + ROWS_PER_PAGE >= historyData.length}
+                          >
+                            Next
+                          </button>
+                        </div>
+
                         <button
-                          onClick={() => handleNext(kitId, historyData.length)}
-                          disabled={startIndex + ROWS_PER_PAGE >= historyData.length}
+                          className="download-btn"
+                          onClick={() => handleDownloadExcel(kitId, kit.kit_name)}
                         >
-                          Next
+                          <FaDownload style={{ fontSize: "15px", marginRight: "8px", marginTop: "1px"}} />
+                          DataHistory.xlsx
                         </button>
                       </div>
                     </div>
