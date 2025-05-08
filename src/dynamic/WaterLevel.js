@@ -6,9 +6,9 @@ const WaterLevel = ({ value }) => {
     <div className="water-level">
       <h3>Water Level Status</h3>
       <div className="water-status">
-        <span className={value === "High" ? "active-high" : ""}>High</span>
-        <span className={value === "Medium" ? "active-medium" : ""}>Medium</span>
-        <span className={value === "Low" ? "active-low" : ""}>Low</span>
+        <span className={value === "HIGH" ? "active-high" : ""}>High</span>
+        <span className={value === "MEDIUM" ? "active-medium" : ""}>Medium</span>
+        <span className={value === "LOW" ? "active-low" : ""}>Low</span>
       </div>
     </div>
   );
