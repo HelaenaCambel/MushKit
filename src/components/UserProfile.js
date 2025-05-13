@@ -111,7 +111,7 @@ const UserProfile = () => {
       return;
     }
   
-    const requiredFields = ["kit_name", "wifi_ssid", "wifi_pass"];
+    const requiredFields = ["kit_name", "temp_threshold", "humid_threshold"];
   
     const isComplete = requiredFields.every(
       (field) => latestKit[field]?.trim() !== ""
@@ -141,7 +141,7 @@ const UserProfile = () => {
       ...prev,
       mushkits: [
         ...(prev.mushkits || []),
-        { kit_name: "", wifi_ssid: "", wifi_pass: "", kit_id: "", justAdded: true },
+        { kit_name: "", temp_threshold: "", humid_threshold: "", kit_id: "", justAdded: true },
       ],
     }));
   };

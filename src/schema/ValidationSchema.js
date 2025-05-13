@@ -40,8 +40,12 @@ const ValidationSchema = Yup.object().shape({
       kit_id: Yup.string()
         .matches(/^\d{4}$/, 'MushKit ID contains 4 digits only.')
         .required('*MushKit is required'),
-      wifi_ssid: Yup.string().required('*SSID is required.'),
-      wifi_pass: Yup.string().required('*Password is required'),
+      temp_threshold: Yup.string()
+        .matches(/^\d{2}$/, 'Must be 2 digits only.')
+        .required('*Required'),
+      humid_threshold: Yup.string()
+        .matches(/^\d{2}$/, 'Must be 2 digits only.')
+        .required('*Required'),
     })
   ),
 });

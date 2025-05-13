@@ -3,7 +3,7 @@ import "../../component styles/User Profile Details/MushKitDetailsView.css";
 import "../../component styles/User Profile Details/MushKitDetailsViewMedia.css";
 import { MdDelete } from "react-icons/md";
 
-const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove, errors }) => {
+const MushKitDetailsView = ({ mushkits, isEditing, onChange, onRemove, errors }) => {
   const handleInputChange = (index, field, value) => {
     const updatedMushkits = [...mushkits];
     updatedMushkits[index] = {
@@ -62,31 +62,31 @@ const MushKitDetailsView = ({ mushkits, isEditing, onChange, canRemove, onRemove
             </div>
 
             <div className="form-group">
-              <label htmlFor={`wifi_ssid_${index}`}>Wi-Fi SSID</label>
+              <label htmlFor={`temp_threshold_${index}`}>Temperature Threshold</label>
               <input
                 type="text"
-                id={`wifi_ssid_${index}`}
-                value={kit.wifi_ssid || ""}
+                id={`temp_threshold_${index}`}
+                value={kit.temp_threshold || ""}
                 disabled={!isEditing}
                   onChange={(e) =>
-                  handleInputChange(index, "wifi_ssid", e.target.value)
+                    handleInputChange(index, "temp_threshold", e.target.value)
                 }
               />
-              {errors.wifi_ssid && <span className="error-message">{errors.wifi_ssid}</span>}
+              {errors.temp_threshold && <span className="error-message">{errors.temp_threshold}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor={`wifi_pass_${index}`}>Wi-Fi Password</label>
+              <label htmlFor={`humid_threshold_${index}`}>Humidity Threshold</label>
               <input
                 type="text"
-                id={`wifi_pass_${index}`}
-                value={kit.wifi_pass || ""}
+                id={`humid_threshold_${index}`}
+                value={kit.humid_threshold || ""}
                 disabled={!isEditing}
                 onChange={(e) =>
-                  handleInputChange(index, "wifi_pass", e.target.value)
+                  handleInputChange(index, "humid_threshold", e.target.value)
                 }
               />
-              {errors.wifi_pass && <span className="error-message">{errors.wifi_pass}</span>}
+              {errors.humid_threshold && <span className="error-message">{errors.humid_threshold}</span>}
             </div>
 
             {isEditing && (

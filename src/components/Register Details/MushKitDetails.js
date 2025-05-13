@@ -1,7 +1,6 @@
 import React from 'react';
 import "../../component styles/Register Details/MushKitDetails.css";
 import "../../component styles/Register Details/MushKitDetailsMedia.css";
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 
 function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword, remove, mushkitCount }) {
@@ -42,39 +41,34 @@ function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword, r
       </div>
 
       <div className="form-group">
-        <label htmlFor={getField("wifi_ssid")}>SSID (Wi-Fi Name)</label>
+        <label htmlFor={getField("temp_threshold")}>Temperature Threshold</label>
         <input
           type="text"
-          id={`wifi_ssid_${index}`}
-          name={getField("wifi_ssid")}
-          placeholder="Enter Wi-Fi's name/SSID"
-          value={formik.values.mushkits[index].wifi_ssid}
+          id={`temp_threshold_${index}`}
+          name={getField("temp_threshold")}
+          placeholder="Enter Temperature Threshold"
+          value={formik.values.mushkits[index].temp_threshold}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.touched.mushkits?.[index]?.wifi_ssid && formik.errors.mushkits?.[index]?.wifi_ssid && (
-          <div className="error">{formik.errors.mushkits[index].wifi_ssid}</div>
+        {formik.touched.mushkits?.[index]?.temp_threshold && formik.errors.mushkits?.[index]?.temp_threshold && (
+          <div className="error">{formik.errors.mushkits[index].temp_threshold}</div>
         )}
       </div>
 
       <div className="form-group password-group">
-        <label htmlFor={getField("wifi_pass")}>Wi-Fi Password</label>
-        <div className="password-wrapper">
-          <input
-            type={showWifiPassword ? 'text' : 'password'}
-            id={`wifi_pass_${index}`}
-            name={getField("wifi_pass")}
-            placeholder="Enter Wi-Fi password"
-            value={formik.values.mushkits[index].wifi_pass}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <span className="eye-icon" onClick={toggleWifiPassword}>
-            {showWifiPassword ? <FaEye /> : <FaEyeSlash />}
-          </span>
-        </div>
-        {formik.touched.mushkits?.[index]?.wifi_pass && formik.errors.mushkits?.[index]?.wifi_pass && (
-          <div className="error">{formik.errors.mushkits[index].wifi_pass}</div>
+        <label htmlFor={getField("humid_threshold")}>Humidity Threshold</label>
+        <input
+          type='text'
+          id={`humid_threshold_${index}`}
+          name={getField("humid_threshold")}
+          placeholder="Enter Humidity Threshold"
+          value={formik.values.mushkits[index].humid_threshold}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {formik.touched.mushkits?.[index]?.humid_threshold && formik.errors.mushkits?.[index]?.humid_threshold && (
+          <div className="error">{formik.errors.mushkits[index].humid_threshold}</div>
         )}
       </div>
 

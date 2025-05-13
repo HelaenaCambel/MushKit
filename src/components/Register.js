@@ -19,18 +19,9 @@ const Register = () => {
   const navigate = useNavigate();  
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showWifiPassword, setShowWifiPassword] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const togglePassword = () => setShowPassword(prev => !prev);
-  
-  const toggleWifiPassword = (index) => {
-    setShowWifiPassword(prev => {
-      const newState = [...prev];
-      newState[index] = !newState[index];
-      return newState;
-    });
-  };
 
   const handleSubmit = async (values, actions) => {
     setIsSubmitting(true);
@@ -134,8 +125,8 @@ const Register = () => {
           mushkits: [
             {
               kit_name: '',
-              wifi_ssid: '',
-              wifi_pass: '',
+              temp_threshold: '',
+              humid_threshold: '',
             }
           ]
         }}
@@ -148,11 +139,11 @@ const Register = () => {
           
           const isLastMushKitComplete =
             lastKit.kit_name.trim() !== '' &&
-            lastKit.wifi_ssid.trim() !== '' &&
-            lastKit.wifi_pass.trim() !== '' &&
+            lastKit.temp_threshold.trim() !== '' &&
+            lastKit.humid_threshold.trim() !== '' &&
             !formik.errors.mushkits?.[lastIndex]?.kit_name &&
-            !formik.errors.mushkits?.[lastIndex]?.wifi_ssid &&
-            !formik.errors.mushkits?.[lastIndex]?.wifi_pass;
+            !formik.errors.mushkits?.[lastIndex]?.temp_threshold &&
+            !formik.errors.mushkits?.[lastIndex]?.humid_threshold;
           
           return (
             <Form className='register-form'>
@@ -175,8 +166,6 @@ const Register = () => {
                           key={index}
                           index={index}
                           formik={formik}
-                          showWifiPassword={showWifiPassword[index]}
-                          toggleWifiPassword={() => toggleWifiPassword(index)}
                           remove={remove}
                           mushkitCount={formik.values.mushkits.length}
                         />
@@ -186,7 +175,7 @@ const Register = () => {
                     <Buttons
                       onAddMushKit={() => {
                         if (isLastMushKitComplete) {
-                          push({ kit_name: '', wifi_ssid: '', wifi_pass: '' });
+                          push({ kit_name: '', temp_threshold: '', humid_threshold: '' });
                         }
                       }}
                       canAdd={isLastMushKitComplete}
