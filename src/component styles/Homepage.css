@@ -1,11 +1,12 @@
   .home-container {
 	margin-left: 100px;
-	padding-top: 90px; 
+	padding-top: 80px; 
+	padding-right: 15px;
   }
   
   .home-header h1 {
 	position: fixed;
-	top: -22px;
+	top: 0px;
 	left: 85px;
 	right: 0;
 	background-color: #fff;
@@ -14,7 +15,7 @@
 	font-weight: bold;
 	z-index: 1000;
 	border-bottom: 2px solid #ccc;
-	margin-bottom: 10px;
+	margin-bottom: 0px;
 	transition: left 0.3s ease;
   }  
   
@@ -25,4 +26,61 @@
   
   .home-header.collapsed h1 {
 	left: 85px; 
+  }
+
+  .carousel-item img {
+  	width: 90vw;
+  	height: 85vh;
+  	object-fit: contain;
+	margin-bottom: 20px;
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+  	background-image: none !important;
+  	background-color: transparent;
+  	width: 2rem;
+  	height: 2rem;
+  }
+
+  .carousel-control-prev-icon::after,
+  .carousel-control-next-icon::after {
+  	content: '';
+  	display: inline-block;
+  	width: 1rem;
+  	height: 1rem;
+  	border-top: 4px solid #000;
+  	border-right: 4px solid #000;
+  	position: relative;
+  	top: 2px;
+  }
+
+  .carousel-control-prev-icon::after {
+  	transform: rotate(-135deg);
+  	left: 4px;
+  }
+
+  .carousel-control-next-icon::after {
+  	transform: rotate(45deg);
+  	left: -4px;
+  }
+
+  .download-btn {
+  	position: fixed;
+  	top: 80px;
+  	right: 30px;
+  	z-index: 1100;
+  	background-color: #343a40;
+  	color: white;
+  	border: none;
+  	padding: 10px 16px;
+  	border-radius: 5px;
+  	cursor: pointer;
+  	font-weight: bold;
+  	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  	transition: background-color 0.3s;
+  }
+
+  .download-btn:hover {
+  	background-color: #495057;
   }
