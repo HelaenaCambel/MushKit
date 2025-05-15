@@ -318,8 +318,21 @@ const DataHistory = () => {
                           {currentRows.map((entry, idx) => (
                             <tr key={idx}>
                               <td>{entry.timestamp}</td>
-                              <td>{entry.temperature} °C</td>
-                              <td>{entry.humidity} %</td>
+                              <td
+                                style={{
+                                  color:
+                                    entry.temperature < 28
+                                      ? "yellow"
+                                      : entry.temperature <= 29.9
+                                      ? "green"
+                                      : "red",
+                                }}
+                              > {entry.temperature} °C </td>
+                              <td
+                                style={{
+                                  color: entry.humidity < 90 ? "red" : "green",
+                                }}
+                              > {entry.humidity} %</td>
                               <td>{entry.waterStatus}</td>
                               <td>{entry.lightStatus}</td>
                             </tr>

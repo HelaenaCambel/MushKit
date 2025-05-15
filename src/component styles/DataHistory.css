@@ -44,7 +44,7 @@
 
 .section-name h2 {
 	margin-top: -10px;
-	margin-bottom: -20px;
+	margin-bottom: 10px;
 	font-size: 1.6rem;
 }
 
@@ -60,7 +60,7 @@
 
 .history-table th,
 .history-table td {
-	padding: 8px 12px;
+	padding: 5px 12px;
 	border: 1px solid #ccc;
 	text-align: center;
 }
