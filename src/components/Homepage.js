@@ -28,7 +28,7 @@ const Home = () => {
       <div className={`home-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
         <h1>Home</h1>
         <a href={MushKitPDF} download="MushKitPDF.pdf" style={{ textDecoration: 'none' }}>
-          <button className="download-btn">
+          <button className="home-download-btn">
             Download PDF
           </button>
         </a>
