@@ -322,7 +322,7 @@ const DataHistory = () => {
                                 style={{
                                   color:
                                     entry.temperature < 28
-                                      ? "yellow"
+                                      ? "blue"
                                       : entry.temperature <= 29.9
                                       ? "green"
                                       : "red",
@@ -330,11 +330,32 @@ const DataHistory = () => {
                               > {entry.temperature} °C </td>
                               <td
                                 style={{
-                                  color: entry.humidity < 90 ? "red" : "green",
+                                  color:
+                                    entry.humidity < 90
+                                      ? "red"
+                                      : entry.humidity <= 95.9
+                                      ? "green"
+                                      : "blue",
                                 }}
                               > {entry.humidity} %</td>
-                              <td>{entry.waterStatus}</td>
-                              <td>{entry.lightStatus}</td>
+                              <td
+                                style={{
+                                  color:
+                                    entry.waterStatus === "Low"
+                                      ? "red"
+                                      : entry.waterStatus === "Medium"
+                                      ? "orange"
+                                      : "green",
+                                }}
+                              > {entry.waterStatus}</td>
+                              <td
+                                style={{
+                                  color:
+                                    entry.lightStatus === "OFF"
+                                      ? "red"
+                                      : "green",
+                                }}
+                              >{entry.lightStatus}</td>
                             </tr>
                           ))}
                           {Array.from({ length: ROWS_PER_PAGE - currentRows.length }).map((_, idx) => (
