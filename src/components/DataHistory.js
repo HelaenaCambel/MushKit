@@ -13,7 +13,11 @@ import { FaDownload, FaTrash } from "react-icons/fa";
 
 const LoadingSpinner = () => (
   <div className="mushroom-loading">
-    <img src="/mushroom.svg" alt="Loading spinner" className="loading-spinner" />
+    <img
+      src="/mushroom.svg"
+      alt="Loading spinner"
+      className="loading-spinner"
+    />
   </div>
 );
 
@@ -30,10 +34,8 @@ const DataHistory = () => {
   const [dateRange, setDateRange] = useState({});
   const [deletingProgress, setDeletingProgress] = useState({});
   const [isDeleting, setIsDeleting] = useState({});
+  const [deletingDateRange, setDeletingDateRange] = useState({});
   const [averages, setAverages] = useState({});
-
-  // New state to track which kit graph modal is open (kitId or null)
-  const [modalKitId, setModalKitId] = useState(null);
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -107,7 +109,6 @@ const DataHistory = () => {
     };
   }, [user]);
 
-  // Pagination handlers
   const handlePrevious = (kitId) => {
     setCurrentPage((prev) => ({
       ...prev,
@@ -133,7 +134,6 @@ const DataHistory = () => {
     }));
   };
 
-  // Excel Download Handler
   const handleDownloadExcel = (kitId, kitName) => {
     const historyData = historyDataByKit[kitId];
     if (!historyData || historyData.length === 0) return;
@@ -206,6 +206,10 @@ const DataHistory = () => {
 
     setIsDeleting((prev) => ({ ...prev, [kitId]: true }));
     setDeletingProgress((prev) => ({ ...prev, [kitId]: 0 }));
+    setDeletingDateRange((prev) => ({
+      ...prev,
+      [kitId]: { from: fromDateStr, to: toDateStr },
+    }));
 
     try {
       for (let i = 0; i < entriesToDelete.length; i++) {
@@ -225,183 +229,161 @@ const DataHistory = () => {
         }),
       }));
 
-      alert("Selected history entries deleted successfully.");
+      alert("Selected history deleted successfully.");
     } catch (error) {
-      alert("Error deleting history: " + error.message);
+      console.error("Error deleting history:", error);
+      alert("Failed to delete history.");
     } finally {
       setIsDeleting((prev) => ({ ...prev, [kitId]: false }));
-      setDeletingProgress((prev) => ({ ...prev, [kitId]: 0 }));
+      setDeletingDateRange((prev) => ({ ...prev, [kitId]: null }));
     }
   };
 
-  const calculateAverages = (data) => {
-    if (!data || data.length === 0) return { avgTemp: 0, avgHumid: 0 };
+  const handleGetAverage = (kitId) => {
+    const historyData = historyDataByKit[kitId];
+    if (!historyData || historyData.length === 0) {
+      alert("No data available.");
+      return;
+    }
 
-    let sumTemp = 0;
-    let sumHumid = 0;
-    data.forEach((entry) => {
-      sumTemp += entry.temperature || 0;
-      sumHumid += entry.humidity || 0;
+    const from = dateRange[kitId]?.from ? new Date(dateRange[kitId].from) : null;
+    const to = dateRange[kitId]?.to ? new Date(dateRange[kitId].to + "T23:59:59") : null;
+
+    const filtered = historyData.filter((entry) => {
+      const entryDate = new Date(entry.rawDate);
+      return (!from || entryDate >= from) && (!to || entryDate <= to);
     });
 
-    return {
-      avgTemp: (sumTemp / data.length).toFixed(2),
-      avgHumid: (sumHumid / data.length).toFixed(2),
-    };
+    if (filtered.length === 0) {
+      alert("No data in selected range.");
+      return;
+    }
+
+    const avgTemp =
+      filtered.reduce((sum, e) => sum + parseFloat(e.temperature), 0) /
+      filtered.length;
+    const avgHumid =
+      filtered.reduce((sum, e) => sum + parseFloat(e.humidity), 0) /
+      filtered.length;
+
+    setAverages((prev) => ({
+      ...prev,
+      [kitId]: {
+        temp: avgTemp.toFixed(2),
+        humid: avgHumid.toFixed(2),
+        message: null,
+      },
+    }));
   };
 
-  // Calculate averages for each kit when history updates
-  useEffect(() => {
-    const newAverages = {};
-    for (const kitId in historyDataByKit) {
-      newAverages[kitId] = calculateAverages(historyDataByKit[kitId]);
-    }
-    setAverages(newAverages);
-  }, [historyDataByKit]);
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
-    <div className="data-history-page">
-      <SideNavBar
-        isExpanded={isSidebarExpanded}
-        onToggle={() => setIsSidebarExpanded(!isSidebarExpanded)}
-      />
-      <main className="data-history-main">
-        {mushkits.length === 0 ? (
-          <p>No MushKits found for this user.</p>
+    <div className="history-container">
+      <SideNavBar onToggle={setIsSidebarExpanded} />
+      <div>
+        <div className={`history-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
+          <h1>Data History</h1>
+        </div>
+        {isLoading ? (
+          <LoadingSpinner />
         ) : (
-          mushkits.map(({ kit_name, kit_id }, index) => {
-            const history = historyDataByKit[kit_id] || [];
-            const page = currentPage[kit_id] || 1;
-            const fromDate = dateRange[kit_id]?.from || "";
-            const toDate = dateRange[kit_id]?.to || "";
+          <>
+            <div className="data-container">
+              {mushkits.map((kit, index) => {
+                const kitId = kit.kit_id;
+                const historyData = historyDataByKit[kitId] || [];
+                const page = currentPage[kitId] || 1;
+                const startIndex = (page - 1) * ROWS_PER_PAGE;
+                const currentRows = historyData.slice(startIndex, startIndex + ROWS_PER_PAGE);
 
-            // Filter history by selected date range
-            const filteredHistory = history.filter((entry) => {
-              const entryDate = new Date(entry.rawDate);
-              const from = fromDate ? new Date(fromDate) : null;
-              const to = toDate ? new Date(toDate + "T23:59:59") : null;
-              return (!from || entryDate >= from) && (!to || entryDate <= to);
-            });
+                return (
+                  <div key={index} className="mushkit-section">
+                    <div className="mushkit-left">
+                      <div className="section-name">
+                        <h2>{kit.kit_name}</h2>
+                        <p>MushKit ID# {kitId}</p>
+                      </div>
 
-            const totalPages = Math.ceil(filteredHistory.length / ROWS_PER_PAGE);
-
-            const pageData = filteredHistory.slice(
-              (page - 1) * ROWS_PER_PAGE,
-              page * ROWS_PER_PAGE
-            );
-
-            return (
-              <section className="mushkit-section" key={kit_id}>
-                <h2>{kit_name}</h2>
-
-                <div className="averages">
-                  <p>Avg Temperature: {averages[kit_id]?.avgTemp ?? "N/A"} °C</p>
-                  <p>Avg Humidity: {averages[kit_id]?.avgHumid ?? "N/A"} %</p>
-                </div>
-
-                <div className="date-filter">
-                  <label>
-                    From:{" "}
-                    <input
-                      type="date"
-                      value={fromDate}
-                      onChange={(e) => updateDateRange(kit_id, "from", e.target.value)}
-                    />
-                  </label>
-                  <label>
-                    To:{" "}
-                    <input
-                      type="date"
-                      value={toDate}
-                      onChange={(e) => updateDateRange(kit_id, "to", e.target.value)}
-                    />
-                  </label>
-                </div>
-
-                <div className="actions">
-                  <button onClick={() => handleDownloadExcel(kit_id, kit_name)}>
-                    <FaDownload /> Download Excel
-                  </button>
-                  <button
-                    onClick={() => handleDeleteHistory(kit_id)}
-                    disabled={isDeleting[kit_id]}
-                  >
-                    {isDeleting[kit_id] ? `Deleting ${deletingProgress[kit_id]}%` : <><FaTrash /> Delete History</>}
-                  </button>
-
-                  {/* New See Graph button */}
-                  <button onClick={() => setModalKitId(kit_id)}>
-                    See Graph
-                  </button>
-                </div>
-
-                <div className="history-table-wrapper">
-                  <table className="history-table">
-                    <thead>
-                      <tr>
-                        <th>Timestamp</th>
-                        <th>Temperature (°C)</th>
-                        <th>Humidity (%)</th>
-                        <th>Water Level</th>
-                        <th>Light Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pageData.length === 0 ? (
-                        <tr>
-                          <td colSpan="5">No data for the selected date range.</td>
-                        </tr>
-                      ) : (
-                        pageData.map((entry) => (
-                          <tr key={entry.id}>
-                            <td>{entry.timestamp}</td>
-                            <td>{entry.temperature}</td>
-                            <td>{entry.humidity}</td>
-                            <td>{entry.waterStatus}</td>
-                            <td>{entry.lightStatus}</td>
+                      <table className="history-table">
+                        <thead>
+                          <tr>
+                            <th>Timestamp</th>
+                            <th>Temperature (°C)</th>
+                            <th>Humidity (%)</th>
+                            <th>Water Level</th>
+                            <th>Light Status</th>
                           </tr>
-                        ))
+                        </thead>
+                        <tbody>
+                          {currentRows.map((entry, i) => (
+                            <tr key={i}>
+                              <td>{entry.timestamp}</td>
+                              <td>{entry.temperature}</td>
+                              <td>{entry.humidity}</td>
+                              <td>{entry.waterStatus}</td>
+                              <td>{entry.lightStatus}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      <div className="pagination-controls">
+                        <button onClick={() => handlePrevious(kitId)} disabled={page === 1}>
+                          Previous
+                        </button>
+                        <span>
+                          Page {page} of {Math.ceil(historyData.length / ROWS_PER_PAGE)}
+                        </span>
+                        <button
+                          onClick={() => handleNext(kitId, historyData.length)}
+                          disabled={page === Math.ceil(historyData.length / ROWS_PER_PAGE)}
+                        >
+                          Next
+                        </button>
+                      </div>
+
+                      <div className="controls">
+                        <input
+                          type="date"
+                          value={dateRange[kitId]?.from || ""}
+                          onChange={(e) => updateDateRange(kitId, "from", e.target.value)}
+                        />
+                        <input
+                          type="date"
+                          value={dateRange[kitId]?.to || ""}
+                          onChange={(e) => updateDateRange(kitId, "to", e.target.value)}
+                        />
+                        <button onClick={() => handleDownloadExcel(kitId, kit.kit_name)}>
+                          <FaDownload /> Download
+                        </button>
+                        <button onClick={() => handleDeleteHistory(kitId)} disabled={isDeleting[kitId]}>
+                          <FaTrash /> {isDeleting[kitId] ? `Deleting... (${deletingProgress[kitId]}%)` : "Delete"}
+                        </button>
+                        <button onClick={() => handleGetAverage(kitId)}>Get Averages</button>
+                      </div>
+
+                      {averages[kitId] && (
+                        <div className="averages">
+                          <p>Average Temperature: {averages[kitId].temp} °C</p>
+                          <p>Average Humidity: {averages[kitId].humid} %</p>
+                        </div>
                       )}
-                    </tbody>
-                  </table>
-                </div>
+                    </div>
+                    <div className="mushkit-right">
+                      <DataChart data={historyData} />
 
-                <div className="pagination">
-                  <button onClick={() => handlePrevious(kit_id)} disabled={page <= 1}>
-                    Previous
-                  </button>
-                  <span>
-                    Page {page} of {totalPages}
-                  </span>
-                  <button
-                    onClick={() => handleNext(kit_id, filteredHistory.length)}
-                    disabled={page >= totalPages}
-                  >
-                    Next
-                  </button>
-                </div>
-              </section>
-            );
-          })
-        )}
-
-        {/* Modal for graph */}
-        {modalKitId && (
-          <div className="modal-overlay" onClick={() => setModalKitId(null)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="modal-close" onClick={() => setModalKitId(null)}>
-                &times;
-              </button>
-              <h3>Graph for {mushkits.find((kit) => kit.kit_id === modalKitId)?.kit_name}</h3>
-              <DataChart data={historyDataByKit[modalKitId]} />
+                      {isDeleting[kitId] && deletingDateRange[kitId] && (
+                        <p className="deleting-msg">
+                          Deleting entries from {deletingDateRange[kitId].from} to {deletingDateRange[kitId].to}... {deletingProgress[kitId]}%
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          </>
         )}
-      </main>
+      </div>
     </div>
   );
 };

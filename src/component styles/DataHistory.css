@@ -146,7 +146,7 @@
 }
 
 .download-btn:hover {
-	background-color: #0056b3; 
+	background-color: #0056b3;
 }
 
 .delete-btn {
@@ -162,7 +162,8 @@
 }
 
 .delete-btn:hover {
-	background-color: #c9302c; }
+	background-color: #c9302c;
+}
 
 .chart-title {
 	margin-bottom: -10px;
@@ -235,37 +236,4 @@
 	align-items: center;
 	gap: 5px;
 	margin-bottom: 1rem;
-}
-
-.modal-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 1000;
-}
-
-.modal-content {
-	background-color: white;
-	padding: 20px;
-	max-width: 90vw;
-	max-height: 90vh;
-	overflow-y: auto;
-	border-radius: 8px;
-	position: relative;
-}
-
-.modal-close {
-	position: absolute;
-	top: 8px;
-	right: 8px;
-	font-size: 24px;
-	background: none;
-	border: none;
-	cursor: pointer;
 }
