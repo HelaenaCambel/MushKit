@@ -125,7 +125,8 @@ const Register = () => {
           mushkits: [
             {
               kit_name: '',
-              temp_threshold: '',
+              wifi_ssid: '',
+              wifi_pass: '',
               humid_threshold: '',
             }
           ]
@@ -139,10 +140,12 @@ const Register = () => {
           
           const isLastMushKitComplete =
             lastKit.kit_name.trim() !== '' &&
-            lastKit.temp_threshold.trim() !== '' &&
+            lastKit.wifi_ssid.trim() !== '' &&
+            lastKit.wifi_pass.trim() !== '' &&
             lastKit.humid_threshold.trim() !== '' &&
             !formik.errors.mushkits?.[lastIndex]?.kit_name &&
-            !formik.errors.mushkits?.[lastIndex]?.temp_threshold &&
+            !formik.errors.mushkits?.[lastIndex]?.wifi_ssid &&
+            !formik.errors.mushkits?.[lastIndex]?.wifi_pass &&
             !formik.errors.mushkits?.[lastIndex]?.humid_threshold;
           
           return (

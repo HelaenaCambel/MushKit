@@ -8,16 +8,12 @@ import { doc, getDoc, collection, onSnapshot, deleteDoc } from "firebase/firesto
 import { db } from "../database/firebase";
 import DataChart from "../charts/DataChart";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver"; 
+import { saveAs } from "file-saver";
 import { FaDownload, FaTrash } from "react-icons/fa";
 
 const LoadingSpinner = () => (
   <div className="mushroom-loading">
-    <img
-      src="/mushroom.svg"
-      alt="Loading spinner"
-      className="loading-spinner"
-    />
+    <img src="/mushroom.svg" alt="Loading spinner" className="loading-spinner" />
   </div>
 );
 
@@ -34,8 +30,10 @@ const DataHistory = () => {
   const [dateRange, setDateRange] = useState({});
   const [deletingProgress, setDeletingProgress] = useState({});
   const [isDeleting, setIsDeleting] = useState({});
-  const [deletingDateRange, setDeletingDateRange] = useState({});
   const [averages, setAverages] = useState({});
+
+  // New state to track which kit graph modal is open (kitId or null)
+  const [modalKitId, setModalKitId] = useState(null);
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -109,6 +107,7 @@ const DataHistory = () => {
     };
   }, [user]);
 
+  // Pagination handlers
   const handlePrevious = (kitId) => {
     setCurrentPage((prev) => ({
       ...prev,
@@ -132,7 +131,7 @@ const DataHistory = () => {
         [field]: value,
       },
     }));
-  };  
+  };
 
   // Excel Download Handler
   const handleDownloadExcel = (kitId, kitName) => {
@@ -174,7 +173,7 @@ const DataHistory = () => {
     });
 
     saveAs(blob, `${kitName}_DataHistory_${dateRange[kitId]?.from || "all"}_to_${dateRange[kitId]?.to || "all"}.xlsx`);
-  };  
+  };
 
   const handleDeleteHistory = async (kitId) => {
     const fromDateStr = dateRange[kitId]?.from;
@@ -207,10 +206,6 @@ const DataHistory = () => {
 
     setIsDeleting((prev) => ({ ...prev, [kitId]: true }));
     setDeletingProgress((prev) => ({ ...prev, [kitId]: 0 }));
-    setDeletingDateRange((prev) => ({
-      ...prev,
-      [kitId]: { from: fromDateStr, to: toDateStr }, // Save deletion-specific range
-    }));
 
     try {
       for (let i = 0; i < entriesToDelete.length; i++) {
@@ -230,236 +225,183 @@ const DataHistory = () => {
         }),
       }));
 
-      alert("Selected history deleted successfully.");
+      alert("Selected history entries deleted successfully.");
     } catch (error) {
-      console.error("Error deleting history:", error);
-      alert("Failed to delete history.");
+      alert("Error deleting history: " + error.message);
     } finally {
       setIsDeleting((prev) => ({ ...prev, [kitId]: false }));
-      setDeletingDateRange((prev) => ({ ...prev, [kitId]: null })); 
+      setDeletingProgress((prev) => ({ ...prev, [kitId]: 0 }));
     }
-  };   
+  };
 
-  const handleGetAverage = (kitId) => {
-    const historyData = historyDataByKit[kitId];
-    if (!historyData || historyData.length === 0) {
-      alert("No data available.");
-      return;
-    }
+  const calculateAverages = (data) => {
+    if (!data || data.length === 0) return { avgTemp: 0, avgHumid: 0 };
 
-    const from = dateRange[kitId]?.from ? new Date(dateRange[kitId].from) : null;
-    const to = dateRange[kitId]?.to ? new Date(dateRange[kitId].to + "T23:59:59") : null;
-
-    const filtered = historyData.filter((entry) => {
-      const entryDate = new Date(entry.rawDate);
-      return (!from || entryDate >= from) && (!to || entryDate <= to);
+    let sumTemp = 0;
+    let sumHumid = 0;
+    data.forEach((entry) => {
+      sumTemp += entry.temperature || 0;
+      sumHumid += entry.humidity || 0;
     });
 
-    if (filtered.length === 0) {
-      alert("No data in selected range.");
-      return;
+    return {
+      avgTemp: (sumTemp / data.length).toFixed(2),
+      avgHumid: (sumHumid / data.length).toFixed(2),
+    };
+  };
+
+  // Calculate averages for each kit when history updates
+  useEffect(() => {
+    const newAverages = {};
+    for (const kitId in historyDataByKit) {
+      newAverages[kitId] = calculateAverages(historyDataByKit[kitId]);
     }
+    setAverages(newAverages);
+  }, [historyDataByKit]);
 
-    const avgTemp =
-      filtered.reduce((sum, e) => sum + parseFloat(e.temperature), 0) /
-      filtered.length;
-    const avgHumid =
-      filtered.reduce((sum, e) => sum + parseFloat(e.humidity), 0) /
-      filtered.length;
-
-    setAverages((prev) => ({
-      ...prev,
-      [kitId]: {
-        temp: avgTemp.toFixed(2),
-        humid: avgHumid.toFixed(2),
-        message: null,
-      },
-    }));
-  };  
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <div className="history-container">
-      <SideNavBar onToggle={setIsSidebarExpanded} />
-      <div>
-        <div className={`history-header ${isSidebarExpanded ? "expanded" : "collapsed"}`}>
-          <h1>Data History</h1>
-        </div>
-        {isLoading ? (
-          <LoadingSpinner />
+    <div className="data-history-page">
+      <SideNavBar
+        isExpanded={isSidebarExpanded}
+        onToggle={() => setIsSidebarExpanded(!isSidebarExpanded)}
+      />
+      <main className="data-history-main">
+        {mushkits.length === 0 ? (
+          <p>No MushKits found for this user.</p>
         ) : (
-          <>
-            <div className="data-container">
-              {mushkits.map((kit, index) => {
-                const kitId = kit.kit_id;
-                const historyData = historyDataByKit[kitId] || [];
-                const page = currentPage[kitId] || 1;
-                const startIndex = (page - 1) * ROWS_PER_PAGE;
-                const currentRows = historyData.slice(startIndex, startIndex + ROWS_PER_PAGE);
+          mushkits.map(({ kit_name, kit_id }, index) => {
+            const history = historyDataByKit[kit_id] || [];
+            const page = currentPage[kit_id] || 1;
+            const fromDate = dateRange[kit_id]?.from || "";
+            const toDate = dateRange[kit_id]?.to || "";
 
-                return (
-                  <div key={index} className="mushkit-section">
-                    <div className="mushkit-left">
-                      <div className="section-name">
-                        <h2>{kit.kit_name}</h2>
-                        <p>MushKit ID# {kitId}</p>
-                      </div>
+            // Filter history by selected date range
+            const filteredHistory = history.filter((entry) => {
+              const entryDate = new Date(entry.rawDate);
+              const from = fromDate ? new Date(fromDate) : null;
+              const to = toDate ? new Date(toDate + "T23:59:59") : null;
+              return (!from || entryDate >= from) && (!to || entryDate <= to);
+            });
 
-                      <table className="history-table">
-                        <thead>
-                          <tr>
-                            <th>Timestamp</th>
-                            <th>Temperature</th>
-                            <th>Humidity</th>
-                            <th>Water Level</th>
-                            <th>Light Status</th>
+            const totalPages = Math.ceil(filteredHistory.length / ROWS_PER_PAGE);
+
+            const pageData = filteredHistory.slice(
+              (page - 1) * ROWS_PER_PAGE,
+              page * ROWS_PER_PAGE
+            );
+
+            return (
+              <section className="mushkit-section" key={kit_id}>
+                <h2>{kit_name}</h2>
+
+                <div className="averages">
+                  <p>Avg Temperature: {averages[kit_id]?.avgTemp ?? "N/A"} °C</p>
+                  <p>Avg Humidity: {averages[kit_id]?.avgHumid ?? "N/A"} %</p>
+                </div>
+
+                <div className="date-filter">
+                  <label>
+                    From:{" "}
+                    <input
+                      type="date"
+                      value={fromDate}
+                      onChange={(e) => updateDateRange(kit_id, "from", e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    To:{" "}
+                    <input
+                      type="date"
+                      value={toDate}
+                      onChange={(e) => updateDateRange(kit_id, "to", e.target.value)}
+                    />
+                  </label>
+                </div>
+
+                <div className="actions">
+                  <button onClick={() => handleDownloadExcel(kit_id, kit_name)}>
+                    <FaDownload /> Download Excel
+                  </button>
+                  <button
+                    onClick={() => handleDeleteHistory(kit_id)}
+                    disabled={isDeleting[kit_id]}
+                  >
+                    {isDeleting[kit_id] ? `Deleting ${deletingProgress[kit_id]}%` : <><FaTrash /> Delete History</>}
+                  </button>
+
+                  {/* New See Graph button */}
+                  <button onClick={() => setModalKitId(kit_id)}>
+                    See Graph
+                  </button>
+                </div>
+
+                <div className="history-table-wrapper">
+                  <table className="history-table">
+                    <thead>
+                      <tr>
+                        <th>Timestamp</th>
+                        <th>Temperature (°C)</th>
+                        <th>Humidity (%)</th>
+                        <th>Water Level</th>
+                        <th>Light Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pageData.length === 0 ? (
+                        <tr>
+                          <td colSpan="5">No data for the selected date range.</td>
+                        </tr>
+                      ) : (
+                        pageData.map((entry) => (
+                          <tr key={entry.id}>
+                            <td>{entry.timestamp}</td>
+                            <td>{entry.temperature}</td>
+                            <td>{entry.humidity}</td>
+                            <td>{entry.waterStatus}</td>
+                            <td>{entry.lightStatus}</td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {currentRows.map((entry, idx) => (
-                            <tr key={idx}>
-                              <td>{entry.timestamp}</td>
-                              <td
-                                style={{
-                                  color:
-                                    entry.temperature < 28
-                                      ? "blue"
-                                      : entry.temperature <= 29.9
-                                      ? "green"
-                                      : "red",
-                                }}
-                              > {entry.temperature} °C </td>
-                              <td
-                                style={{
-                                  color:
-                                    entry.humidity < 90
-                                      ? "red"
-                                      : entry.humidity <= 95.9
-                                      ? "green"
-                                      : "blue",
-                                }}
-                              > {entry.humidity} %</td>
-                              <td
-                                style={{
-                                  color:
-                                    entry.waterStatus === "Low"
-                                      ? "red"
-                                      : entry.waterStatus === "Medium"
-                                      ? "orange"
-                                      : "green",
-                                }}
-                              > {entry.waterStatus}</td>
-                              <td
-                                style={{
-                                  color:
-                                    entry.lightStatus === "OFF"
-                                      ? "red"
-                                      : "green",
-                                }}
-                              >{entry.lightStatus}</td>
-                            </tr>
-                          ))}
-                          {Array.from({ length: ROWS_PER_PAGE - currentRows.length }).map((_, idx) => (
-                            <tr key={`empty-${idx}`}>
-                              <td style={{ height: "21.6px" }}></td>
-                              <td>&nbsp;</td>
-                              <td>&nbsp;</td>
-                              <td>&nbsp;</td>
-                              <td>&nbsp;</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-
-                      <div className="pagination-buttons">
-                        <button onClick={() => handlePrevious(kitId)} disabled={page === 1}>
-                          Previous
-                        </button>
-                        <span style={{ margin: "0 10px" }}>Page {page}</span>
-                        <button
-                          onClick={() => handleNext(kitId, historyData.length)}
-                          disabled={startIndex + ROWS_PER_PAGE >= historyData.length}
-                        >
-                          Next
-                        </button>
-                      </div>
-
-                      <div className="controls-row">
-                        <div className="date-range-inputs">
-                          <label>
-                            From:
-                            <input
-                              type="date"
-                              value={dateRange[kitId]?.from || ""}
-                              onChange={(e) => updateDateRange(kitId, "from", e.target.value)}
-                            />
-                          </label>
-                          <label>
-                            To:
-                            <input
-                              type="date"
-                              value={dateRange[kitId]?.to || ""}
-                              onChange={(e) => updateDateRange(kitId, "to", e.target.value)}
-                            />
-                          </label>
-                        </div>
-                          
-                        <button className="get-average-button" onClick={() => handleGetAverage(kitId)}>
-                          Get Average
-                        </button>
-
-                        <button
-                          className="download-btn"
-                          onClick={() => handleDownloadExcel(kitId, kit.kit_name)}
-                        >
-                        <FaDownload style={{ fontSize: "15px", marginRight: "8px", marginTop: "1px" }} />
-                        DataHistory
-                        </button>
-
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDeleteHistory(kitId)}
-                        >
-                          <FaTrash style={{ fontSize: "15px", marginRight: "8px", marginTop: "1px" }} />
-                          Delete History
-                        </button>
-                      </div>
-
-                      <div className="average-controls">
-                        {averages[kitId]?.message ? (
-                          <p className="average-message">{averages[kitId].message}</p>
-                        ) : averages[kitId] ? (
-                          <p className="average-result">
-                            <strong>Average Temperature:</strong> {averages[kitId].temp} °C &nbsp;
-                            <strong>Average Humidity:</strong> {averages[kitId].humid} %
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    <div className="mushkit-right">
-                      <DataChart historyData={currentRows} />
-
-                      {isDeleting[kitId] && (
-                        <div className="delete-progress">
-                          <p>Deleting data history from <strong>{deletingDateRange[kitId]?.from}</strong> to <strong>{deletingDateRange[kitId]?.to}</strong>...</p>
-                          <div className="progress-bar-container">
-                            <div
-                              className="progress-bar-fill"
-                              style={{ width: `${deletingProgress[kitId] || 0}%` }}
-                            ></div>
-                          </div>
-                          <p>{deletingProgress[kitId] || 0}% complete</p>
-                        </div>
+                        ))
                       )}
+                    </tbody>
+                  </table>
+                </div>
 
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </>
+                <div className="pagination">
+                  <button onClick={() => handlePrevious(kit_id)} disabled={page <= 1}>
+                    Previous
+                  </button>
+                  <span>
+                    Page {page} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => handleNext(kit_id, filteredHistory.length)}
+                    disabled={page >= totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              </section>
+            );
+          })
         )}
-      </div>
+
+        {/* Modal for graph */}
+        {modalKitId && (
+          <div className="modal-overlay" onClick={() => setModalKitId(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close" onClick={() => setModalKitId(null)}>
+                &times;
+              </button>
+              <h3>Graph for {mushkits.find((kit) => kit.kit_id === modalKitId)?.kit_name}</h3>
+              <DataChart data={historyDataByKit[modalKitId]} />
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

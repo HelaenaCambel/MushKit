@@ -41,22 +41,38 @@ function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword, r
       </div>
 
       <div className="form-group">
-        <label htmlFor={getField("temp_threshold")}>Temperature Threshold</label>
+        <label htmlFor={getField("wifi_ssid")}>Wi-Fi SSID</label>
         <input
           type="text"
-          id={`temp_threshold_${index}`}
-          name={getField("temp_threshold")}
-          placeholder="Enter Temperature Threshold"
-          value={formik.values.mushkits[index].temp_threshold}
+          id={`wifi_ssid_${index}`}
+          name={getField("wifi_ssid")}
+          placeholder="Enter Wi-FI SSID"
+          value={formik.values.mushkits[index].wifi_ssid}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.touched.mushkits?.[index]?.temp_threshold && formik.errors.mushkits?.[index]?.temp_threshold && (
-          <div className="error">{formik.errors.mushkits[index].temp_threshold}</div>
+        {formik.touched.mushkits?.[index]?.wifi_ssid && formik.errors.mushkits?.[index]?.wifi_ssid && (
+          <div className="error">{formik.errors.mushkits[index].wifi_ssid}</div>
         )}
       </div>
 
       <div className="form-group password-group">
+        <label htmlFor={getField("wifi_pass")}>Wi-Fi Password</label>
+        <input
+          type='text'
+          id={`wifi_pass_${index}`}
+          name={getField("wifi_pass")}
+          placeholder="Enter Wi-Fi Password"
+          value={formik.values.mushkits[index].wifi_pass}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {formik.touched.mushkits?.[index]?.wifi_pass && formik.errors.mushkits?.[index]?.wifi_pass && (
+          <div className="error">{formik.errors.mushkits[index].wifi_pass}</div>
+        )}
+      </div>
+
+      <div className="form-group">
         <label htmlFor={getField("humid_threshold")}>Humidity Threshold</label>
         <input
           type='text'
