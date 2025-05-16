@@ -100,6 +100,7 @@ const Dashboard = () => {
 
               <div className="status-cell">
                 <GrowingLight value={data.lightStatus} />
+                <p> </p>
                 <WaterLevel value={data.waterStatus} />
               </div>
 
