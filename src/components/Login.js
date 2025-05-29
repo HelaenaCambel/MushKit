@@ -86,7 +86,7 @@ const Login = () => {
           }}
         >
           <div className="login-form">
-            <div className="input-container">
+            <div className="input-container-email">
               <label htmlFor="email">
                 Email
                 {errors.email && <span className="login-error-msg"> {errors.email} </span>}

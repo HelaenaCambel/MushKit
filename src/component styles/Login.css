@@ -39,13 +39,21 @@
     align-items: center;
   }
 
-  .input-container {
+  .input-container,
+  .input-container-email {
     margin-bottom: 15px;
     width: 100%;
   }
   
   .input-container input {
     width: 93%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }  
+
+  .input-container-email input {
+    width: 100%;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
