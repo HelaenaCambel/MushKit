@@ -72,22 +72,6 @@ function MushKitDetails({ formik, index, showWifiPassword, toggleWifiPassword, r
         )}
       </div>
 
-      <div className="form-group">
-        <label htmlFor={getField("humid_threshold")}>Humidity Threshold</label>
-        <input
-          type='text'
-          id={`humid_threshold_${index}`}
-          name={getField("humid_threshold")}
-          placeholder="Enter Humidity Threshold"
-          value={formik.values.mushkits[index].humid_threshold}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.mushkits?.[index]?.humid_threshold && formik.errors.mushkits?.[index]?.humid_threshold && (
-          <div className="error">{formik.errors.mushkits[index].humid_threshold}</div>
-        )}
-      </div>
-
       <div
         className={`regremove-icon ${mushkitCount === 1 ? "regremove-icon-disabled" : ""}`}
         onClick={mushkitCount === 1 ? undefined : () => remove(index)}

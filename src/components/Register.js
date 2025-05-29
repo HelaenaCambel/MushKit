@@ -127,7 +127,6 @@ const Register = () => {
               kit_name: '',
               wifi_ssid: '',
               wifi_pass: '',
-              humid_threshold: '',
             }
           ]
         }}
@@ -142,11 +141,9 @@ const Register = () => {
             lastKit.kit_name.trim() !== '' &&
             lastKit.wifi_ssid.trim() !== '' &&
             lastKit.wifi_pass.trim() !== '' &&
-            lastKit.humid_threshold.trim() !== '' &&
             !formik.errors.mushkits?.[lastIndex]?.kit_name &&
             !formik.errors.mushkits?.[lastIndex]?.wifi_ssid &&
-            !formik.errors.mushkits?.[lastIndex]?.wifi_pass &&
-            !formik.errors.mushkits?.[lastIndex]?.humid_threshold;
+            !formik.errors.mushkits?.[lastIndex]?.wifi_pass
           
           return (
             <Form className='register-form'>
